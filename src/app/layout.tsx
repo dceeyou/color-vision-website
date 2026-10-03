@@ -2,9 +2,6 @@ import type { Metadata } from "next";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import CustomCursor from "@/components/CustomCursor";
-import GlobalProgress from "@/components/GlobalProgress";
-import Navigation from "@/components/Navigation";
-import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "Color Vision | Creative Design Studio",
@@ -24,10 +21,7 @@ export default function RootLayout({
         
         <SmoothScroll>
           <CustomCursor />
-          <GlobalProgress />
-          <Navigation />
           {children}
-          <Footer />
         </SmoothScroll>
       </body>
     </html>

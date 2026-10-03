@@ -5,11 +5,8 @@ import Link from "next/link";
 import Image from "next/image";
 import gsap from "gsap";
 import { Menu, X } from "lucide-react";
-import { usePathname } from "next/navigation";
 
 export default function Navigation() {
-  const pathname = usePathname();
-  if (pathname === "/" || pathname === "/launch") return null;
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
