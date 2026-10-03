@@ -77,11 +77,11 @@ export default function LaunchCountdown() {
       {timeBlocks.map((time) => (
         <div key={time.label} className="flex flex-col items-center">
           <div className="overflow-hidden h-[60px] md:h-[80px] flex items-center justify-center">
-             <span className={`${time.class} text-5xl md:text-7xl font-bold font-sans text-foreground inline-block`}>
+             <span className={`${time.class} text-[32px] md:text-[48px] lg:text-[64px] font-[600] text-foreground inline-block`}>
                {time.val.toString().padStart(2, '0')}
              </span>
           </div>
-          <span className="text-[10px] tracking-[0.2em] text-muted mt-2 uppercase">{time.label}</span>
+          <span className="text-[9px] md:text-[11px] font-[600] tracking-[0.2em] text-muted mt-1 uppercase">{time.label}</span>
         </div>
       ))}
     </div>
