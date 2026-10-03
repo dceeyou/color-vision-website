@@ -1,117 +1,138 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
+import { useEffect, useRef } from "react";
+import Image from "next/image";
 import gsap from "gsap";
+import LaunchCursor from "@/components/launch/LaunchCursor";
+import LaunchOrb from "@/components/launch/LaunchOrb";
+import LaunchCountdown from "@/components/launch/LaunchCountdown";
+import LaunchProgress from "@/components/launch/LaunchProgress";
 
 export default function LaunchPage() {
-  const [timeLeft, setTimeLeft] = useState({ days: 12, hours: 8, minutes: 43, seconds: 27 });
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Simple countdown logic
-    const timer = setInterval(() => {
-      setTimeLeft(prev => {
-        let { days, hours, minutes, seconds } = prev;
-        if (seconds > 0) { seconds--; }
-        else {
-          seconds = 59;
-          if (minutes > 0) { minutes--; }
-          else {
-            minutes = 59;
-            if (hours > 0) { hours--; }
-            else { hours = 23; if (days > 0) days--; }
-          }
-        }
-        return { days, hours, minutes, seconds };
-      });
-    }, 1000);
+    // Cinematic Entrance Sequence
+    const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
+    
+    // Initial states
+    gsap.set(".reveal-grid", { opacity: 0 });
+    gsap.set(".reveal-logo", { opacity: 0, x: -20 });
+    gsap.set(".reveal-status", { opacity: 0, x: 20 });
+    gsap.set(".reveal-orb", { opacity: 0, scale: 0.8 });
+    gsap.set(".reveal-eyebrow", { opacity: 0, y: 10 });
+    gsap.set(".reveal-headline-line", { opacity: 0, y: 30, rotationX: -20 });
+    gsap.set(".reveal-desc", { opacity: 0, y: 20 });
+    gsap.set(".reveal-countdown", { opacity: 0, y: 20 });
+    gsap.set(".reveal-progress", { opacity: 0, y: 20 });
+    gsap.set(".reveal-footer", { opacity: 0, y: 20 });
 
-    // Enter animation
-    gsap.fromTo(".reveal", 
-      { opacity: 0, y: 20 }, 
-      { opacity: 1, y: 0, duration: 1, stagger: 0.1, ease: "power3.out" }
-    );
+    // Sequence
+    tl.to(".reveal-grid", { opacity: 1, duration: 2 }, 0.2)
+      .to(".reveal-logo", { opacity: 1, x: 0, duration: 1.5 }, 0.5)
+      .to(".reveal-status", { opacity: 1, x: 0, duration: 1.5 }, 0.6)
+      .to(".reveal-orb", { opacity: 1, scale: 1, duration: 2 }, 0.8)
+      .to(".reveal-eyebrow", { opacity: 1, y: 0, duration: 1 }, 1.2)
+      .to(".reveal-headline-line", { opacity: 1, y: 0, rotationX: 0, duration: 1.2, stagger: 0.15 }, 1.4)
+      .to(".reveal-desc", { opacity: 1, y: 0, duration: 1 }, 1.8)
+      .to(".reveal-countdown", { opacity: 1, y: 0, duration: 1 }, 2.0)
+      .to(".reveal-progress", { opacity: 1, y: 0, duration: 1 }, 2.2)
+      .to(".reveal-footer", { opacity: 1, y: 0, duration: 1 }, 2.4);
 
-    return () => clearInterval(timer);
+    // Headline Hover Effect via CSS classes
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col justify-between bg-[#050608] text-foreground p-6 md:p-12 relative overflow-hidden font-mono selection:bg-accent selection:text-black">
+    <div ref={containerRef} className="min-h-screen flex flex-col justify-between bg-[#050608] text-foreground p-6 md:p-8 lg:p-12 relative overflow-hidden font-sans selection:bg-accent selection:text-black">
       
-      {/* Background Grid & Noise */}
-      <div className="tech-grid absolute inset-0 opacity-10" />
-      <div className="noise-overlay" />
-      
-      {/* Subtle Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-accent/5 blur-[150px] rounded-full pointer-events-none" />
+      {/* Background System */}
+      <div className="reveal-grid absolute inset-0 z-0 pointer-events-none">
+        <div className="tech-grid opacity-20" />
+        <div className="noise-overlay opacity-[0.04]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-accent/10 blur-[150px] rounded-full mix-blend-screen" />
+        
+        {/* Subtle floating particles in bg */}
+        <div className="absolute top-1/4 left-1/4 w-1 h-1 bg-white/30 rounded-full animate-ping" style={{ animationDuration: '4s' }} />
+        <div className="absolute top-3/4 right-1/4 w-1.5 h-1.5 bg-accent/40 rounded-full animate-pulse" style={{ animationDuration: '3s' }} />
+      </div>
+
+      <LaunchCursor />
 
       {/* Header */}
-      <header className="flex justify-between items-start text-xs tracking-[0.2em] uppercase reveal">
-        <div className="flex items-center gap-4">
-          <span className="text-accent border border-accent/30 px-3 py-1">[ COLOR VISION ]</span>
+      <header className="flex justify-between items-start z-10 w-full relative">
+        <div className="reveal-logo md:absolute md:left-12 md:top-8 left-6 top-6">
+          {/* Ensure logo exists or fallback gracefully */}
+          <div className="w-12 h-12 relative">
+             <Image src="/brand-mark.png" alt="Color Vision" fill className="object-contain" />
+          </div>
         </div>
-        <div className="flex items-center gap-2 text-muted">
-          <div className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-          <span>BUILDING CV-001</span>
+        
+        <div className="reveal-status md:absolute md:right-12 md:top-8 right-6 top-6 flex flex-col items-end text-xs tracking-widest uppercase font-mono text-muted">
+          <div className="flex items-center gap-2 text-foreground mb-1">
+            <div className="w-2 h-2 rounded-full bg-accent animate-pulse shadow-[0_0_8px_#FF4D00]" />
+            <span>BUILDING</span>
+          </div>
+          <span>CV-001</span>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col items-center justify-center text-center my-20 z-10">
+      <main className="flex-1 flex flex-col items-center justify-center text-center w-full max-w-5xl mx-auto z-10 my-16 md:my-0">
         
-        {/* Abstract ASCII/Orbital Graphic */}
-        <div className="mb-16 relative w-64 h-64 flex items-center justify-center reveal">
-           <div className="absolute inset-0 border border-border-light rounded-full border-dashed animate-[spin_60s_linear_infinite]" />
-           <div className="absolute w-[80%] h-[80%] border border-accent/30 rounded-full animate-[spin_40s_linear_infinite_reverse]" />
-           
-           <div className="flex flex-col items-center text-[10px] tracking-widest text-muted">
-             <div className="w-[1px] h-8 bg-accent/50 mb-2" />
-             <span className="mb-1 text-accent">ORBITAL</span>
-             <span>LAUNCH SYSTEM</span>
-             <div className="w-[1px] h-8 bg-accent/50 mt-2" />
-           </div>
+        {/* Orbital System */}
+        <div className="reveal-orb mb-12 md:mb-16 relative perspective-1000">
+          {/* Circular Progress Ring Around the Orb */}
+          <svg className="absolute inset-0 w-full h-full -rotate-90 pointer-events-none scale-110" viewBox="0 0 520 520">
+            <circle cx="260" cy="260" r="250" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="2" />
+            <circle cx="260" cy="260" r="250" fill="none" stroke="#FF4D00" strokeWidth="2" strokeDasharray="1570" className="progress-ring" />
+          </svg>
+          <LaunchOrb />
         </div>
 
         {/* Typography */}
-        <div className="space-y-6 reveal">
-          <p className="text-accent text-xs tracking-[0.3em] uppercase">Color Vision / 2026</p>
-          <h1 className="text-5xl md:text-7xl font-bold font-sans tracking-tight">
-            Something<br/>
-            <span className="text-accent">remarkable</span><br/>
-            is coming.
-          </h1>
-          <p className="text-muted max-w-sm mx-auto text-sm font-sans">
+        <div className="space-y-6 flex flex-col items-center">
+          <p className="reveal-eyebrow text-muted text-xs tracking-[0.3em] uppercase font-mono">
+            Color Vision / 2026
+          </p>
+          
+          <div className="flex flex-col items-center space-y-[-5px] md:space-y-[-10px] perspective-1000">
+            <div className="overflow-hidden pb-2 pt-2">
+              <h1 className="reveal-headline-line text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight">
+                Something
+              </h1>
+            </div>
+            <div className="overflow-hidden pb-2 pt-2">
+              <h1 className="reveal-headline-line text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-accent transition-all duration-500 hover:-translate-y-[2px] hover:tracking-wide hover:shadow-[0_0_30px_rgba(255,77,0,0.5)] cursor-default">
+                remarkable
+              </h1>
+            </div>
+            <div className="overflow-hidden pb-2 pt-2">
+              <h1 className="reveal-headline-line text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight">
+                is coming.
+              </h1>
+            </div>
+          </div>
+          
+          <p className="reveal-desc text-muted max-w-sm mx-auto text-sm mt-6">
             We're building a new digital experience. Worth the wait.
           </p>
         </div>
 
-        {/* Countdown */}
-        <div className="flex gap-6 md:gap-12 mt-16 reveal">
-          {[
-            { label: "DAYS", val: timeLeft.days },
-            { label: "HOURS", val: timeLeft.hours },
-            { label: "MINUTES", val: timeLeft.minutes },
-            { label: "SECONDS", val: timeLeft.seconds },
-          ].map(time => (
-            <div key={time.label} className="flex flex-col items-center">
-              <span className="text-3xl md:text-5xl font-light text-foreground">{time.val.toString().padStart(2, '0')}</span>
-              <span className="text-[10px] tracking-widest text-muted mt-2">{time.label}</span>
-            </div>
-          ))}
+        <div className="reveal-countdown w-full flex justify-center">
+          <LaunchCountdown />
         </div>
 
-        {/* Progress */}
-        <div className="mt-16 flex items-center gap-4 text-xs tracking-widest reveal">
-          <div className="w-4 h-4 rounded-full border-2 border-accent border-r-transparent animate-spin" />
-          <span className="text-accent font-bold">67% LAUNCH</span>
+        <div className="reveal-progress">
+          <LaunchProgress />
         </div>
+
       </main>
 
       {/* Footer */}
-      <footer className="flex justify-between items-end text-[10px] tracking-widest text-muted uppercase reveal">
-        <span>Creative Design Studio</span>
+      <footer className="reveal-footer flex flex-col md:flex-row justify-between items-center text-[10px] tracking-widest text-muted uppercase font-mono z-10 w-full relative pt-8 border-t border-white/10 md:border-none md:pt-0">
+        <span className="mb-4 md:mb-0">Creative Design Studio</span>
         <span className="hidden md:inline text-accent">Launch / 001</span>
-        <span>&copy; Color Vision</span>
+        <span>&copy; {new Date().getFullYear()} Color Vision</span>
       </footer>
     </div>
   );
