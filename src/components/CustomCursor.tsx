@@ -12,6 +12,7 @@ export default function CustomCursor() {
   useEffect(() => {
     // Detect touch
     if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsTouch(false);
       document.body.classList.add("custom-cursor-active");
     }

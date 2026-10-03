@@ -51,7 +51,7 @@ export default function Contact() {
           <span className="text-accent">remarkable.</span>
         </h2>
         <p className="text-muted max-w-md pt-4">
-          We're currently accepting new projects. Fill out the form or send us an email directly at <a href="mailto:hello@colorvision.studio" className="text-foreground hover:text-accent underline transition-colors">hello@colorvision.studio</a>.
+          We&apos;re currently accepting new projects. Fill out the form or send us an email directly at <a href="mailto:info@colorvision.lk" className="text-foreground hover:text-accent underline transition-colors">info@colorvision.lk</a>.
         </p>
       </div>
       

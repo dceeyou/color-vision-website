@@ -55,7 +55,7 @@ export default function Testimonials() {
           {/* Subtle Glow */}
           <div className="absolute inset-0 bg-accent/0 group-hover:bg-accent/5 rounded-2xl transition-colors duration-500 blur-2xl pointer-events-none" />
           
-          <div className="text-6xl text-accent/30 font-serif leading-none absolute top-6 left-6 group-hover:-translate-y-2 group-hover:text-accent/60 transition-all duration-300">"</div>
+          <div className="text-6xl text-accent/30 font-serif leading-none absolute top-6 left-6 group-hover:-translate-y-2 group-hover:text-accent/60 transition-all duration-300">&quot;</div>
           
           <p className="relative z-10 text-xl md:text-2xl font-medium leading-relaxed mt-6 mb-10 text-foreground">
             Color Vision entirely transformed our digital presence. Their meticulous attention to detail and deep understanding of our strategic goals resulted in a platform that truly matters.

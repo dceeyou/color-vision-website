@@ -94,17 +94,18 @@ const fragmentShaderSource = `
     
     // Colors
     vec3 bgColor = vec3(0.02, 0.024, 0.031); // #050608 base
-    vec3 color1 = vec3(1.0, 0.3, 0.0); // #FF4D00 Orange
-    vec3 color2 = vec3(0.3, 0.05, 0.0); // Dark red-orange
-    vec3 color3 = vec3(0.05, 0.05, 0.06); // Dark charcoal
+    vec3 color1 = vec3(1.0, 0.3, 0.0); // #FF4D00 Orange (subtle glow)
+    vec3 color2 = vec3(0.05, 0.035, 0.03); // #0D0908
+    vec3 color3 = vec3(0.03, 0.035, 0.043); // #08090B
     
     // Mix based on noise
     vec3 finalColor = mix(bgColor, color3, clamp((f*f)*4.0, 0.0, 1.0));
     finalColor = mix(finalColor, color2, clamp(length(q), 0.0, 1.0));
-    finalColor = mix(finalColor, color1, clamp(length(r.x), 0.0, 1.0) * 0.3 * (f * f * f));
+    // Drastically reduce orange intensity
+    finalColor = mix(finalColor, color1, clamp(length(r.x), 0.0, 1.0) * 0.08 * (f * f * f));
     
-    // Mouse glow interaction
-    finalColor += color1 * mouseInfluence * 0.15;
+    // Mouse glow interaction (very subtle)
+    finalColor += color1 * mouseInfluence * 0.05;
     
     // Add grid overlay
     finalColor += vec3(gridLines);
@@ -182,7 +183,7 @@ export default function LiquidBackgroundWebGL() {
     const uMouse = gl.getUniformLocation(program, "u_mouse");
     
     let animationFrameId: number;
-    let startTime = Date.now();
+    const startTime = Date.now();
     let mouseX = 0;
     let mouseY = 0;
     let targetMouseX = 0;

@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 
-export default function Work({ projects }: { projects: any[] }) {
+export default function Work({ projects }: { projects: unknown[] }) {
   const containerRef = useRef<HTMLDivElement>(null);
   
   // Minimal fallback projects if none provided

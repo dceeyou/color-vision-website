@@ -12,6 +12,7 @@ export default function LaunchCursor() {
   useEffect(() => {
     const isReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (window.matchMedia("(hover: hover) and (pointer: fine)").matches && !isReduced) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsTouch(false);
       document.body.classList.add("custom-cursor-active");
     }

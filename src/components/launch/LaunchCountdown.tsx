@@ -28,6 +28,7 @@ export default function LaunchCountdown() {
       return { days, hours, minutes, seconds, isLive: false };
     };
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setTimeLeft(calculateTime());
 
     const timer = setInterval(() => {

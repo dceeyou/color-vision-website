@@ -38,7 +38,7 @@ export default function Footer() {
           </div>
           <div className="flex flex-col gap-4">
             <h4 className="text-foreground mb-2">Contact</h4>
-            <Link href="mailto:hello@colorvision.studio" className="hover:text-accent transition-colors normal-case tracking-normal">hello@colorvision.studio</Link>
+            <Link href="mailto:info@colorvision.lk" className="hover:text-accent transition-colors normal-case tracking-normal">info@colorvision.lk</Link>
             <Link href="#" className="hover:text-accent transition-colors normal-case tracking-normal">+1 (555) 123-4567</Link>
           </div>
         </div>
