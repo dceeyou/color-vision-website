@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Footer() {
   return (
@@ -9,8 +10,9 @@ export default function Footer() {
       <div className="flex flex-col md:flex-row justify-between items-start gap-16 relative z-10">
         <div>
           <Link href="/" className="flex items-center gap-3 group mb-6">
-            <div className="w-10 h-10 bg-accent rounded-full flex items-center justify-center font-bold text-xl text-background">CV</div>
-            <span className="font-bold tracking-widest text-sm">COLOR VISION</span>
+            <div className="relative w-32 h-10 group-hover:scale-105 transition-transform">
+              <Image src="/logo.png" alt="Color Vision" fill className="object-contain object-left" />
+            </div>
           </Link>
           <p className="text-muted text-sm max-w-xs">An independent creative design studio shaping the future of visual communication.</p>
         </div>

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import gsap from "gsap";
 import { Menu, X } from "lucide-react";
 
@@ -45,8 +46,9 @@ export default function Navigation() {
     <>
       <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${scrolled ? 'bg-[#050608]/80 backdrop-blur-md border-b border-white/10 py-4' : 'bg-transparent py-6'} px-6 md:px-12 flex justify-between items-center`}>
         <Link href="/" className="flex items-center gap-3 group z-50">
-          <div className="w-10 h-10 bg-accent rounded-full flex items-center justify-center font-bold text-xl text-background group-hover:scale-110 transition-transform">CV</div>
-          <span className="font-bold tracking-widest text-sm hidden md:block">COLOR VISION</span>
+          <div className="relative w-32 h-10 group-hover:scale-105 transition-transform">
+            <Image src="/logo.png" alt="Color Vision" fill className="object-contain object-left" />
+          </div>
         </Link>
         
         <nav className="hidden md:flex gap-8 text-xs font-bold uppercase tracking-widest text-muted">

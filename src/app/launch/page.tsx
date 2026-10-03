@@ -60,9 +60,8 @@ export default function LaunchPage() {
       {/* Header */}
       <header className="flex justify-between items-start z-10 w-full relative">
         <div className="reveal-logo md:absolute md:left-12 md:top-8 left-6 top-6">
-          {/* Ensure logo exists or fallback gracefully */}
-          <div className="w-12 h-12 relative">
-             <Image src="/brand-mark.png" alt="Color Vision" fill className="object-contain" />
+          <div className="w-32 h-10 relative">
+             <Image src="/logo.png" alt="Color Vision" fill className="object-contain object-left" />
           </div>
         </div>
         
