@@ -111,8 +111,16 @@ export default function LaunchPage() {
 
       </main>
 
+      {/* Contact Section */}
+      <div className="reveal-footer flex flex-col md:flex-row justify-center items-center gap-6 md:gap-12 z-10 w-full relative pt-12 pb-8 font-mono text-xs tracking-widest text-muted">
+        <a href="mailto:info@colorvision.lk" className="hover:text-accent transition-colors cursor-hover">info@colorvision.lk</a>
+        <a href="https://wa.me/94761428445" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors cursor-hover flex items-center gap-2">
+          +94 76 142 8445 <span>(WhatsApp)</span>
+        </a>
+      </div>
+
       {/* Footer */}
-      <footer className="reveal-footer flex flex-col md:flex-row justify-between items-center text-[10px] tracking-widest text-muted uppercase font-mono z-10 w-full relative pt-8 border-t border-white/10 md:border-none md:pt-0">
+      <footer className="reveal-footer flex flex-col md:flex-row justify-between items-center text-[10px] tracking-widest text-muted uppercase font-mono z-10 w-full relative pt-8 border-t border-white/10 md:border-none md:pt-0 pb-6 md:pb-0">
         <span className="mb-4 md:mb-0">Creative Design Studio</span>
         <span className="hidden md:inline text-accent">Launch / 001</span>
         <span>&copy; {new Date().getFullYear()} Color Vision</span>
