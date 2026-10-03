@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import LaunchCursor from "@/components/launch/LaunchCursor";
-import LiquidBackground from "@/components/launch/LiquidBackground";
+import LiquidBackgroundWebGL from "@/components/launch/LiquidBackgroundWebGL";
 import LaunchCountdown from "@/components/launch/LaunchCountdown";
 import LaunchProgress from "@/components/launch/LaunchProgress";
 
@@ -39,7 +39,6 @@ export default function LaunchPage() {
       .to(".reveal-progress", { opacity: 1, y: 0, duration: 1 }, 2.2)
       .to(".reveal-footer", { opacity: 1, y: 0, duration: 1 }, 2.4);
 
-    // Headline Hover Effect via CSS classes
   }, []);
 
   return (
@@ -47,7 +46,7 @@ export default function LaunchPage() {
       
       {/* Background System */}
       <div className="reveal-grid absolute inset-0 z-0 pointer-events-none">
-        <LiquidBackground />
+        <LiquidBackgroundWebGL />
       </div>
 
       <LaunchCursor />
