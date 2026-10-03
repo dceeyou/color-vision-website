@@ -59,7 +59,7 @@ export default function LaunchCountdown() {
   if (timeLeft.isLive) {
     return (
       <div className="mt-12 reveal-item">
-        <h2 className="text-4xl md:text-6xl font-bold tracking-widest text-accent">WE'RE LIVE.</h2>
+        <h2 className="text-4xl md:text-6xl font-bold tracking-widest text-accent">WE&apos;RE LIVE.</h2>
       </div>
     );
   }

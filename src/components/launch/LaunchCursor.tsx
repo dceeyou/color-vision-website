@@ -23,8 +23,6 @@ export default function LaunchCursor() {
 
     const xDotSet = gsap.quickSetter(dot, "x", "px");
     const yDotSet = gsap.quickSetter(dot, "y", "px");
-    const xRingSet = gsap.quickSetter(ring, "x", "px");
-    const yRingSet = gsap.quickSetter(ring, "y", "px");
 
     const onMouseMove = (e: MouseEvent) => {
       const { clientX, clientY } = e;

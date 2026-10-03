@@ -4,7 +4,6 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import LaunchCursor from "@/components/launch/LaunchCursor";
-import LaunchOrb from "@/components/launch/LaunchOrb";
 import LaunchCountdown from "@/components/launch/LaunchCountdown";
 import LaunchProgress from "@/components/launch/LaunchProgress";
 
@@ -78,16 +77,6 @@ export default function LaunchPage() {
 
       {/* Main Content */}
       <main className="flex-1 flex flex-col items-center justify-center text-center w-full max-w-5xl mx-auto z-10 my-16 md:my-0">
-        
-        {/* Orbital System */}
-        <div className="reveal-orb mb-12 md:mb-16 relative perspective-1000">
-          {/* Circular Progress Ring Around the Orb */}
-          <svg className="absolute inset-0 w-full h-full -rotate-90 pointer-events-none scale-110" viewBox="0 0 520 520">
-            <circle cx="260" cy="260" r="250" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="2" />
-            <circle cx="260" cy="260" r="250" fill="none" stroke="#FF4D00" strokeWidth="2" strokeDasharray="1570" className="progress-ring" />
-          </svg>
-          <LaunchOrb />
-        </div>
 
         {/* Typography */}
         <div className="space-y-6 flex flex-col items-center">
@@ -95,34 +84,34 @@ export default function LaunchPage() {
             Color Vision / 2026
           </p>
           
-          <div className="flex flex-col items-center space-y-[-5px] md:space-y-[-10px] perspective-1000">
+          <div className="flex flex-col items-center space-y-[-5px] md:space-y-[-10px] perspective-1000 mt-4">
             <div className="overflow-hidden pb-2 pt-2">
-              <h1 className="reveal-headline-line text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight">
+              <h1 className="reveal-headline-line text-6xl md:text-8xl lg:text-9xl font-bold tracking-tight">
                 Something
               </h1>
             </div>
             <div className="overflow-hidden pb-2 pt-2">
-              <h1 className="reveal-headline-line text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-accent transition-all duration-500 hover:-translate-y-[2px] hover:tracking-wide hover:shadow-[0_0_30px_rgba(255,77,0,0.5)] cursor-default">
+              <h1 className="reveal-headline-line text-6xl md:text-8xl lg:text-9xl font-bold tracking-tight text-accent transition-all duration-500 hover:-translate-y-[2px] hover:tracking-wide hover:shadow-[0_0_30px_rgba(255,77,0,0.5)] cursor-default">
                 remarkable
               </h1>
             </div>
             <div className="overflow-hidden pb-2 pt-2">
-              <h1 className="reveal-headline-line text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight">
+              <h1 className="reveal-headline-line text-6xl md:text-8xl lg:text-9xl font-bold tracking-tight">
                 is coming.
               </h1>
             </div>
           </div>
           
-          <p className="reveal-desc text-muted max-w-sm mx-auto text-sm mt-6">
-            We're building a new digital experience. Worth the wait.
+          <p className="reveal-desc text-muted max-w-md mx-auto text-base md:text-lg mt-8">
+            We&apos;re building a new digital experience. Worth the wait.
           </p>
         </div>
 
-        <div className="reveal-countdown w-full flex justify-center">
+        <div className="reveal-countdown w-full flex justify-center mt-12 md:mt-20">
           <LaunchCountdown />
         </div>
 
-        <div className="reveal-progress">
+        <div className="reveal-progress w-full flex justify-center">
           <LaunchProgress />
         </div>
 

@@ -26,20 +26,16 @@ export default function LaunchProgress() {
     return () => clearInterval(interval);
   }, []);
 
-  const radius = 260; // Slightly larger than the Orb's 250 center
-  const circumference = 2 * Math.PI * radius;
-  const strokeDashoffset = circumference - (progress / 100) * circumference;
-
   useEffect(() => {
-    gsap.to(".progress-ring", {
-      strokeDashoffset,
+    gsap.to(".progress-fill", {
+      width: `${progress}%`,
       duration: 1.5,
       ease: "power2.out"
     });
-  }, [strokeDashoffset]);
+  }, [progress]);
 
   return (
-    <div className="mt-16 flex flex-col items-center gap-4 reveal-item relative z-10">
+    <div className="mt-20 flex flex-col items-center gap-4 reveal-item relative z-10 w-full max-w-lg">
       <div className="flex items-center gap-4">
         <span className="text-accent font-bold tracking-[0.2em] text-xs">
           LAUNCH PROGRESS
@@ -49,13 +45,8 @@ export default function LaunchProgress() {
         </span>
       </div>
       
-      {/* We apply the circular ring visually behind the orb in the page layout, 
-          or we can render a minimal horizontal bar here for clarity on mobile.
-          The prompt asked for a circular progress ring *around* the orbital system.
-          We will export the ring calculation to be used in page.tsx if needed, 
-          but drawing a horizontal one here is also good fallback. */}
-      <div className="w-64 h-[1px] bg-border-light relative mt-2 md:hidden">
-         <div className="absolute top-0 left-0 h-full bg-accent transition-all duration-500" style={{ width: `${progress}%` }} />
+      <div className="w-full h-[1px] bg-border-light relative mt-2">
+         <div className="progress-fill absolute top-0 left-0 h-full bg-accent" style={{ width: '0%' }} />
       </div>
     </div>
   );
