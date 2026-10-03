@@ -3,7 +3,7 @@ const API_URL = process.env.WORDPRESS_API_URL || 'https://placeholder.wp.endpoin
 /**
  * Utility function to execute GraphQL queries against the Headless WordPress backend.
  */
-async function fetchAPI(query = '', { variables }: Record<string, any> = {}) {
+async function fetchAPI(query = '', { variables }: Record<string, unknown> = {}) {
   const headers = { 'Content-Type': 'application/json' };
   
   if (process.env.WORDPRESS_AUTH_REFRESH_TOKEN) {

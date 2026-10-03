@@ -115,7 +115,7 @@ export default function Hero() {
             View Work
           </Link>
           <Link href="#contact" className="text-foreground uppercase tracking-widest text-sm hover:text-accent transition-colors flex items-center gap-2 group">
-            Let's Talk <span className="group-hover:translate-x-1 transition-transform">→</span>
+            Let&apos;s Talk <span className="group-hover:translate-x-1 transition-transform">→</span>
           </Link>
         </div>
       </div>

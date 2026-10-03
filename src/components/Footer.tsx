@@ -1,7 +1,11 @@
+"use client";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import Image from "next/image";
 
 export default function Footer() {
+  const pathname = usePathname();
+  if (pathname === "/" || pathname === "/launch") return null;
   return (
     <footer className="px-6 md:px-12 py-16 border-t border-border-light relative overflow-hidden">
       {/* Background Grid specific to footer */}

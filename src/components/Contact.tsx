@@ -47,7 +47,7 @@ export default function Contact() {
       <div className="lg:w-1/2 space-y-6">
         <p className="uppercase tracking-widest text-muted text-sm mb-4">Have a project in mind?</p>
         <h2 className="text-5xl md:text-7xl font-bold leading-tight">
-          Let's make it<br />
+          Let&apos;s make it<br />
           <span className="text-accent">remarkable.</span>
         </h2>
         <p className="text-muted max-w-md pt-4">

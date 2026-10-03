@@ -13,10 +13,6 @@ export default function LaunchPage() {
 
   useEffect(() => {
     // Hide global Navigation and Footer dynamically so we don't affect main site RootLayout
-    const globalHeader = document.querySelector('header.fixed');
-    const globalFooter = document.querySelector('footer.border-border-light');
-    if (globalHeader) globalHeader.setAttribute('style', 'display: none !important');
-    if (globalFooter) globalFooter.setAttribute('style', 'display: none !important');
 
     // Cinematic Entrance Sequence
     const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
@@ -41,8 +37,6 @@ export default function LaunchPage() {
 
     return () => {
       // Restore on unmount just in case
-      if (globalHeader) globalHeader.setAttribute('style', '');
-      if (globalFooter) globalFooter.setAttribute('style', '');
     };
   }, []);
 
