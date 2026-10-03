@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 
-export default function Work({ projects }: { projects: unknown[] }) {
+export default function Work({ projects }: { projects: any[] }) {
   const containerRef = useRef<HTMLDivElement>(null);
   
   // Minimal fallback projects if none provided
