@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import LaunchCursor from "@/components/launch/LaunchCursor";
+import LiquidBackground from "@/components/launch/LiquidBackground";
 import LaunchCountdown from "@/components/launch/LaunchCountdown";
 import LaunchProgress from "@/components/launch/LaunchProgress";
 
@@ -46,13 +47,7 @@ export default function LaunchPage() {
       
       {/* Background System */}
       <div className="reveal-grid absolute inset-0 z-0 pointer-events-none">
-        <div className="tech-grid opacity-20" />
-        <div className="noise-overlay opacity-[0.04]" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-accent/10 blur-[150px] rounded-full mix-blend-screen" />
-        
-        {/* Subtle floating particles in bg */}
-        <div className="absolute top-1/4 left-1/4 w-1 h-1 bg-white/30 rounded-full animate-ping" style={{ animationDuration: '4s' }} />
-        <div className="absolute top-3/4 right-1/4 w-1.5 h-1.5 bg-accent/40 rounded-full animate-pulse" style={{ animationDuration: '3s' }} />
+        <LiquidBackground />
       </div>
 
       <LaunchCursor />
@@ -90,7 +85,7 @@ export default function LaunchPage() {
               </h1>
             </div>
             <div className="overflow-hidden pb-2 pt-2">
-              <h1 className="reveal-headline-line text-6xl md:text-8xl lg:text-9xl font-bold tracking-tight text-accent transition-all duration-500 hover:-translate-y-[2px] hover:tracking-wide hover:shadow-[0_0_30px_rgba(255,77,0,0.5)] cursor-default">
+              <h1 className="reveal-headline-line text-6xl md:text-8xl lg:text-9xl font-bold tracking-tight text-accent transition-all duration-500 hover:-translate-y-[2px] hover:tracking-wide hover:drop-shadow-[0_0_20px_rgba(255,77,0,0.6)] cursor-default">
                 remarkable
               </h1>
             </div>
