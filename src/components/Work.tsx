@@ -4,14 +4,16 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 
-export default function Work({ projects }: { projects: any[] }) {
+import { Project } from "@/lib/wordpress/types";
+
+export default function Work({ projects }: { projects?: Project[] }) {
   const containerRef = useRef<HTMLDivElement>(null);
   
   // Minimal fallback projects if none provided
-  const items = projects?.length > 0 ? projects : [
-    { node: { id: 1, title: 'Aura FinTech', projectFields: { category: 'Brand / UI' } } },
-    { node: { id: 2, title: 'Nexus System', projectFields: { category: 'Product' } } },
-    { node: { id: 3, title: 'Horizon Ventures', projectFields: { category: 'Strategy' } } },
+  const items = projects?.length ? projects : [
+    { id: '1', title: 'Aura FinTech', category: ['Brand / UI'] } as any,
+    { id: '2', title: 'Nexus System', category: ['Product'] } as any,
+    { id: '3', title: 'Horizon Ventures', category: ['Strategy'] } as any,
   ];
 
   useEffect(() => {
@@ -67,7 +69,7 @@ export default function Work({ projects }: { projects: any[] }) {
           let cardRef: HTMLDivElement | null = null;
           return (
             <div 
-              key={project.node.id} 
+              key={project.id} 
               ref={el => { cardRef = el; }}
               className={`work-card-reveal group cursor-view relative ${i === 1 ? 'md:mt-16' : i === 2 ? 'md:mt-32' : ''}`}
               onMouseMove={(e) => handleMouseMove(e, cardRef)}
@@ -83,8 +85,8 @@ export default function Work({ projects }: { projects: any[] }) {
               
               <div className="mt-6 flex justify-between items-start transition-transform duration-300 group-hover:translate-x-2">
                 <div>
-                  <p className="text-accent uppercase text-[10px] tracking-widest mb-2 font-bold">{project.node.projectFields?.category}</p>
-                  <h3 className="text-2xl font-bold">{project.node.title}</h3>
+                  <p className="text-accent uppercase text-[10px] tracking-widest mb-2 font-bold">{project.category?.[0]}</p>
+                  <h3 className="text-2xl font-bold">{project.title}</h3>
                 </div>
                 <div className="w-8 h-8 rounded-full border border-border-light flex items-center justify-center transform group-hover:rotate-45 group-hover:border-accent group-hover:bg-accent group-hover:text-black transition-all duration-300">
                   <span className="text-sm">↗</span>

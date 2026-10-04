@@ -1,17 +1,23 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useMemo } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-const stats = [
-  { value: 20, suffix: "+", label: "Projects" },
-  { value: 10, suffix: "+", label: "Years" },
-  { value: 5, suffix: "+", label: "Awards" },
-  { value: 100, suffix: "%", label: "Commitment" },
-];
+import { Stat } from "@/lib/wordpress/types";
 
-export default function Stats() {
+export default function Stats({ stats: propStats }: { stats?: Stat[] }) {
+  const stats = useMemo(() => propStats?.map(s => {
+    const valMatch = s.number.match(/^(\d+)/);
+    const value = valMatch ? parseInt(valMatch[1], 10) : 0;
+    const suffix = s.number.replace(/^\d+/, '');
+    return { value, suffix, label: s.label };
+  }) || [
+    { value: 20, suffix: "+", label: "Projects" },
+    { value: 10, suffix: "+", label: "Years" },
+    { value: 5, suffix: "+", label: "Awards" },
+    { value: 100, suffix: "%", label: "Commitment" },
+  ], [propStats]);
   const containerRef = useRef<HTMLDivElement>(null);
   const numRefs = useRef<(HTMLHeadingElement | null)[]>([]);
 
@@ -52,7 +58,7 @@ export default function Stats() {
       );
     }, containerRef);
     return () => ctx.revert();
-  }, []);
+  }, [stats]);
 
   return (
     <section ref={containerRef} className="px-6 md:px-12 py-16 relative">

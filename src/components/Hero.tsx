@@ -4,7 +4,9 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import Link from "next/link";
 
-export default function Hero() {
+import { HeroContent } from "@/lib/wordpress/types";
+
+export default function Hero({ hero }: { hero?: HeroContent }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const eyebrowRef = useRef<HTMLParagraphElement>(null);
   const title1Ref = useRef<HTMLDivElement>(null);
@@ -25,7 +27,7 @@ export default function Hero() {
     // Text animations
     tl.fromTo(eyebrowRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8 }, 0.2);
     
-    // Split text reveal for "Design" and "That Matters."
+    // Split text reveal for "{hero?.heading?.split("\n")[0] || "Design"}" and "{hero?.highlightedText || "That Matters."}"
     tl.fromTo(title1Ref.current, { opacity: 0, y: 80 }, { opacity: 1, y: 0, duration: 1 }, 0.3);
     
     // Clip-path reveal for the second line
@@ -91,28 +93,28 @@ export default function Hero() {
       
       {/* Left Content */}
       <div className="lg:w-1/2 z-10 space-y-6">
-        <p ref={eyebrowRef} className="uppercase tracking-[0.3em] text-xs font-bold text-muted">Creative Design Studio</p>
+        <p ref={eyebrowRef} className="uppercase tracking-[0.3em] text-xs font-bold text-muted">{hero?.eyebrow || "Creative Design Studio"}</p>
         
         <div className="space-y-[-10px] sm:space-y-[-20px]">
           <div className="overflow-hidden pb-4">
             <h1 ref={title1Ref} className="text-[12vw] lg:text-[7vw] font-bold leading-none text-foreground">
-              Design
+              {hero?.heading?.split("\n")[0] || "Design"}
             </h1>
           </div>
           <div className="overflow-hidden pt-2 pb-4">
             <h1 ref={title2Ref} className="text-[12vw] lg:text-[7vw] font-bold leading-none text-accent">
-              That Matters.
+              {hero?.highlightedText || "That Matters."}
             </h1>
           </div>
         </div>
 
         <p ref={pRef} className="text-muted max-w-lg text-lg leading-relaxed pt-6">
-          We craft digital experiences that transcend the ordinary. An independent creative design studio shaping the future of visual communication and digital products.
+          {hero?.description || "We craft digital experiences that transcend the ordinary. An independent creative design studio shaping the future of visual communication and digital products."}
         </p>
         
         <div ref={btnsRef} className="pt-8 flex gap-8 items-center">
           <Link href="#work" className="bg-accent text-background px-10 py-5 font-bold uppercase tracking-widest text-sm rounded-full hover:bg-white hover:scale-105 transition-all duration-300 shadow-[0_0_20px_rgba(255,77,0,0.4)]">
-            View Work
+            {hero?.primaryCtaLabel || "View Work"}
           </Link>
           <Link href="#contact" className="text-foreground uppercase tracking-widest text-sm hover:text-accent transition-colors flex items-center gap-2 group">
             Let&apos;s Talk <span className="group-hover:translate-x-1 transition-transform">→</span>

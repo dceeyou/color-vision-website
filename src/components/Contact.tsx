@@ -3,7 +3,9 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 
-export default function Contact() {
+import { ContactContent } from "@/lib/wordpress/types";
+
+export default function Contact({ contact }: { contact?: ContactContent }) {
   const btnRef = useRef<HTMLButtonElement>(null);
   const arrowRef = useRef<HTMLSpanElement>(null);
 
@@ -45,13 +47,15 @@ export default function Contact() {
       <div className="absolute inset-0 bg-[#000] z-[-1]" />
       
       <div className="lg:w-1/2 space-y-6">
-        <p className="uppercase tracking-widest text-muted text-sm mb-4">Have a project in mind?</p>
+        <p className="uppercase tracking-widest text-muted text-sm mb-4">{contact?.eyebrow || "Have a project in mind?"}</p>
         <h2 className="text-5xl md:text-7xl font-bold leading-tight">
-          Let&apos;s make it<br />
-          <span className="text-accent">remarkable.</span>
+          {contact?.heading?.split('\n')[0] || "Let's make it"}<br />
+          <span className="text-accent">{contact?.highlightedHeading || "remarkable."}</span>
         </h2>
         <p className="text-muted max-w-md pt-4">
-          We&apos;re currently accepting new projects. Fill out the form or send us an email directly at <a href="mailto:info@colorvision.lk" className="text-foreground hover:text-accent underline transition-colors">info@colorvision.lk</a>.
+          {contact?.description || "We're currently accepting new projects. Fill out the form or send us an email directly at "}
+          {!contact?.description && <a href={`mailto:${contact?.email || "info@colorvision.lk"}`} className="text-foreground hover:text-accent underline transition-colors">{contact?.email || "info@colorvision.lk"}</a>}
+          {!contact?.description && "."}
         </p>
       </div>
       

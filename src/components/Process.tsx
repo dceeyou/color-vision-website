@@ -4,15 +4,20 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-const steps = [
-  { num: "01", title: "Understand the challenge", desc: "Immersing in your world to uncover truths." },
-  { num: "02", title: "Find the right direction", desc: "Defining the conceptual and architectural framework." },
-  { num: "03", title: "Explore the possibilities", desc: "Iterative design execution balancing aesthetics." },
-  { num: "04", title: "Make the details count", desc: "Meticulous detailing and polishing." },
-  { num: "05", title: "Ready for the real world", desc: "Launch and observe the impact." },
-];
+import { ProcessStep } from "@/lib/wordpress/types";
 
-export default function Process() {
+export default function Process({ steps: propSteps }: { steps?: ProcessStep[] }) {
+  const steps = propSteps?.map(s => ({
+    num: s.stepNumber,
+    title: s.title,
+    desc: s.description
+  })) || [
+    { num: "01", title: "Understand the challenge", desc: "Immersing in your world to uncover truths." },
+    { num: "02", title: "Find the right direction", desc: "Defining the conceptual and architectural framework." },
+    { num: "03", title: "Explore the possibilities", desc: "Iterative design execution balancing aesthetics." },
+    { num: "04", title: "Make the details count", desc: "Meticulous detailing and polishing." },
+    { num: "05", title: "Ready for the real world", desc: "Launch and observe the impact." },
+  ];
   const containerRef = useRef<HTMLDivElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
   const itemsRef = useRef<(HTMLDivElement | null)[]>([]);

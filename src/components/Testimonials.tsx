@@ -3,7 +3,9 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 
-export default function Testimonials() {
+import { Testimonial } from "@/lib/wordpress/types";
+
+export default function Testimonials({ testimonials }: { testimonials?: Testimonial[] }) {
   const cardRef = useRef<HTMLDivElement>(null);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -58,7 +60,7 @@ export default function Testimonials() {
           <div className="text-6xl text-accent/30 font-serif leading-none absolute top-6 left-6 group-hover:-translate-y-2 group-hover:text-accent/60 transition-all duration-300">&quot;</div>
           
           <p className="relative z-10 text-xl md:text-2xl font-medium leading-relaxed mt-6 mb-10 text-foreground">
-            Color Vision entirely transformed our digital presence. Their meticulous attention to detail and deep understanding of our strategic goals resulted in a platform that truly matters.
+            {testimonials?.[0]?.testimonial || "Color Vision entirely transformed our digital presence. Their meticulous attention to detail and deep understanding of our strategic goals resulted in a platform that truly matters."}
           </p>
           
           <div className="flex items-center gap-4 relative z-10">
@@ -66,8 +68,8 @@ export default function Testimonials() {
                {/* Avatar placeholder */}
             </div>
             <div>
-              <p className="font-bold">Sarah Jenkins</p>
-              <p className="text-muted text-sm">CMO, Aura FinTech</p>
+              <p className="font-bold">{testimonials?.[0]?.clientName || "Sarah Jenkins"}</p>
+              <p className="text-muted text-sm">{testimonials?.[0]?.clientRole ? `${testimonials[0].clientRole}, ${testimonials[0].companyName}` : "CMO, Aura FinTech"}</p>
             </div>
           </div>
         </div>

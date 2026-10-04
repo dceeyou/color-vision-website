@@ -3,16 +3,17 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 
-const services = [
-  "Brand Identity",
-  "UI/UX Design",
-  "Digital Product Design",
-  "Web Design",
-  "Design Systems",
-  "Visual Communication"
-];
+import { Service } from "@/lib/wordpress/types";
 
-export default function Services() {
+export default function Services({ services: propServices }: { services?: Service[] }) {
+  const services = propServices?.map(s => s.name) || [
+    "Brand Identity",
+    "UI/UX Design",
+    "Digital Product Design",
+    "Web Design",
+    "Design Systems",
+    "Visual Communication"
+  ];
   const containerRef = useRef<HTMLDivElement>(null);
   const title1Ref = useRef<HTMLDivElement>(null);
   const title2Ref = useRef<HTMLDivElement>(null);
