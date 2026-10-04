@@ -4,8 +4,8 @@ import SmoothScroll from "@/components/SmoothScroll";
 import CustomCursor from "@/components/CustomCursor";
 
 export const metadata: Metadata = {
-  title: "Color Vision | Creative Design Studio",
-  description: "An award-winning futuristic design studio.",
+  title: "Color Vision — Design That Matters.",
+  description: "Color Vision is an independent design studio based in Sri Lanka, helping ambitious businesses turn ideas into clear brands, digital products, and meaningful experiences.",
 };
 
 export default function RootLayout({
