@@ -381,3 +381,21 @@ export async function getTestimonials(): Promise<Testimonial[]> {
     }
   ];
 }
+
+export async function getContact(): Promise<ContactContent> {
+  const data = await fetchWP(`query { contact { eyebrow heading highlightedHeading description ctaLabel email phone location formHeading formSuccessMessage } }`);
+  if (data?.contact) return data.contact;
+
+  return {
+    eyebrow: "LET'S CREATE TOGETHER",
+    heading: "Have a project in mind?\nLet's make it",
+    highlightedHeading: "matter.",
+    description: "Have an idea, a challenge, or a product that needs a clearer direction? Tell us what you're working on and what you're trying to solve. We'll bring strategy and purposeful design together to turn your idea into an experience people can understand, use, and remember.",
+    ctaLabel: "SEND INQUIRY",
+    email: "info@colorvision.lk",
+    phone: "",
+    location: "Colombo, Sri Lanka",
+    formHeading: "Project Inquiry",
+    formSuccessMessage: "Thanks for reaching out. We've received your project details and will get back to you soon."
+  };
+}
