@@ -193,9 +193,102 @@ export async function getProjects(): Promise<Project[]> {
 
   // Fallback Data
   return [
-    { id: "1", title: "Aura FinTech", slug: "aura-fintech", category: ["Brand", "UI/UX"], shortDescription: "", fullDescription: "", clientName: "", year: "2026", featuredImage: null, galleryImages: [], projectUrl: "", caseStudyUrl: "", servicesUsed: [], featuredProject: true },
-    { id: "2", title: "Nexus System", slug: "nexus-system", category: ["Product", "Web"], shortDescription: "", fullDescription: "", clientName: "", year: "2026", featuredImage: null, galleryImages: [], projectUrl: "", caseStudyUrl: "", servicesUsed: [], featuredProject: true },
-    { id: "3", title: "Horizon Ventures", slug: "horizon-ventures", category: ["Strategy", "Brand"], shortDescription: "", fullDescription: "", clientName: "", year: "2026", featuredImage: null, galleryImages: [], projectUrl: "", caseStudyUrl: "", servicesUsed: [], featuredProject: true }
+    {
+      id: "elegant-ai",
+      title: "Elegant AI",
+      slug: "elegant-ai",
+      category: ["UI/UX", "Digital", "UI/UX / Digital Product"],
+      shortDescription: "A clearer digital experience for AI-powered technology, making complex capabilities easier to understand and use.",
+      fullDescription: "A clearer digital experience for AI-powered technology, making complex capabilities easier to understand and use.",
+      clientName: "Elegant AI Labs",
+      year: "2025",
+      featuredImage: null,
+      galleryImages: [],
+      projectUrl: "#contact",
+      caseStudyUrl: "#contact",
+      servicesUsed: ["Interface Design", "Product Strategy", "Design System"],
+      featuredProject: true
+    },
+    {
+      id: "vehicle-service-platform",
+      title: "Vehicle Service Platform",
+      slug: "vehicle-service-platform",
+      category: ["UI/UX", "Digital", "UI/UX / Product Design"],
+      shortDescription: "A connected product experience designed to simplify vehicle servicing workflows and everyday operations.",
+      fullDescription: "A connected product experience designed to simplify vehicle servicing workflows and everyday operations.",
+      clientName: "FleetMotion Mobility",
+      year: "2025",
+      featuredImage: null,
+      galleryImages: [],
+      projectUrl: "#contact",
+      caseStudyUrl: "#contact",
+      servicesUsed: ["Web Application", "Mobile Experience", "Service Design"],
+      featuredProject: true
+    },
+    {
+      id: "cr-cricket-bar",
+      title: "CR Cricket Bar",
+      slug: "cr-cricket-bar",
+      category: ["Branding", "Graphic Design", "Brand Identity / Visual Design"],
+      shortDescription: "A distinctive identity translating the energy of cricket culture into a bold and memorable brand.",
+      fullDescription: "A distinctive identity translating the energy of cricket culture into a bold and memorable brand.",
+      clientName: "CR Hospitality",
+      year: "2024",
+      featuredImage: null,
+      galleryImages: [],
+      projectUrl: "#contact",
+      caseStudyUrl: "#contact",
+      servicesUsed: ["Visual Identity", "Environmental Design", "Print & Signage"],
+      featuredProject: false
+    },
+    {
+      id: "goodly",
+      title: "Goodly",
+      slug: "goodly",
+      category: ["Branding", "Graphic Design", "Brand Identity / Packaging"],
+      shortDescription: "A fresh visual identity for a healthy snack brand, balancing an approachable personality with contemporary packaging design.",
+      fullDescription: "A fresh visual identity for a healthy snack brand, balancing an approachable personality with contemporary packaging design.",
+      clientName: "Goodly Organics",
+      year: "2024",
+      featuredImage: null,
+      galleryImages: [],
+      projectUrl: "#contact",
+      caseStudyUrl: "#contact",
+      servicesUsed: ["Brand Strategy", "Packaging System", "Visual Identity"],
+      featuredProject: false
+    },
+    {
+      id: "my-little-kevi",
+      title: "My Little Kevi",
+      slug: "my-little-kevi",
+      category: ["UI/UX", "Digital", "UI/UX / Mobile"],
+      shortDescription: "A thoughtful mobile experience designed around pregnancy tracking and everyday personal care.",
+      fullDescription: "A thoughtful mobile experience designed around pregnancy tracking and everyday personal care.",
+      clientName: "Kevi Healthcare",
+      year: "2024",
+      featuredImage: null,
+      galleryImages: [],
+      projectUrl: "#contact",
+      caseStudyUrl: "#contact",
+      servicesUsed: ["Mobile UI/UX", "User Research", "Interaction Design"],
+      featuredProject: false
+    },
+    {
+      id: "baps",
+      title: "BAPS",
+      slug: "baps",
+      category: ["Branding", "Digital", "Graphic Design", "Branding / Web Design"],
+      shortDescription: "A cohesive visual identity and digital presentation designed to establish a consistent brand experience.",
+      fullDescription: "A cohesive visual identity and digital presentation designed to establish a consistent brand experience.",
+      clientName: "BAPS Group",
+      year: "2024",
+      featuredImage: null,
+      galleryImages: [],
+      projectUrl: "#contact",
+      caseStudyUrl: "#contact",
+      servicesUsed: ["Brand Identity", "Web Experience", "Design Guidelines"],
+      featuredProject: false
+    }
   ];
 }
 
