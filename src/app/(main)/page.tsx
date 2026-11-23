@@ -1,7 +1,8 @@
 import Hero from "@/components/Hero";
-import Stats from "@/components/Stats";
+import Marquee from "@/components/Marquee";
 import Services from "@/components/Services";
 import Work from "@/components/Work";
+import Stats from "@/components/Stats";
 import Process from "@/components/Process";
 import Statement from "@/components/Statement";
 import Testimonials from "@/components/Testimonials";
@@ -21,9 +22,10 @@ export default async function Home() {
   return (
     <main className="flex flex-col">
       <Hero hero={hero} />
-      <Stats stats={stats} />
+      <Marquee />
       <Services services={services} />
       <Work projects={projects} />
+      <Stats stats={stats} />
       <Process steps={processSteps} />
       <Statement />
       <Testimonials testimonials={testimonials} />
