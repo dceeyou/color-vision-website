@@ -13,16 +13,68 @@ export default function Navigation() {
   const menuRef = useRef<HTMLDivElement>(null);
   const menuItemsRef = useRef<(HTMLAnchorElement | null)[]>([]);
 
+  const links = [
+    { label: "Work", href: "#work", id: "work" },
+    { label: "Services", href: "#services", id: "services" },
+    { label: "About Us", href: "#about", id: "about" },
+    { label: "Process", href: "#process", id: "process" },
+    { label: "Contact", href: "#contact", id: "contact" },
+  ];
+
+  // Helper for smooth anchor scrolling with header offset
+  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    const id = href.replace("#", "");
+    let target = document.getElementById(id);
+
+    // Dynamic fallbacks if section element lacks direct ID
+    if (!target) {
+      if (id === "about") {
+        const sections = document.querySelectorAll("main > section");
+        if (sections.length >= 6) target = sections[5] as HTMLElement;
+      } else if (id === "process") {
+        const sections = document.querySelectorAll("main > section");
+        if (sections.length >= 5) target = sections[4] as HTMLElement;
+      }
+    }
+
+    if (target) {
+      const headerOffset = 80;
+      const elementPosition = target.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      });
+      setActiveSection(id);
+    }
+
+    if (menuOpen) {
+      setMenuOpen(false);
+    }
+  };
+
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 30);
+      setScrolled(window.scrollY > 20);
 
-      // Detect active section on scroll
-      const sections = ["work", "services", "process", "about", "contact"];
-      const scrollPosition = window.scrollY + 200;
+      // Track active section for navigation highlighting
+      const sections = ["work", "services", "about", "process", "contact"];
+      const scrollPosition = window.scrollY + 250;
 
       for (const sectionId of sections) {
-        const el = document.getElementById(sectionId);
+        let el = document.getElementById(sectionId);
+        if (!el) {
+          if (sectionId === "about") {
+            const all = document.querySelectorAll("main > section");
+            if (all.length >= 6) el = all[5] as HTMLElement;
+          } else if (sectionId === "process") {
+            const all = document.querySelectorAll("main > section");
+            if (all.length >= 5) el = all[4] as HTMLElement;
+          }
+        }
+
         if (el) {
           const top = el.offsetTop;
           const height = el.offsetHeight;
@@ -32,6 +84,7 @@ export default function Navigation() {
           }
         }
       }
+
       if (window.scrollY < 200) {
         setActiveSection("");
       }
@@ -42,42 +95,58 @@ export default function Navigation() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Keyboard accessibility: ESC key closes mobile menu
   useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && menuOpen) {
+        setMenuOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [menuOpen]);
+
+  useEffect(() => {
+    const isReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
     if (menuOpen) {
-      gsap.to(menuRef.current, { y: 0, opacity: 1, duration: 0.5, ease: "power3.inOut" });
-      gsap.fromTo(
-        menuItemsRef.current,
-        { y: 40, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.4, stagger: 0.08, delay: 0.2, ease: "power2.out" }
-      );
+      if (isReduced) {
+        gsap.set(menuRef.current, { y: 0, opacity: 1 });
+      } else {
+        gsap.to(menuRef.current, { y: 0, opacity: 1, duration: 0.45, ease: "power3.inOut" });
+        gsap.fromTo(
+          menuItemsRef.current,
+          { y: 30, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.35, stagger: 0.06, delay: 0.15, ease: "power2.out" }
+        );
+      }
       document.body.style.overflow = "hidden";
     } else {
-      gsap.to(menuRef.current, { y: "-100%", opacity: 0, duration: 0.4, ease: "power3.inOut" });
+      if (isReduced) {
+        gsap.set(menuRef.current, { y: "-100%", opacity: 0 });
+      } else {
+        gsap.to(menuRef.current, { y: "-100%", opacity: 0, duration: 0.35, ease: "power3.inOut" });
+      }
       document.body.style.overflow = "";
     }
   }, [menuOpen]);
 
-  const links = [
-    { label: "Work", href: "#work", id: "work" },
-    { label: "Services", href: "#services", id: "services" },
-    { label: "Process", href: "#process", id: "process" },
-    { label: "About", href: "#about", id: "about" },
-    { label: "Contact", href: "#contact", id: "contact" }
-  ];
-
   return (
     <>
       <header
-        className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
+        className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 border-b ${
           scrolled
-            ? "bg-[#08090D]/85 backdrop-blur-md border-b border-white/[0.08] py-4 shadow-xl shadow-black/20"
-            : "bg-transparent py-6 md:py-8 border-b border-transparent"
+            ? "bg-[#08090D]/90 backdrop-blur-md border-white/[0.08] py-4 shadow-xl shadow-black/40"
+            : "bg-[#08090D]/50 backdrop-blur-sm border-white/[0.04] py-6 md:py-7"
         }`}
       >
         <div className="w-full max-w-[1280px] mx-auto px-4 md:px-6 lg:px-0 flex justify-between items-center">
           {/* Logo aligned with grid */}
-          <Link href="/" className="flex items-center group z-50 focus:outline-none">
-            <div className="transition-transform duration-300 group-hover:opacity-90">
+          <Link
+            href="/"
+            className="flex items-center group z-50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#FF5108] rounded"
+          >
+            <div className="transition-opacity duration-200 group-hover:opacity-85">
               <Image
                 src="/logo.png"
                 alt="Color Vision"
@@ -89,25 +158,30 @@ export default function Navigation() {
             </div>
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-8 lg:gap-10 text-[12px] md:text-[13px] font-[600] uppercase tracking-[0.16em]">
+          {/* Desktop Right Navigation */}
+          <nav
+            aria-label="Main Navigation"
+            className="hidden md:flex items-center gap-7 lg:gap-8 text-[12px] md:text-[13px] font-[600] uppercase tracking-[0.14em]"
+          >
             {links.map((link) => {
               const isActive = activeSection === link.id;
               return (
-                <Link
+                <a
                   key={link.label}
                   href={link.href}
-                  className={`relative py-1.5 transition-colors duration-200 group ${
+                  onClick={(e) => scrollToSection(e, link.href)}
+                  className={`relative py-1 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#FF5108] rounded group ${
                     isActive ? "text-[#FF5108]" : "text-[#8E9098] hover:text-[#F4F2ED]"
                   }`}
                 >
                   <span>{link.label}</span>
+                  {/* Subtle active/hover indicator */}
                   <span
-                    className={`absolute bottom-0 left-0 h-[2px] bg-[#FF5108] transition-all duration-300 ease-out ${
+                    className={`absolute -bottom-1 left-0 h-[1.5px] bg-[#FF5108] transition-all duration-300 ease-out ${
                       isActive ? "w-full" : "w-0 group-hover:w-full"
                     }`}
                   />
-                </Link>
+                </a>
               );
             })}
           </nav>
@@ -115,39 +189,41 @@ export default function Navigation() {
           {/* Mobile Menu Button */}
           <button
             type="button"
-            className="md:hidden z-50 p-2 text-[#F4F2ED] hover:text-[#FF5108] transition-colors focus:outline-none"
+            className="md:hidden z-50 p-2 text-[#F4F2ED] hover:text-[#FF5108] transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#FF5108] rounded"
             onClick={() => setMenuOpen(!menuOpen)}
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+            aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
           >
-            {menuOpen ? <X size={26} /> : <Menu size={26} />}
+            {menuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
       </header>
 
-      {/* Mobile Full-Screen Menu */}
+      {/* Mobile Full-Screen Navigation Drawer */}
       <div
         ref={menuRef}
         className="fixed inset-0 bg-[#08090D] z-40 flex flex-col justify-center items-center -translate-y-full opacity-0 pointer-events-none data-[open=true]:pointer-events-auto"
         data-open={menuOpen}
+        aria-hidden={!menuOpen}
       >
-        <div className="absolute inset-0 bg-[#FF5108]/5 blur-[120px] rounded-full scale-125 pointer-events-none" />
-        <nav className="flex flex-col gap-7 text-center relative z-10">
+        <div className="absolute inset-0 bg-[#FF5108]/[0.04] blur-[120px] rounded-full scale-125 pointer-events-none" />
+        <nav className="flex flex-col gap-6 text-center relative z-10">
           {links.map((link, i) => {
             const isActive = activeSection === link.id;
             return (
-              <Link
+              <a
                 key={link.label}
                 href={link.href}
                 ref={(el) => {
                   menuItemsRef.current[i] = el;
                 }}
-                onClick={() => setMenuOpen(false)}
-                className={`text-3xl font-[700] uppercase tracking-tight transition-colors duration-200 ${
+                onClick={(e) => scrollToSection(e, link.href)}
+                className={`text-2xl sm:text-3xl font-[700] uppercase tracking-tight transition-colors duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#FF5108] px-4 py-2 ${
                   isActive ? "text-[#FF5108]" : "text-[#F4F2ED] hover:text-[#FF5108]"
                 }`}
               >
                 {link.label}
-              </Link>
+              </a>
             );
           })}
         </nav>
