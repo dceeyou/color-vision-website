@@ -294,10 +294,41 @@ export async function getProjects(): Promise<Project[]> {
 
 export async function getProcessSteps(): Promise<ProcessStep[]> {
   return [
-    { id: "1", stepNumber: "01", stepLabel: "DISCOVER", title: "Understand the challenge", description: "We learn about your business, audience, goals, and challenges to understand what the project really needs." },
-    { id: "2", stepNumber: "02", stepLabel: "DEFINE", title: "Find the right direction", description: "Creating a solid blueprint and strategy." },
-    { id: "3", stepNumber: "03", stepLabel: "DESIGN", title: "Explore the possibilities", description: "Crafting the visual identity and interface." },
-    { id: "4", stepNumber: "04", stepLabel: "DELIVER", title: "Ready for the real world", description: "Launching and ensuring everything is perfect." }
+    {
+      id: "1",
+      stepNumber: "01",
+      stepLabel: "DISCOVER",
+      title: "Understand the challenge",
+      description: "We learn about your business, audience, goals, competitors, challenges, and opportunities. This gives us the context needed to understand what the project actually needs."
+    },
+    {
+      id: "2",
+      stepNumber: "02",
+      stepLabel: "DEFINE",
+      title: "Find the right direction",
+      description: "We bring the findings together, establish priorities, structure the experience, and create a shared understanding of what success should look like."
+    },
+    {
+      id: "3",
+      stepNumber: "03",
+      stepLabel: "DESIGN",
+      title: "Explore the possibilities",
+      description: "We translate strategy into visual and digital experiences through concepts, wireframes, interfaces, identity systems, and prototypes."
+    },
+    {
+      id: "4",
+      stepNumber: "04",
+      stepLabel: "REFINE",
+      title: "Make the details count",
+      description: "We review, test, challenge, and refine the work to improve usability, clarity, consistency, and visual quality."
+    },
+    {
+      id: "5",
+      stepNumber: "05",
+      stepLabel: "DELIVER",
+      title: "Ready for the real world",
+      description: "We prepare final assets, specifications, components, and documentation to help the work move confidently from design into production."
+    }
   ];
 }
 
