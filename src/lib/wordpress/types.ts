@@ -84,6 +84,7 @@ export interface Testimonial {
   testimonial: string;
   clientPhoto: string | null;
   companyLogo: string | null;
+  projectReference?: string;
 }
 
 export interface ContactContent {

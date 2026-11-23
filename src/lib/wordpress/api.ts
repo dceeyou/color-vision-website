@@ -349,7 +349,35 @@ export async function getProcessSteps(): Promise<ProcessStep[]> {
 
 export async function getTestimonials(): Promise<Testimonial[]> {
   return [
-    { id: "1", clientName: "Sarah Chen", clientRole: "Founder", companyName: "Nexus", testimonial: "Color Vision fundamentally transformed how our users perceive our product.", clientPhoto: null, companyLogo: null },
-    { id: "2", clientName: "Marcus Thorne", clientRole: "Marketing Dir.", companyName: "Aura", testimonial: "The attention to detail is truly unmatched.", clientPhoto: null, companyLogo: null }
+    {
+      id: "demo-1",
+      clientName: "Client Partner [Demo Placeholder]",
+      clientRole: "Product Director",
+      companyName: "Fintech & Mobility Ecosystem",
+      testimonial: "Working with Color Vision brought clarity to our product structure from day one. Their team took the time to understand the underlying problem before touching a single wireframe, resulting in an interface that our users found genuinely intuitive.",
+      clientPhoto: null,
+      companyLogo: null,
+      projectReference: "02 — Vehicle Service Platform"
+    },
+    {
+      id: "demo-2",
+      clientName: "Design Director [Demo Placeholder]",
+      clientRole: "Brand Strategy Lead",
+      companyName: "Digital Technology Group",
+      testimonial: "The visual identity and design system created by Color Vision gave our brand a distinct, enduring presence. Their disciplined approach to typography, layout, and purpose-driven design set a completely new benchmark for our team.",
+      clientPhoto: null,
+      companyLogo: null,
+      projectReference: "01 — Elegant AI"
+    },
+    {
+      id: "demo-3",
+      clientName: "Founder & CEO [Demo Placeholder]",
+      clientRole: "Executive Leadership",
+      companyName: "Consumer Goods & Retail",
+      testimonial: "Color Vision's collaborative process is remarkably focused and transparent. They transformed complex technical requirements into a clean, purposeful digital experience that scaled effortlessly across our entire platform.",
+      clientPhoto: null,
+      companyLogo: null,
+      projectReference: "04 — Goodly Packaging & Web"
+    }
   ];
 }
