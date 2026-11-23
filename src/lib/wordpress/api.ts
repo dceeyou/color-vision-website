@@ -100,9 +100,60 @@ export async function getStats(): Promise<Stat[]> {
 
 export async function getServices(): Promise<Service[]> {
   return [
-    { id: "1", serviceNumber: "01", name: "Brand Identity", shortDescription: "Visual language", longDescription: "A clear visual language that makes a brand distinctive, consistent, and easy to recognize.", category: "Branding", slug: "brand-identity" },
-    { id: "2", serviceNumber: "02", name: "Digital Products", shortDescription: "Web & App Design", longDescription: "Interfaces that balance aesthetics with frictionless usability.", category: "Digital", slug: "digital-products" },
-    { id: "3", serviceNumber: "03", name: "Creative Strategy", shortDescription: "Positioning", longDescription: "Defining the core purpose and direction before we draw a single pixel.", category: "Strategy", slug: "creative-strategy" }
+    {
+      id: "1",
+      serviceNumber: "01",
+      name: "Brand Identity",
+      shortDescription: "A clear visual language that makes a brand distinctive, consistent, and easy to recognize.",
+      longDescription: "A clear visual language that makes a brand distinctive, consistent, and easy to recognize.",
+      category: "Branding",
+      slug: "brand-identity"
+    },
+    {
+      id: "2",
+      serviceNumber: "02",
+      name: "UI/UX Design",
+      shortDescription: "Digital experiences shaped around real people, clear interactions, and purposeful journeys.",
+      longDescription: "Digital experiences shaped around real people, clear interactions, and purposeful journeys.",
+      category: "Design",
+      slug: "ui-ux-design"
+    },
+    {
+      id: "3",
+      serviceNumber: "03",
+      name: "Digital Product Design",
+      shortDescription: "Structured product experiences that turn complex requirements into simple, useful interfaces.",
+      longDescription: "Structured product experiences that turn complex requirements into simple, useful interfaces.",
+      category: "Product",
+      slug: "digital-product-design"
+    },
+    {
+      id: "4",
+      serviceNumber: "04",
+      name: "Web Design",
+      shortDescription: "Responsive digital experiences that balance brand character, usability, clarity, and conversion.",
+      longDescription: "Responsive digital experiences that balance brand character, usability, clarity, and conversion.",
+      category: "Web",
+      slug: "web-design"
+    },
+    {
+      id: "5",
+      serviceNumber: "05",
+      name: "Design Systems",
+      shortDescription: "Flexible visual foundations that keep digital products consistent, scalable, and easier to evolve.",
+      longDescription: "Flexible visual foundations that keep digital products consistent, scalable, and easier to evolve.",
+      category: "Systems",
+      slug: "design-systems"
+    },
+    {
+      id: "6",
+      serviceNumber: "06",
+      name: "Visual Communication",
+      shortDescription: "Purposeful visuals that make ideas easier to understand, remember, and connect with.",
+      longDescription: "Purposeful visuals that make ideas easier to understand, remember, and connect with.",
+      category: "Communication",
+      slug: "visual-communication"
+    }
   ];
 }
 
