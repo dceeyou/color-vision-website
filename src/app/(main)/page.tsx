@@ -7,11 +7,12 @@ import Process from "@/components/Process";
 import Statement from "@/components/Statement";
 import Testimonials from "@/components/Testimonials";
 import Contact from "@/components/Contact";
-import { getHero, getStats, getServices, getProjects, getProcessSteps, getTestimonials } from "@/lib/wordpress/api";
+import { getHero, getAbout, getStats, getServices, getProjects, getProcessSteps, getTestimonials } from "@/lib/wordpress/api";
 
 export default async function Home() {
-  const [hero, stats, services, projects, processSteps, testimonials] = await Promise.all([
+  const [hero, about, stats, services, projects, processSteps, testimonials] = await Promise.all([
     getHero(),
+    getAbout(),
     getStats(),
     getServices(),
     getProjects(),
@@ -27,7 +28,7 @@ export default async function Home() {
       <Work projects={projects} />
       <Stats stats={stats} />
       <Process steps={processSteps} />
-      <Statement />
+      <Statement about={about} />
       <Testimonials testimonials={testimonials} />
       <Contact />
     </main>
