@@ -45,11 +45,6 @@ export default function LaunchCountdown() {
             { y: 10, opacity: 0 }, 
             { y: 0, opacity: 1, duration: 0.3, ease: "power2.out" }
           );
-          
-          gsap.fromTo(".center-pulse-node",
-            { r: 15 },
-            { r: 10, duration: 0.4, ease: "power2.out", overwrite: "auto" }
-          );
         }
       }
     }, 1000);

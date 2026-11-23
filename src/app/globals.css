@@ -1,17 +1,19 @@
 @import "tailwindcss";
 
 :root {
-  --background: #050608;
-  --foreground: #F5F5F5;
-  --accent: #FF4D00;
-  --muted: #8D8D8D;
-  --border-light: rgba(255,255,255,0.10);
+  --background: #08090D;
+  --foreground: #F4F2ED;
+  --accent: #FF5108;
+  --secondary: #8E9098;
+  --muted: #737680;
+  --border-light: rgba(255, 255, 255, 0.08);
 }
 
 @theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-accent: var(--accent);
+  --color-secondary: var(--secondary);
   --color-muted: var(--muted);
   --color-border-light: var(--border-light);
 }
@@ -19,14 +21,13 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: 'Inter', 'Futura', 'Trebuchet MS', sans-serif;
+  font-family: var(--font-manrope), 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
   overflow-x: hidden;
-  /* smooth scrolling base via lenis */
 }
 
 /* Base Headings */
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Futura', 'Inter', sans-serif;
+  font-family: var(--font-manrope), 'Manrope', sans-serif;
   font-weight: 700;
 }
 
@@ -61,7 +62,7 @@ h1, h2, h3, h4, h5, h6 {
   opacity: 0.3;
 }
 
-/* Hide scrollbar for lenis if desired */
+/* Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
