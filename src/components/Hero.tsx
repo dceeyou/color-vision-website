@@ -272,17 +272,16 @@ export default function Hero({ hero }: HeroProps) {
   const eyebrowText =
     hero?.eyebrow || "INDEPENDENT DESIGN STUDIO · SRI LANKA";
   const descriptionText =
-    hero?.description ||
     "Strategy, creativity and thoughtful design come together to shape distinctive brands, intuitive digital products and meaningful digital experiences.";
-  const primaryLabel = hero?.primaryCtaLabel || "VIEW OUR WORK →";
-  const secondaryLabel = hero?.secondaryCtaLabel || "START A PROJECT →";
+  const primaryText = (hero?.primaryCtaLabel || "VIEW OUR WORK").replace("→", "").trim();
+  const secondaryText = (hero?.secondaryCtaLabel || "START A PROJECT").replace("→", "").trim();
 
   return (
     <section
       ref={containerRef}
       id="hero"
       aria-label="Color Vision Hero: Orange Dimension × Kinetic Typography"
-      className="relative w-full min-h-[100svh] bg-[#FF5108] text-[#08090D] flex flex-col justify-between items-center overflow-hidden pt-36 md:pt-40 lg:pt-44 pb-12 sm:pb-16 select-none"
+      className="relative w-full min-h-[100svh] bg-[#FF5108] text-[#08090D] flex flex-col justify-between items-center overflow-hidden pt-28 sm:pt-32 md:pt-36 pb-6 sm:pb-8 select-none"
     >
       {/* =========================================================================
           ORANGE DIMENSION: BACKGROUND VISUAL SYSTEM
@@ -480,7 +479,7 @@ export default function Hero({ hero }: HeroProps) {
         {/* 3. Supporting Studio Description */}
         <p
           ref={descRef}
-          className="opacity-0 text-[#08090D]/85 text-[15px] sm:text-[16px] md:text-[18px] leading-[1.65] font-[500] max-w-[520px] mx-auto mt-6 sm:mt-8 md:mt-10"
+          className="opacity-0 text-[#08090D]/85 text-[15px] sm:text-[16px] md:text-[17px] leading-[1.6] font-[500] max-w-[520px] mx-auto mt-5 sm:mt-6 md:mt-7"
         >
           {descriptionText}
         </p>
@@ -488,15 +487,15 @@ export default function Hero({ hero }: HeroProps) {
         {/* 4. Call to Action Buttons */}
         <div
           ref={btnsRef}
-          className="opacity-0 mt-8 sm:mt-10 md:mt-11 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5 w-full sm:w-auto"
+          className="opacity-0 mt-6 sm:mt-7 md:mt-8 flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-4 w-full sm:w-auto"
         >
           {/* Primary CTA: Deep black pill with warm-white text */}
           <a
             href="#work"
             onClick={(e) => scrollToAnchor(e, "work")}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-[#08090D] text-[#F4F2ED] border border-[#08090D] px-8 sm:px-9 py-3.5 sm:py-4 font-[700] uppercase tracking-[0.1em] text-[12px] sm:text-[13px] rounded-full hover:bg-[#1A1D24] hover:shadow-[0_8px_30px_rgba(8,9,13,0.35)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#08090D]"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 bg-[#08090D] text-[#F4F2ED] border border-[#08090D] px-7 sm:px-8 py-3 sm:py-3.5 font-[700] uppercase tracking-[0.1em] text-[12px] sm:text-[13px] rounded-full hover:bg-[#1A1D24] hover:shadow-[0_8px_30px_rgba(8,9,13,0.35)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#08090D]"
           >
-            <span>{primaryLabel}</span>
+            <span>{primaryText}</span>
             <span
               className="transition-transform duration-300 group-hover:translate-x-1"
               aria-hidden="true"
@@ -509,9 +508,9 @@ export default function Hero({ hero }: HeroProps) {
           <a
             href="#contact"
             onClick={(e) => scrollToAnchor(e, "contact")}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-transparent text-[#08090D] border-2 border-[#08090D] px-8 sm:px-9 py-3.5 sm:py-4 font-[700] uppercase tracking-[0.1em] text-[12px] sm:text-[13px] rounded-full hover:bg-[#08090D] hover:text-[#F4F2ED] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#08090D]"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 bg-transparent text-[#08090D] border-2 border-[#08090D] px-7 sm:px-8 py-3 sm:py-3.5 font-[700] uppercase tracking-[0.1em] text-[12px] sm:text-[13px] rounded-full hover:bg-[#08090D] hover:text-[#F4F2ED] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#08090D]"
           >
-            <span>{secondaryLabel}</span>
+            <span>{secondaryText}</span>
             <span
               className="transition-transform duration-300 group-hover:translate-x-1"
               aria-hidden="true"
@@ -537,12 +536,12 @@ export default function Hero({ hero }: HeroProps) {
           }
         }}
         aria-label="Scroll down to explore work"
-        className="relative z-10 mt-10 sm:mt-12 flex flex-col items-center gap-2 cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#08090D] rounded-md px-3 py-1"
+        className="relative z-10 mt-6 sm:mt-8 flex flex-col items-center gap-2 cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#08090D] rounded-md px-3 py-1"
       >
         <span className="text-[11px] sm:text-[12px] font-[700] tracking-[0.24em] text-[#08090D]/75 uppercase group-hover:text-[#08090D] transition-colors duration-300">
           SCROLL TO EXPLORE
         </span>
-        <div className="w-[1.5px] h-7 bg-[#08090D]/20 relative overflow-hidden rounded-full">
+        <div className="w-[1.5px] h-6 bg-[#08090D]/20 relative overflow-hidden rounded-full">
           <div className="absolute inset-0 bg-[#08090D] animate-scroll-line" />
         </div>
       </div>
