@@ -5,11 +5,11 @@ import Image from "next/image";
 
 export default function Footer() {
   const navLinks = [
-    { name: "Work", href: "#work" },
-    { name: "Services", href: "#services" },
-    { name: "About Us", href: "#about" },
-    { name: "Process", href: "#process" },
-    { name: "Contact", href: "#contact" },
+    { name: "Work", href: "/#work" },
+    { name: "Services", href: "/#services" },
+    { name: "About Us", href: "/about" },
+    { name: "Process", href: "/#process" },
+    { name: "Contact", href: "/#contact" },
   ];
 
   // Configurable social destinations (kept clean and inactive until live handles are configured)
@@ -21,17 +21,22 @@ export default function Footer() {
   ];
 
   const handleScrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    e.preventDefault();
-    const id = href.replace("#", "");
-    const target = document.getElementById(id);
-    if (target) {
-      const headerOffset = 80;
-      const elementPosition = target.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth",
-      });
+    if (href === "/about") {
+      return;
+    }
+    const targetId = href.replace(/^\/?#/, "");
+    if (typeof window !== "undefined" && (window.location.pathname === "/" || window.location.pathname === "")) {
+      const target = document.getElementById(targetId);
+      if (target) {
+        e.preventDefault();
+        const headerOffset = 80;
+        const elementPosition = target.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth",
+        });
+      }
     }
   };
 
@@ -89,7 +94,7 @@ export default function Footer() {
             <ul className="space-y-3">
               {navLinks.map((link) => (
                 <li key={link.name}>
-                  <a
+                  <Link
                     href={link.href}
                     onClick={(e) => handleScrollToSection(e, link.href)}
                     className="group inline-flex items-center gap-2 text-[#8E9098] hover:text-[#F4F2ED] transition-colors duration-200 text-[15px] font-[500] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#FF5108] rounded"
@@ -98,7 +103,7 @@ export default function Footer() {
                     <span className="transition-transform duration-200 group-hover:translate-x-1">
                       {link.name}
                     </span>
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>

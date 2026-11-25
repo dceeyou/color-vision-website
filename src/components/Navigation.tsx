@@ -18,43 +18,44 @@ export default function Navigation() {
   const menuItemsRef = useRef<(HTMLAnchorElement | null)[]>([]);
 
   const links = [
-    { label: "Work", href: "#work", id: "work" },
-    { label: "Services", href: "#services", id: "services" },
-    { label: "About", href: "#about", id: "about" },
-    { label: "Process", href: "#process", id: "process" },
-    { label: "Contact", href: "#contact", id: "contact" },
+    { label: "Work", href: "/#work", id: "work" },
+    { label: "Services", href: "/#services", id: "services" },
+    { label: "About", href: "/about", id: "about" },
+    { label: "Process", href: "/#process", id: "process" },
+    { label: "Contact", href: "/#contact", id: "contact" },
   ];
 
   // Helper for smooth anchor scrolling with header offset
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    e.preventDefault();
-    const id = href.replace("#", "");
-    let target = document.getElementById(id);
-
-    // Dynamic fallbacks if section element lacks direct ID
-    if (!target) {
-      if (id === "about") {
-        const sections = document.querySelectorAll("main > section");
-        if (sections.length >= 6) target = sections[5] as HTMLElement;
-      } else if (id === "process") {
-        const sections = document.querySelectorAll("main > section");
-        if (sections.length >= 5) target = sections[4] as HTMLElement;
+    if (href === "/about") {
+      if (pathname === "/about") {
+        e.preventDefault();
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
       }
+      if (menuOpen) {
+        setMenuOpen(false);
+      }
+      return;
     }
 
-    if (target) {
-      const headerOffset = 80;
-      const elementPosition = target.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+    const targetId = href.replace(/^\/?#/, "");
+    if (pathname === "/" || pathname === "") {
+      const target = document.getElementById(targetId);
+      if (target) {
+        e.preventDefault();
+        const headerOffset = 80;
+        const elementPosition = target.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth",
-      });
-      setActiveSection(id);
-    } else {
-      // If target element is not on current page (e.g. browsing /work/[slug]), navigate to home anchor
-      window.location.href = `/${href}`;
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth",
+        });
+        setActiveSection(targetId);
+      }
     }
 
     if (menuOpen) {
@@ -171,9 +172,12 @@ export default function Navigation() {
             className="hidden md:flex items-center gap-7 lg:gap-8 text-[12px] md:text-[13px] uppercase tracking-[0.14em]"
           >
             {links.map((link) => {
-              const isActive = activeSection === link.id;
+              const isActive =
+                pathname === "/about"
+                  ? link.id === "about"
+                  : activeSection === link.id;
               return (
-                <a
+                <Link
                   key={link.label}
                   href={link.href}
                   onClick={(e) => scrollToSection(e, link.href)}
@@ -188,7 +192,7 @@ export default function Navigation() {
                       isActive ? "w-full" : "w-0 group-hover:w-full"
                     }`}
                   />
-                </a>
+                </Link>
               );
             })}
           </nav>
@@ -216,9 +220,12 @@ export default function Navigation() {
         <div className="absolute inset-0 bg-[#FF5108]/[0.04] blur-[120px] rounded-full scale-125 pointer-events-none" />
         <nav className="flex flex-col gap-6 text-center relative z-10">
           {links.map((link, i) => {
-            const isActive = activeSection === link.id;
+            const isActive =
+              pathname === "/about"
+                ? link.id === "about"
+                : activeSection === link.id;
             return (
-              <a
+              <Link
                 key={link.label}
                 href={link.href}
                 ref={(el) => {
@@ -230,7 +237,7 @@ export default function Navigation() {
                 }`}
               >
                 {link.label}
-              </a>
+              </Link>
             );
           })}
         </nav>
