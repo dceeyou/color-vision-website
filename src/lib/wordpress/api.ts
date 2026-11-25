@@ -314,35 +314,35 @@ export async function getProcessSteps(): Promise<ProcessStep[]> {
       stepNumber: "01",
       stepLabel: "DISCOVER",
       title: "Understand the challenge",
-      description: "We learn about your business, audience, goals, competitors, challenges, and opportunities. This gives us the context needed to understand what the project actually needs."
+      description: "We learn about your business, audience, goals, competitors, challenges and opportunities. This gives us the context to understand what the project really needs."
     },
     {
       id: "2",
       stepNumber: "02",
       stepLabel: "DEFINE",
       title: "Find the right direction",
-      description: "We bring the findings together, establish priorities, structure the experience, and create a shared understanding of what success should look like."
+      description: "We bring the findings together, establish priorities and create a clear direction for the project."
     },
     {
       id: "3",
       stepNumber: "03",
       stepLabel: "DESIGN",
       title: "Explore the possibilities",
-      description: "We translate strategy into visual and digital experiences through concepts, wireframes, interfaces, identity systems, and prototypes."
+      description: "We translate ideas into concepts, wireframes, interfaces, identity systems and meaningful digital experiences."
     },
     {
       id: "4",
       stepNumber: "04",
       stepLabel: "REFINE",
       title: "Make the details count",
-      description: "We review, test, challenge, and refine the work to improve usability, clarity, consistency, and visual quality."
+      description: "We review, test and refine the work to improve usability, clarity, consistency and visual quality."
     },
     {
       id: "5",
       stepNumber: "05",
       stepLabel: "DELIVER",
       title: "Ready for the real world",
-      description: "We prepare final assets, specifications, components, and documentation to help the work move confidently from design into production."
+      description: "We prepare the final assets, specifications and documentation for a smooth transition into production."
     }
   ];
 }
