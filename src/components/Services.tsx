@@ -136,7 +136,7 @@ export default function Services({ services: propServices }: { services?: Servic
     <section
       id="services"
       ref={containerRef}
-      className="relative w-full bg-transparent py-24 md:py-32 lg:py-40 border-b border-[#08090D]/15"
+      className="relative w-full bg-transparent py-24 md:py-32 lg:py-40 border-b border-white/[0.06]"
     >
       <div className="w-full max-w-[1280px] mx-auto px-4 md:px-6 lg:px-0">
         {/* Two-Column Introductory Composition */}
@@ -147,22 +147,22 @@ export default function Services({ services: propServices }: { services?: Servic
           {/* Left Column: Eyebrow + Main Heading */}
           <div className="lg:w-7/12">
             <div className="flex items-center gap-2.5 mb-6">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#08090D] inline-block shadow-[0_0_8px_rgba(8,9,13,0.4)]" />
-              <p className="uppercase tracking-[0.22em] text-[12px] md:text-[13px] font-[700] text-[#08090D]">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#FF5108] inline-block shadow-[0_0_8px_rgba(255,81,8,0.7)]" />
+              <p className="uppercase tracking-[0.22em] text-[12px] md:text-[13px] font-[600] text-[#8E9098]">
                 WHAT WE DO
               </p>
             </div>
 
             <h2 className="text-[44px] sm:text-[56px] md:text-[68px] lg:text-[76px] xl:text-[84px] font-[800] leading-[1.0] tracking-[-0.03em] select-none">
-              <span className="text-[#08090D] block">Design for</span>
-              <span className="text-[#F4F2ED] block drop-shadow-[0_2px_16px_rgba(8,9,13,0.25)]">real-world</span>
-              <span className="text-[#F4F2ED] block drop-shadow-[0_2px_16px_rgba(8,9,13,0.25)]">impact.</span>
+              <span className="text-[#F4F2ED] block">Design for</span>
+              <span className="text-[#F4F2ED] block">real-world</span>
+              <span className="text-[#FF5108] block">impact.</span>
             </h2>
           </div>
 
           {/* Right Column: Supporting Description */}
           <div className="lg:w-5/12 flex justify-start lg:justify-end pb-2">
-            <p className="text-[#08090D]/85 text-[15px] sm:text-[16px] md:text-[17px] leading-[1.75] font-[500] max-w-[480px]">
+            <p className="text-[#8E9098] text-[15px] sm:text-[16px] md:text-[17px] leading-[1.75] font-[400] max-w-[480px]">
               We bring strategy, creativity and thoughtful execution together to help businesses
               communicate clearly and move forward with confidence. Every project begins with
               understanding the problem before deciding what the solution should look like.
@@ -171,7 +171,7 @@ export default function Services({ services: propServices }: { services?: Servic
         </div>
 
         {/* Six Full-Width Editorial Service Rows */}
-        <div ref={rowsRef} className="w-full border-t border-[#08090D]/15">
+        <div ref={rowsRef} className="w-full border-t border-white/[0.08]">
           {services.map((service, idx) => {
             const isHovered = hoveredIdx === idx;
             const isDimmed = hoveredIdx !== null && hoveredIdx !== idx;
@@ -183,16 +183,16 @@ export default function Services({ services: propServices }: { services?: Servic
                 onClick={handleServiceClick}
                 onMouseEnter={() => setHoveredIdx(idx)}
                 onMouseLeave={() => setHoveredIdx(null)}
-                className={`service-row group block w-full py-8 sm:py-10 md:py-12 border-b border-[#08090D]/15 transition-all duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#08090D] relative ${
+                className={`service-row group block w-full py-8 sm:py-10 md:py-12 border-b border-white/[0.08] transition-all duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#FF5108] relative hover:bg-white/[0.02] ${
                   isDimmed ? "opacity-35" : "opacity-100"
-                } ${isHovered ? "border-[#08090D]/40" : ""}`}
+                } ${isHovered ? "border-white/[0.2]" : ""}`}
               >
                 {/* Desktop & Tablet Layout (Horizontal Editorial Row) */}
-                <div className="hidden md:flex items-center justify-between gap-6 lg:gap-12 w-full">
+                <div className="hidden md:flex items-center justify-between gap-6 lg:gap-12 w-full px-2 sm:px-4">
                   {/* Number */}
                   <span
-                    className={`font-[700] text-[13px] md:text-[14px] tracking-[0.18em] transition-colors duration-300 shrink-0 w-16 lg:w-20 ${
-                      isHovered ? "text-[#F4F2ED]" : "text-[#08090D]/70"
+                    className={`font-mono text-[13px] md:text-[14px] tracking-[0.18em] transition-colors duration-300 shrink-0 w-16 lg:w-20 ${
+                      isHovered ? "text-[#FF7A24]" : "text-[#FF5108]"
                     }`}
                   >
                     {service.serviceNumber || `0${idx + 1}`}
@@ -203,8 +203,8 @@ export default function Services({ services: propServices }: { services?: Servic
                     <h3
                       className={`text-[28px] lg:text-[34px] xl:text-[38px] font-[800] tracking-[-0.02em] leading-tight transition-all duration-300 ${
                         isHovered
-                          ? "text-[#F4F2ED] translate-x-2.5"
-                          : "text-[#08090D] translate-x-0"
+                          ? "text-[#FF5108] translate-x-2.5"
+                          : "text-[#F4F2ED] translate-x-0"
                       }`}
                     >
                       {service.name}
@@ -214,8 +214,8 @@ export default function Services({ services: propServices }: { services?: Servic
                   {/* Short Description */}
                   <div className="flex-1 max-w-[460px] pr-4">
                     <p
-                      className={`text-[14px] lg:text-[15px] leading-[1.65] font-[500] transition-colors duration-300 ${
-                        isHovered ? "text-[#F4F2ED]/95" : "text-[#08090D]/85"
+                      className={`text-[14px] lg:text-[15px] leading-[1.65] font-[400] transition-colors duration-300 ${
+                        isHovered ? "text-[#F4F2ED]" : "text-[#8E9098]"
                       }`}
                     >
                       {service.shortDescription || service.longDescription}
@@ -227,8 +227,8 @@ export default function Services({ services: propServices }: { services?: Servic
                     <div
                       className={`w-10 h-10 rounded-full border flex items-center justify-center transition-all duration-300 ${
                         isHovered
-                          ? "bg-[#08090D] border-[#08090D] text-[#F4F2ED] shadow-md shadow-[#08090D]/20"
-                          : "border-[#08090D]/25 text-[#08090D] bg-transparent"
+                          ? "bg-[#FF5108] border-[#FF5108] text-[#08090D] shadow-md shadow-[#FF5108]/25"
+                          : "border-white/15 text-white/50 bg-transparent"
                       }`}
                     >
                       <svg
@@ -254,20 +254,16 @@ export default function Services({ services: propServices }: { services?: Servic
                   </div>
                 </div>
 
-                {/* Mobile Layout (Stacked with prominent Title, Number, Arrow, and Description) */}
-                <div className="md:hidden flex flex-col gap-3">
+                {/* Mobile Layout */}
+                <div className="md:hidden flex flex-col gap-3 px-2">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <span
-                        className={`font-[700] text-[12px] tracking-[0.16em] transition-colors duration-300 ${
-                          isHovered ? "text-[#F4F2ED]" : "text-[#08090D]/70"
-                        }`}
-                      >
+                      <span className="font-mono text-[12px] tracking-[0.16em] text-[#FF5108]">
                         {service.serviceNumber || `0${idx + 1}`}
                       </span>
                       <h3
                         className={`text-[22px] sm:text-[26px] font-[800] tracking-[-0.02em] leading-tight transition-colors duration-300 ${
-                          isHovered ? "text-[#F4F2ED]" : "text-[#08090D]"
+                          isHovered ? "text-[#FF5108]" : "text-[#F4F2ED]"
                         }`}
                       >
                         {service.name}
@@ -277,8 +273,8 @@ export default function Services({ services: propServices }: { services?: Servic
                     <div
                       className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all duration-300 shrink-0 ${
                         isHovered
-                          ? "bg-[#08090D] border-[#08090D] text-[#F4F2ED]"
-                          : "border-[#08090D]/25 text-[#08090D] bg-transparent"
+                          ? "bg-[#FF5108] border-[#FF5108] text-[#08090D]"
+                          : "border-white/15 text-white/50 bg-transparent"
                       }`}
                     >
                       <svg
@@ -300,7 +296,7 @@ export default function Services({ services: propServices }: { services?: Servic
                     </div>
                   </div>
 
-                  <p className="text-[#08090D]/85 text-[14px] leading-[1.6] pl-7 font-[500]">
+                  <p className="text-[#8E9098] text-[14px] leading-[1.6] pl-7 font-[400]">
                     {service.shortDescription || service.longDescription}
                   </p>
                 </div>

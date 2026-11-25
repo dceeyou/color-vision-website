@@ -138,17 +138,13 @@ export default function Navigation() {
     }
   }, [menuOpen]);
 
-  const isOverOrangeHero = isHomePage && !scrolled;
-
   return (
     <>
       <header
         className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 border-b ${
           scrolled
-            ? "bg-[#08090D]/95 backdrop-blur-md border-white/[0.08] py-4 shadow-xl shadow-black/40"
-            : isOverOrangeHero
-            ? "bg-transparent border-[#08090D]/10 py-5 md:py-6"
-            : "bg-[#08090D]/50 backdrop-blur-sm border-white/[0.04] py-6 md:py-7"
+            ? "bg-[#08090D]/90 backdrop-blur-md border-white/[0.08] py-4 shadow-xl shadow-black/50"
+            : "bg-[#08090D]/40 backdrop-blur-sm border-white/[0.04] py-6 md:py-7"
         }`}
       >
         <div className="w-full max-w-[1280px] mx-auto px-4 md:px-6 lg:px-0 flex justify-between items-center">
@@ -163,9 +159,7 @@ export default function Navigation() {
                 alt="Color Vision"
                 width={160}
                 height={63}
-                className={`h-8 md:h-9 w-auto object-contain transition-all duration-300 ${
-                  isOverOrangeHero ? "brightness-0" : ""
-                }`}
+                className="h-8 md:h-9 w-auto object-contain"
                 priority
               />
             </div>
@@ -183,22 +177,16 @@ export default function Navigation() {
                   key={link.label}
                   href={link.href}
                   onClick={(e) => scrollToSection(e, link.href)}
-                  className={`relative py-1 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#FF5108] rounded group ${
-                    isOverOrangeHero
-                      ? isActive
-                        ? "text-[#08090D] font-[800]"
-                        : "text-[#08090D]/80 hover:text-[#08090D] font-[700]"
-                      : isActive
-                      ? "text-[#FF5108] font-[600]"
-                      : "text-[#8E9098] hover:text-[#F4F2ED] font-[600]"
+                  className={`relative py-1 font-[600] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#FF5108] rounded group ${
+                    isActive ? "text-[#FF5108]" : "text-[#92939B] hover:text-[#F4F2ED]"
                   }`}
                 >
                   <span>{link.label}</span>
                   {/* Subtle active/hover indicator */}
                   <span
-                    className={`absolute -bottom-1 left-0 h-[1.5px] transition-all duration-300 ease-out ${
-                      isOverOrangeHero ? "bg-[#08090D]" : "bg-[#FF5108]"
-                    } ${isActive ? "w-full" : "w-0 group-hover:w-full"}`}
+                    className={`absolute -bottom-1 left-0 h-[1.5px] bg-[#FF5108] transition-all duration-300 ease-out ${
+                      isActive ? "w-full" : "w-0 group-hover:w-full"
+                    }`}
                   />
                 </a>
               );
@@ -208,11 +196,7 @@ export default function Navigation() {
           {/* Mobile Menu Button */}
           <button
             type="button"
-            className={`md:hidden z-50 p-2 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#FF5108] rounded ${
-              isOverOrangeHero && !menuOpen
-                ? "text-[#08090D] hover:text-[#08090D]/70"
-                : "text-[#F4F2ED] hover:text-[#FF5108]"
-            }`}
+            className="md:hidden z-50 p-2 text-[#F4F2ED] hover:text-[#FF5108] transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#FF5108] rounded"
             onClick={() => setMenuOpen(!menuOpen)}
             aria-expanded={menuOpen}
             aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
