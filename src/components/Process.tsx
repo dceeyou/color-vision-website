@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ProcessStep } from "@/lib/wordpress/types";
@@ -11,12 +11,20 @@ interface ProcessProps {
 
 export default function Process({ steps: propSteps }: ProcessProps) {
   const containerRef = useRef<HTMLElement>(null);
-  const headerRef = useRef<HTMLDivElement>(null);
-  const pathRef = useRef<SVGPathElement>(null);
+  const leftColRef = useRef<HTMLDivElement>(null);
+  const timelineColRef = useRef<HTMLDivElement>(null);
+  const desktopPathRef = useRef<SVGPathElement>(null);
 
-  const [activeStep, setActiveStep] = useState<number>(4);
+  // Active step index (0 to 4)
+  const [activeStep, setActiveStep] = useState<number>(0);
+  const [isInViewport, setIsInViewport] = useState<boolean>(false);
+  const [isUserInteracting, setIsUserInteracting] = useState<boolean>(false);
+  const [isReducedMotion, setIsReducedMotion] = useState<boolean>(false);
+  const [pathLength, setPathLength] = useState<number>(650);
 
-  // 5 Canonical process steps
+  const interactionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // 5 Approved Process Steps with exact canonical copy
   const defaultSteps: ProcessStep[] = [
     {
       id: "1",
@@ -24,7 +32,7 @@ export default function Process({ steps: propSteps }: ProcessProps) {
       stepLabel: "DISCOVER",
       title: "Understand the challenge",
       description:
-        "We learn about your business, audience, goals, competitors, challenges and opportunities. This gives us the context to understand what the project really needs.",
+        "We learn about your business, audience, goals and challenges to understand what really matters.",
     },
     {
       id: "2",
@@ -32,7 +40,7 @@ export default function Process({ steps: propSteps }: ProcessProps) {
       stepLabel: "DEFINE",
       title: "Find the right direction",
       description:
-        "We bring the findings together, establish priorities and create a clear direction for the project.",
+        "We identify priorities, clarify the problem and establish a focused direction for the project.",
     },
     {
       id: "3",
@@ -40,7 +48,7 @@ export default function Process({ steps: propSteps }: ProcessProps) {
       stepLabel: "DESIGN",
       title: "Explore the possibilities",
       description:
-        "We translate ideas into concepts, wireframes, interfaces, identity systems and meaningful digital experiences.",
+        "We translate ideas into purposeful visual concepts and intuitive digital experiences.",
     },
     {
       id: "4",
@@ -48,7 +56,7 @@ export default function Process({ steps: propSteps }: ProcessProps) {
       stepLabel: "REFINE",
       title: "Make the details count",
       description:
-        "We review, test and refine the work to improve usability, clarity, consistency and visual quality.",
+        "We review, test and improve the solution to ensure every detail works as intended.",
     },
     {
       id: "5",
@@ -56,334 +64,519 @@ export default function Process({ steps: propSteps }: ProcessProps) {
       stepLabel: "DELIVER",
       title: "Ready for the real world",
       description:
-        "We prepare the final assets, specifications and documentation for a smooth transition into production.",
+        "We prepare and hand over the final work for implementation and real-world use.",
     },
   ];
 
   const steps = propSteps && propSteps.length >= 5 ? propSteps : defaultSteps;
 
-  // Normalized node configuration matching SVG coordinates (1000 x 500)
-  const milestoneNodes = [
-    { leftPercent: "10%", topPercent: "52%", isBelow: true },
-    { leftPercent: "30%", topPercent: "39%", isBelow: false },
-    { leftPercent: "50%", topPercent: "52%", isBelow: true },
-    { leftPercent: "70%", topPercent: "39%", isBelow: false },
-    { leftPercent: "90%", topPercent: "52%", isBelow: true },
+  // Desktop timeline coordinates (viewBox="0 0 540 640")
+  // Nodes placed along a vertical serpentine curve with alternating X positions
+  const desktopNodes = [
+    { x: 42, y: 48, textLeft: 106 },   // Node 01: left peak
+    { x: 98, y: 180, textLeft: 162 },  // Node 02: right peak
+    { x: 42, y: 312, textLeft: 106 },  // Node 03: left peak
+    { x: 98, y: 444, textLeft: 162 },  // Node 04: right peak
+    { x: 42, y: 576, textLeft: 106 },  // Node 05: left peak
   ];
 
-  // Continuous S-curved path passing through all 5 normalized nodes (1000 x 500)
-  const sCurvedTimelinePath =
-    "M 25,260 C 60,260 75,260 100,260 C 170,260 230,195 300,195 C 370,195 430,260 500,260 C 570,260 630,195 700,195 C 770,195 830,260 900,260 C 925,260 950,260 975,260";
+  // Continuous vertical cubic Bézier curve through all 5 milestone nodes
+  // Starts directly at center of Node 01 (42, 48) and smoothly weaves through all nodes to Node 05 (42, 576)
+  const curvedTimelinePath =
+    "M 42,48 C 42,114 98,114 98,180 C 98,246 42,246 42,312 C 42,378 98,378 98,444 C 98,510 42,510 42,576";
 
-  // Scroll-triggered path drawing & sequential milestone activation
+  // Fractions of path length corresponding to each milestone node (0%, 25%, 50%, 75%, 100%)
+  const milestoneFractions = [0.0, 0.25, 0.5, 0.75, 1.0];
+
+  // Handle manual user selection (click or keyboard Enter/Space)
+  const handleSelectStep = useCallback((index: number) => {
+    setActiveStep(index);
+    setIsUserInteracting(true);
+
+    if (interactionTimeoutRef.current) {
+      clearTimeout(interactionTimeoutRef.current);
+    }
+
+    // Resume automatic sequential animation after 4.5s of manual pause
+    interactionTimeoutRef.current = setTimeout(() => {
+      setIsUserInteracting(false);
+    }, 4500);
+  }, []);
+
+  // Measure path length on mount
+  useEffect(() => {
+    if (desktopPathRef.current) {
+      try {
+        const total = desktopPathRef.current.getTotalLength();
+        if (total && total > 0) {
+          setPathLength(total);
+        }
+      } catch {
+        // Fallback default
+      }
+    }
+  }, []);
+
+  // Check prefers-reduced-motion
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setIsReducedMotion(mediaQuery.matches);
+
+    const handleChange = (e: MediaQueryListEvent) => {
+      setIsReducedMotion(e.matches);
+    };
+
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, []);
+
+  // IntersectionObserver to pause when section leaves viewport and resume when visible
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        setIsInViewport(entry.isIntersecting && entry.intersectionRatio >= 0.2);
+      },
+      {
+        threshold: [0, 0.2, 0.5, 0.8],
+        rootMargin: "0px",
+      }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  // Automatic Sequential Animation Loop:
+  // Advances through 01 -> 02 -> 03 -> 04 -> 05 (active ~2.4s each).
+  // Step 05 holds final state for 2.4s, then smoothly resets back to 01.
+  useEffect(() => {
+    if (!isInViewport || isUserInteracting || isReducedMotion) {
+      return;
+    }
+
+    const timer = setInterval(() => {
+      setActiveStep((prev) => (prev + 1) % 5);
+    }, 2400);
+
+    return () => clearInterval(timer);
+  }, [isInViewport, isUserInteracting, isReducedMotion]);
+
+  // Cleanup interaction timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (interactionTimeoutRef.current) {
+        clearTimeout(interactionTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  // Subtle GSAP scroll reveal for the section container
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
-    const isReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    // Header reveal
-    if (headerRef.current) {
-      if (isReduced) {
-        gsap.set(headerRef.current, { opacity: 1, y: 0 });
-      } else {
+    const isReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (isReduced) {
+      if (leftColRef.current) gsap.set(leftColRef.current, { opacity: 1, y: 0 });
+      if (timelineColRef.current) gsap.set(timelineColRef.current, { opacity: 1, y: 0 });
+      return;
+    }
+
+    const ctx = gsap.context(() => {
+      if (leftColRef.current) {
         gsap.fromTo(
-          headerRef.current,
-          { opacity: 0, y: 25 },
+          leftColRef.current,
+          { opacity: 0, y: 30 },
           {
             opacity: 1,
             y: 0,
-            duration: 0.75,
+            duration: 0.8,
             ease: "power3.out",
             scrollTrigger: {
-              trigger: headerRef.current,
+              trigger: leftColRef.current,
               start: "top 85%",
             },
           }
         );
       }
-    }
 
-    const path = pathRef.current;
-    if (!path) return;
-
-    const totalLength = path.getTotalLength();
-
-    if (isReduced) {
-      gsap.set(path, { strokeDasharray: totalLength, strokeDashoffset: 0 });
-      setActiveStep(4);
-      return;
-    }
-
-    // Set initial stroke offset
-    gsap.set(path, {
-      strokeDasharray: totalLength,
-      strokeDashoffset: totalLength,
-    });
-
-    const ctx = gsap.context(() => {
-      // Natural scroll-triggered path drawing (no long pin, no scroll-jacking)
-      gsap.to(path, {
-        strokeDashoffset: 0,
-        duration: 2.0,
-        ease: "power2.inOut",
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top 65%",
-          once: true,
-        },
-        onUpdate: function () {
-          const progress = this.progress();
-          if (progress < 0.2) setActiveStep(0);
-          else if (progress < 0.42) setActiveStep(1);
-          else if (progress < 0.65) setActiveStep(2);
-          else if (progress < 0.88) setActiveStep(3);
-          else setActiveStep(4);
-        },
-      });
+      if (timelineColRef.current) {
+        gsap.fromTo(
+          timelineColRef.current,
+          { opacity: 0, y: 30 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.85,
+            delay: 0.15,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: timelineColRef.current,
+              start: "top 85%",
+            },
+          }
+        );
+      }
     }, containerRef);
 
     return () => ctx.revert();
   }, []);
+
+  // Calculate dynamic strokeDashoffset for desktop curved timeline
+  const activeFraction = isReducedMotion ? 1.0 : milestoneFractions[activeStep] ?? 1.0;
+  const strokeDashoffset = pathLength * (1 - activeFraction);
 
   return (
     <section
       id="process"
       ref={containerRef}
       aria-label="Color Vision Process"
-      className="relative w-full bg-transparent py-20 md:py-24 lg:py-28 border-b border-white/[0.06] overflow-hidden select-none"
+      className="relative w-full bg-[#08090D] py-20 md:py-28 lg:py-32 border-b border-white/[0.06] overflow-hidden select-none"
     >
-      <div className="w-full max-w-[1280px] mx-auto px-4 md:px-6 lg:px-8">
-        {/* =========================================================================
-            SECTION INTRODUCTION
-            ========================================================================= */}
-        <div
-          ref={headerRef}
-          className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 lg:gap-16 mb-12 md:mb-16"
-        >
-          {/* Eyebrow + Heading */}
-          <div className="lg:w-7/12">
+      {/* Subtle ambient orange glow behind timeline (no harsh light) */}
+      <div
+        className="absolute right-0 top-1/2 -translate-y-1/2 w-[520px] h-[520px] rounded-full bg-[radial-gradient(circle,rgba(255,81,8,0.06)_0%,transparent_70%)] pointer-events-none blur-3xl"
+        aria-hidden="true"
+      />
+
+      <div className="w-full max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+          {/* =========================================================================
+              LEFT COLUMN — EDITORIAL INTRODUCTION
+              ========================================================================= */}
+          <div
+            ref={leftColRef}
+            className="lg:col-span-5 lg:sticky lg:top-32 self-start flex flex-col justify-start"
+          >
+            {/* Eyebrow */}
             <div className="flex items-center gap-2.5 mb-5 sm:mb-6">
               <span
-                className="w-1.5 h-1.5 rounded-full bg-[#FF5108] inline-block shadow-[0_0_8px_rgba(255,81,8,0.7)]"
+                className="w-1.5 h-1.5 rounded-full bg-[#FF5108] inline-block shadow-[0_0_8px_rgba(255,81,8,0.8)]"
                 aria-hidden="true"
               />
               <p className="uppercase tracking-[0.24em] text-[11px] sm:text-[12px] md:text-[13px] font-[600] text-[#8E9098]">
-                OUR PROCESS
+                OUR APPROACH / THE PROCESS
               </p>
-              <span className="text-[#737680] font-mono text-[10px] sm:text-[11px] tracking-widest ml-1 hidden sm:inline-block">
-                (05 STAGES)
-              </span>
             </div>
 
-            <h2 className="text-[36px] sm:text-[46px] md:text-[54px] lg:text-[62px] font-[800] leading-[1.05] tracking-[-0.03em] select-none">
-              <span className="text-[#F4F2ED]">From idea </span>
-              <span className="text-[#FF5108]">to impact.</span>
+            {/* Main Editorial Heading */}
+            <h2 className="text-[34px] sm:text-[42px] md:text-[46px] lg:text-[50px] font-[800] leading-[1.08] tracking-[-0.03em] text-[#F4F2ED] mb-6">
+              Good design starts with the right questions.
             </h2>
-          </div>
 
-          {/* Supporting Description */}
-          <div className="lg:w-5/12 flex justify-start lg:justify-end pb-1">
-            <p className="text-[#8E9098] text-[15px] sm:text-[16px] md:text-[17px] leading-[1.7] font-[400] max-w-[480px]">
-              A thoughtful journey from understanding the challenge to delivering meaningful
-              design. Every stage brings clarity, purpose and direction to the final experience.
+            {/* Supporting Description */}
+            <p className="text-[#8E9098] text-[15px] sm:text-[16px] md:text-[17px] leading-[1.7] font-[400] max-w-[460px] mb-8">
+              Every meaningful experience begins with understanding. We take the time to explore the
+              challenge, define the right direction, and turn ideas into thoughtful design
+              solutions. Our process brings clarity to every stage, from the first conversation to
+              the final delivery.
             </p>
-          </div>
-        </div>
 
-        {/* =========================================================================
-            DESKTOP & TABLET LAYOUT — HORIZONTAL CURVED TIMELINE (md and up)
-            ========================================================================= */}
-        <div className="hidden md:block relative w-full h-[500px] lg:h-[520px]">
-          {/* SVG Canvas for S-curved Timeline */}
-          <svg
-            viewBox="0 0 1000 500"
-            className="absolute inset-0 w-full h-full pointer-events-none z-10"
-            preserveAspectRatio="none"
-          >
-            {/* Base subtle guide path */}
-            <path
-              d={sCurvedTimelinePath}
-              fill="none"
-              stroke="rgba(255, 255, 255, 0.08)"
-              strokeWidth="2"
-              strokeDasharray="4 6"
-              vectorEffect="non-scaling-stroke"
-            />
-
-            {/* Animated primary orange path */}
-            <path
-              ref={pathRef}
-              d={sCurvedTimelinePath}
-              fill="none"
-              stroke="#FF5108"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              vectorEffect="non-scaling-stroke"
-            />
-          </svg>
-
-          {/* Connected Process Nodes & Editorial Milestone Content */}
-          <div className="absolute inset-0 w-full h-full pointer-events-auto">
-            {steps.map((step, i) => {
-              const node = milestoneNodes[i];
-              const isBelow = node.isBelow;
-              const isActive = i === activeStep;
-              const isCompleted = i <= activeStep;
-
-              return (
-                <div key={step.id}>
-                  {/* Timeline Node Circle */}
-                  <div
-                    style={{
-                      left: node.leftPercent,
-                      top: node.topPercent,
-                    }}
-                    onMouseEnter={() => setActiveStep(i)}
-                    className="absolute -translate-x-1/2 -translate-y-1/2 z-20 cursor-pointer group"
-                    role="button"
-                    tabIndex={0}
-                    aria-label={`Milestone ${step.stepNumber}: ${step.title}`}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === " ") {
-                        e.preventDefault();
-                        setActiveStep(i);
-                      }
-                    }}
-                  >
-                    {/* Atmospheric glow ring when active */}
-                    <div
-                      className={`absolute inset-0 -m-2 rounded-full transition-all duration-300 pointer-events-none ${
-                        isActive
-                          ? "bg-[#FF5108]/20 scale-125"
-                          : "bg-transparent scale-100"
+            {/* Stage Progress Counter / Minimal Status Indicator */}
+            <div className="pt-6 border-t border-white/[0.08] flex items-center justify-between max-w-[460px]">
+              <div className="flex items-center gap-1.5">
+                {[0, 1, 2, 3, 4].map((idx) => {
+                  const isCurrent = idx === activeStep;
+                  const isPast = idx < activeStep;
+                  return (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => handleSelectStep(idx)}
+                      aria-label={`Jump to stage 0${idx + 1}`}
+                      className={`h-1.5 rounded-full transition-all duration-500 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#FF5108] ${
+                        isCurrent
+                          ? "w-8 bg-[#FF5108] shadow-[0_0_8px_rgba(255,81,8,0.6)]"
+                          : isPast
+                          ? "w-2.5 bg-[#FF5108]/50 hover:bg-[#FF5108]/80"
+                          : "w-2.5 bg-white/15 hover:bg-white/30"
                       }`}
                     />
-
-                    {/* Circular node */}
-                    <div
-                      className={`relative w-8 h-8 rounded-full bg-[#08090D] border-2 transition-all duration-300 flex items-center justify-center font-mono text-[11px] font-[700] ${
-                        isActive
-                          ? "border-[#FF5108] text-[#F4F2ED] scale-110 shadow-[0_0_14px_rgba(255,81,8,0.6)]"
-                          : isCompleted
-                          ? "border-[#FF5108] text-[#F4F2ED]"
-                          : "border-white/20 text-[#8E9098]"
-                      }`}
-                    >
-                      {step.stepNumber}
-                    </div>
-
-                    {/* Connecting stem line linking node to content */}
-                    <div
-                      className={`w-[1.5px] h-6 absolute left-1/2 -translate-x-1/2 transition-colors duration-300 pointer-events-none ${
-                        isBelow ? "top-full" : "bottom-full"
-                      } ${
-                        isCompleted
-                          ? "bg-gradient-to-b from-[#FF5108] to-[#FF5108]/30"
-                          : "bg-white/10"
-                      }`}
-                    />
-                  </div>
-
-                  {/* Editorial Milestone Text Block */}
-                  <div
-                    onMouseEnter={() => setActiveStep(i)}
-                    style={{
-                      left: node.leftPercent,
-                      top: isBelow ? "calc(52% + 24px)" : "auto",
-                      bottom: isBelow ? "auto" : "calc(100% - 39% + 24px)",
-                      transform: "translateX(-50%)",
-                    }}
-                    className={`absolute w-[180px] lg:w-[210px] xl:w-[230px] flex flex-col cursor-pointer transition-all duration-400 group select-none ${
-                      isActive
-                        ? "opacity-100 scale-100 z-30"
-                        : isCompleted
-                        ? "opacity-85 scale-100 z-20"
-                        : "opacity-45 scale-[0.98] z-10 hover:opacity-85"
-                    }`}
-                  >
-                    {/* Subtle Large Translucent Background Number */}
-                    <span
-                      aria-hidden="true"
-                      className={`absolute -top-4 -left-1 font-mono text-[60px] lg:text-[72px] font-[800] leading-none transition-colors duration-400 pointer-events-none select-none ${
-                        isActive
-                          ? "text-[#FF5108]/[0.10]"
-                          : "text-white/[0.03] group-hover:text-white/[0.06]"
-                      }`}
-                    >
-                      {step.stepNumber}
-                    </span>
-
-                    {/* Relative Content */}
-                    <div className="relative z-10 pt-1">
-                      {/* Step Label */}
-                      <span className="text-[10.5px] lg:text-[11.5px] font-[700] uppercase tracking-[0.2em] text-[#FF5108] block mb-1">
-                        {step.stepNumber} — {step.stepLabel}
-                      </span>
-
-                      {/* Heading */}
-                      <h3 className="text-[15px] lg:text-[17px] font-[700] text-[#F4F2ED] tracking-[-0.02em] mb-1.5 leading-[1.3] group-hover:text-white transition-colors">
-                        {step.title}
-                      </h3>
-
-                      {/* Description */}
-                      <p className="text-[12px] lg:text-[13px] text-[#8E9098] leading-[1.6] font-[400] group-hover:text-[#A6A8AE] transition-colors">
-                        {step.description}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* =========================================================================
-            MOBILE LAYOUT — COMPACT VERTICAL TIMELINE (< md)
-            ========================================================================= */}
-        <div className="block md:hidden relative pl-3 pr-1 mt-6">
-          {/* Vertical continuous orange timeline line */}
-          <div
-            className="absolute left-[27px] top-4 bottom-8 w-[2px] bg-gradient-to-b from-[#FF5108] via-[#FF5108]/70 to-[#FF5108]/20"
-            aria-hidden="true"
-          />
-
-          <div className="flex flex-col gap-9">
-            {steps.map((step) => (
-              <div
-                key={`mobile-${step.id}`}
-                className="relative flex items-start gap-4 group"
-              >
-                {/* Numbered node circle on the vertical line */}
-                <div className="relative z-10 w-9 h-9 rounded-full bg-[#08090D] border-2 border-[#FF5108] flex items-center justify-center font-mono text-[11px] font-[700] text-[#F4F2ED] shrink-0 shadow-[0_0_10px_rgba(255,81,8,0.3)] mt-0.5">
-                  {step.stepNumber}
-                </div>
-
-                {/* Content */}
-                <div className="flex-1 relative pt-0.5">
-                  {/* Subtle Background Number */}
-                  <span
-                    aria-hidden="true"
-                    className="absolute -top-3 right-0 font-mono text-[44px] font-[800] leading-none text-white/[0.04] pointer-events-none select-none"
-                  >
-                    {step.stepNumber}
-                  </span>
-
-                  {/* Step Label */}
-                  <span className="text-[10px] font-[700] uppercase tracking-[0.2em] text-[#FF5108] block mb-1">
-                    {step.stepNumber} — {step.stepLabel}
-                  </span>
-
-                  {/* Heading */}
-                  <h3 className="text-[16px] font-[700] text-[#F4F2ED] tracking-[-0.02em] leading-snug mb-1.5">
-                    {step.title}
-                  </h3>
-
-                  {/* Description */}
-                  <p className="text-[13px] text-[#8E9098] leading-[1.6] font-[400]">
-                    {step.description}
-                  </p>
-                </div>
+                  );
+                })}
               </div>
-            ))}
+
+              <div className="flex items-center gap-2">
+                <span className="font-mono text-[11px] sm:text-[12px] font-[600] text-[#8E9098] tracking-wider">
+                  STAGE 0{activeStep + 1} OF 05
+                </span>
+                <span
+                  className={`w-1.5 h-1.5 rounded-full transition-colors duration-300 ${
+                    isUserInteracting
+                      ? "bg-amber-400"
+                      : isInViewport
+                      ? "bg-[#FF5108] animate-pulse"
+                      : "bg-[#777982]"
+                  }`}
+                  title={isUserInteracting ? "Manual override active" : "Auto-progression active"}
+                  aria-hidden="true"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* =========================================================================
+              RIGHT COLUMN — CURVED VERTICAL TIMELINE
+              ========================================================================= */}
+          <div ref={timelineColRef} className="lg:col-span-7 w-full">
+            {/* Desktop & Tablet Curved Serpentine Timeline (md and up) */}
+            <div className="hidden md:block relative w-full max-w-[580px] lg:max-w-none mx-auto h-[640px]">
+              {/* SVG Canvas for Curved Timeline */}
+              <svg
+                viewBox="0 0 540 640"
+                className="absolute inset-0 w-full h-full pointer-events-none z-10"
+                preserveAspectRatio="none"
+              >
+                {/* Background inactive curve */}
+                <path
+                  d={curvedTimelinePath}
+                  fill="none"
+                  stroke="rgba(255, 255, 255, 0.16)"
+                  strokeWidth="2"
+                  strokeDasharray="4 6"
+                  vectorEffect="non-scaling-stroke"
+                />
+
+                {/* Animated active orange curve */}
+                <path
+                  ref={desktopPathRef}
+                  d={curvedTimelinePath}
+                  fill="none"
+                  stroke="#FF5108"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  style={{
+                    strokeDasharray: pathLength,
+                    strokeDashoffset: strokeDashoffset,
+                    transition: isReducedMotion
+                      ? "none"
+                      : "stroke-dashoffset 0.8s cubic-bezier(0.25, 1, 0.5, 1)",
+                  }}
+                  vectorEffect="non-scaling-stroke"
+                />
+              </svg>
+
+              {/* 5 Milestone Nodes & Editorial Content Blocks */}
+              <div className="absolute inset-0 w-full h-full pointer-events-auto">
+                {steps.map((step, i) => {
+                  const node = desktopNodes[i];
+                  const isActive = i === activeStep;
+                  const isCompleted = i <= activeStep;
+
+                  return (
+                    <div key={step.id}>
+                      {/* Hairline connector line linking node to content */}
+                      <div
+                        style={{
+                          left: `${node.x + 18}px`,
+                          top: `${node.y}px`,
+                          width: `${node.textLeft - (node.x + 18)}px`,
+                        }}
+                        className={`absolute h-[1.5px] -translate-y-1/2 pointer-events-none transition-all duration-500 ${
+                          isActive
+                            ? "bg-[#FF5108] shadow-[0_0_8px_rgba(255,81,8,0.6)] opacity-100"
+                            : isCompleted
+                            ? "bg-[#FF5108]/50 opacity-70"
+                            : "bg-white/[0.12] opacity-40"
+                        }`}
+                        aria-hidden="true"
+                      />
+
+                      {/* Numbered Milestone Node Circle (Accessible Button) */}
+                      <button
+                        type="button"
+                        onClick={() => handleSelectStep(i)}
+                        onFocus={() => handleSelectStep(i)}
+                        style={{
+                          left: `${node.x}px`,
+                          top: `${node.y}px`,
+                        }}
+                        aria-label={`Milestone ${step.stepNumber}: ${step.title}`}
+                        aria-pressed={isActive}
+                        className="absolute -translate-x-1/2 -translate-y-1/2 z-20 cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5108] focus-visible:ring-offset-2 focus-visible:ring-offset-[#08090D] rounded-full"
+                      >
+                        {/* Ambient glow halo ring when active */}
+                        <div
+                          className={`absolute inset-0 -m-2 rounded-full transition-all duration-500 pointer-events-none ${
+                            isActive
+                              ? "bg-[#FF5108]/25 scale-125"
+                              : "bg-transparent scale-100"
+                          }`}
+                          aria-hidden="true"
+                        />
+
+                        {/* Circular node */}
+                        <div
+                          className={`relative w-9 h-9 rounded-full bg-[#08090D] border-2 transition-all duration-500 flex items-center justify-center font-mono text-[11px] font-[700] ${
+                            isActive
+                              ? "border-[#FF5108] text-[#FF5108] scale-110 shadow-[0_0_16px_rgba(255,81,8,0.5)]"
+                              : isCompleted
+                              ? "border-[#FF5108]/70 text-[#F4F2ED]"
+                              : "border-white/[0.18] text-[#8E9098] group-hover:border-white/40 group-hover:text-white"
+                          }`}
+                        >
+                          {step.stepNumber}
+                        </div>
+                      </button>
+
+                      {/* Milestone Editorial Text Content Block */}
+                      <div
+                        onClick={() => handleSelectStep(i)}
+                        style={{
+                          left: `${node.textLeft}px`,
+                          top: `${node.y - 28}px`,
+                          maxWidth: `calc(100% - ${node.textLeft + 16}px)`,
+                        }}
+                        className={`absolute flex flex-col cursor-pointer transition-all duration-500 group select-none pr-4 ${
+                          isActive
+                            ? "opacity-100 translate-x-1 z-30"
+                            : isCompleted
+                            ? "opacity-85 translate-x-0 z-20 hover:opacity-100"
+                            : "opacity-60 translate-x-0 z-10 hover:opacity-90"
+                        }`}
+                        role="region"
+                        aria-label={`Stage ${step.stepNumber} description`}
+                      >
+                        {/* Step Label (e.g. 01 — DISCOVER) */}
+                        <span
+                          className={`text-[11px] font-[700] uppercase tracking-[0.2em] block mb-1 transition-colors duration-400 ${
+                            isActive
+                              ? "text-[#FF5108]"
+                              : isCompleted
+                              ? "text-[#FF5108]/80"
+                              : "text-[#8E9098] group-hover:text-[#B5B5BC]"
+                          }`}
+                        >
+                          {step.stepNumber} — {step.stepLabel}
+                        </span>
+
+                        {/* Milestone Subtitle / Heading */}
+                        <h3
+                          className={`text-[17px] lg:text-[18px] font-[700] tracking-[-0.02em] mb-1.5 leading-[1.3] transition-colors duration-400 ${
+                            isActive
+                              ? "text-[#F4F2ED]"
+                              : isCompleted
+                              ? "text-[#E6E4DC]"
+                              : "text-[#92939B] group-hover:text-[#F4F2ED]"
+                          }`}
+                        >
+                          {step.title}
+                        </h3>
+
+                        {/* Concise Description */}
+                        <p
+                          className={`text-[13px] lg:text-[14px] leading-[1.65] font-[400] transition-colors duration-400 max-w-[440px] ${
+                            isActive
+                              ? "text-[#C4C5CC]"
+                              : isCompleted
+                              ? "text-[#9E9FA7]"
+                              : "text-[#777982] group-hover:text-[#9E9FA7]"
+                          }`}
+                        >
+                          {step.description}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Mobile Compact Vertical Timeline (< md) */}
+            <div className="block md:hidden relative pl-4 pr-1 mt-2">
+              {/* Vertical continuous guide line */}
+              <div
+                className="absolute left-[33px] top-4 bottom-8 w-[2px] bg-white/[0.12]"
+                aria-hidden="true"
+              />
+
+              {/* Animated active progress vertical line */}
+              <div
+                style={{
+                  height: `${(activeStep / 4) * 100}%`,
+                  maxHeight: "calc(100% - 32px)",
+                  transition: isReducedMotion ? "none" : "height 0.6s cubic-bezier(0.25, 1, 0.5, 1)",
+                }}
+                className="absolute left-[33px] top-4 w-[2px] bg-[#FF5108] shadow-[0_0_8px_rgba(255,81,8,0.7)]"
+                aria-hidden="true"
+              />
+
+              <div className="flex flex-col gap-8">
+                {steps.map((step, i) => {
+                  const isActive = i === activeStep;
+                  const isCompleted = i <= activeStep;
+
+                  return (
+                    <div
+                      key={`mobile-${step.id}`}
+                      onClick={() => handleSelectStep(i)}
+                      className={`relative flex items-start gap-4 cursor-pointer transition-all duration-400 group ${
+                        isActive ? "opacity-100" : isCompleted ? "opacity-85" : "opacity-60"
+                      }`}
+                      role="button"
+                      tabIndex={0}
+                      aria-label={`Milestone ${step.stepNumber}: ${step.title}`}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          handleSelectStep(i);
+                        }
+                      }}
+                    >
+                      {/* Numbered Node Circle */}
+                      <div
+                        className={`relative z-10 w-9 h-9 rounded-full bg-[#08090D] border-2 transition-all duration-400 flex items-center justify-center font-mono text-[11px] font-[700] shrink-0 mt-0.5 ${
+                          isActive
+                            ? "border-[#FF5108] text-[#FF5108] scale-110 shadow-[0_0_12px_rgba(255,81,8,0.5)]"
+                            : isCompleted
+                            ? "border-[#FF5108]/70 text-[#F4F2ED]"
+                            : "border-white/[0.18] text-[#8E9098]"
+                        }`}
+                      >
+                        {step.stepNumber}
+                      </div>
+
+                      {/* Content Block */}
+                      <div className="flex-1 relative pt-0.5">
+                        {/* Step Label */}
+                        <span
+                          className={`text-[10.5px] font-[700] uppercase tracking-[0.2em] block mb-1 transition-colors ${
+                            isActive
+                              ? "text-[#FF5108]"
+                              : isCompleted
+                              ? "text-[#FF5108]/80"
+                              : "text-[#8E9098]"
+                          }`}
+                        >
+                          {step.stepNumber} — {step.stepLabel}
+                        </span>
+
+                        {/* Title */}
+                        <h3
+                          className={`text-[16px] font-[700] tracking-[-0.02em] leading-snug mb-1.5 transition-colors ${
+                            isActive ? "text-[#F4F2ED]" : "text-[#92939B]"
+                          }`}
+                        >
+                          {step.title}
+                        </h3>
+
+                        {/* Description */}
+                        <p
+                          className={`text-[13px] leading-[1.6] font-[400] transition-colors ${
+                            isActive ? "text-[#C4C5CC]" : "text-[#777982]"
+                          }`}
+                        >
+                          {step.description}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </div>
       </div>

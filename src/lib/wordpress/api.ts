@@ -316,35 +316,35 @@ export async function getProcessSteps(): Promise<ProcessStep[]> {
       stepNumber: "01",
       stepLabel: "DISCOVER",
       title: "Understand the challenge",
-      description: "We learn about your business, audience, goals, competitors, challenges and opportunities. This gives us the context to understand what the project really needs."
+      description: "We learn about your business, audience, goals and challenges to understand what really matters."
     },
     {
       id: "2",
       stepNumber: "02",
       stepLabel: "DEFINE",
       title: "Find the right direction",
-      description: "We bring the findings together, establish priorities and create a clear direction for the project."
+      description: "We identify priorities, clarify the problem and establish a focused direction for the project."
     },
     {
       id: "3",
       stepNumber: "03",
       stepLabel: "DESIGN",
       title: "Explore the possibilities",
-      description: "We translate ideas into concepts, wireframes, interfaces, identity systems and meaningful digital experiences."
+      description: "We translate ideas into purposeful visual concepts and intuitive digital experiences."
     },
     {
       id: "4",
       stepNumber: "04",
       stepLabel: "REFINE",
       title: "Make the details count",
-      description: "We review, test and refine the work to improve usability, clarity, consistency and visual quality."
+      description: "We review, test and improve the solution to ensure every detail works as intended."
     },
     {
       id: "5",
       stepNumber: "05",
       stepLabel: "DELIVER",
       title: "Ready for the real world",
-      description: "We prepare the final assets, specifications and documentation for a smooth transition into production."
+      description: "We prepare and hand over the final work for implementation and real-world use."
     }
   ];
 }
