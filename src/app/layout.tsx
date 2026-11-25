@@ -1,22 +1,15 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Manrope } from "next/font/google";
+import { Inter_Tight } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import CustomCursor from "@/components/CustomCursor";
 
-const manrope = Manrope({
+const interTight = Inter_Tight({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
-  display: "swap",
-  variable: "--font-manrope",
-});
-
-const cormorant = Cormorant_Garamond({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
   style: ["normal", "italic"],
   display: "swap",
-  variable: "--font-serif",
+  variable: "--font-primary",
 });
 
 export const metadata: Metadata = {
@@ -31,8 +24,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${manrope.variable} ${cormorant.variable}`}>
-      <body className={`antialiased min-h-screen bg-[#08090D] text-[#F4F2ED] ${manrope.className}`}>
+    <html lang="en" className={interTight.variable}>
+      <body className={`antialiased min-h-screen bg-[#08090D] text-[#F4F2ED] ${interTight.className}`}>
         <div className="noise-overlay" />
         <div className="tech-grid" />
 

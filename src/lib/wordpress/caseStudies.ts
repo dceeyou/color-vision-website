@@ -342,7 +342,7 @@ export const demoCaseStudies: Record<string, CaseStudyProject> = {
           bullets: [
             "Zero virgin plastics utilized in secondary shipping cartons.",
             "Color Vision signature orange seal accent used as the brand's quality badge.",
-            "Bilingual regulatory typography set in high-legibility Manrope."
+            "Bilingual regulatory typography set in high-legibility Inter Tight."
           ],
           media: {
             src: "/case-studies/goodly-hero.svg",

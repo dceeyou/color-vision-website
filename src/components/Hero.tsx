@@ -422,16 +422,16 @@ export default function Hero({ hero }: HeroProps) {
         </div>
 
         {/* Studio Technical Metadata in exact requested #777982 */}
-        <div className="absolute top-28 left-6 sm:left-10 text-[10px] font-mono tracking-[0.25em] text-[#777982] uppercase">
+        <div className="absolute top-28 left-6 sm:left-10 text-[10px] tracking-[0.25em] font-[600] text-[#777982] uppercase">
           COLOR VISION // CV-SYS.01
         </div>
-        <div className="absolute top-28 right-6 sm:right-10 text-[10px] font-mono tracking-[0.25em] text-[#777982] uppercase hidden sm:block">
+        <div className="absolute top-28 right-6 sm:right-10 text-[10px] tracking-[0.25em] font-[600] text-[#777982] uppercase hidden sm:block">
           07°00&apos;N · 80°00&apos;E
         </div>
-        <div className="absolute bottom-28 left-6 sm:left-10 text-[10px] font-mono tracking-[0.22em] text-[#777982] uppercase hidden md:block">
+        <div className="absolute bottom-28 left-6 sm:left-10 text-[10px] tracking-[0.22em] font-[600] text-[#777982] uppercase hidden md:block">
           STUDIO // EXPERIENCES
         </div>
-        <div className="absolute bottom-28 right-6 sm:right-10 text-[10px] font-mono tracking-[0.22em] text-[#777982] uppercase hidden md:block">
+        <div className="absolute bottom-28 right-6 sm:right-10 text-[10px] tracking-[0.22em] font-[600] text-[#777982] uppercase hidden md:block">
           EST. SRI LANKA
         </div>
       </div>
@@ -469,7 +469,7 @@ export default function Hero({ hero }: HeroProps) {
 
         {/* Large Expressive Three-Line Headline Composition */}
         <h1 className="relative w-full max-w-[1240px] mx-auto flex flex-col items-center justify-center select-none">
-          {/* LINE 01: WE TRANSFORM (#F4F2ED Manrope Bold) */}
+          {/* LINE 01: WE TRANSFORM (#F4F2ED Inter Tight Bold) */}
           <div className="overflow-hidden py-1">
             <span
               ref={line1Ref}
@@ -479,7 +479,7 @@ export default function Hero({ hero }: HeroProps) {
             </span>
           </div>
 
-          {/* LINE 02: IDEAS INTO (#F4F2ED Manrope Bold) */}
+          {/* LINE 02: IDEAS INTO (#F4F2ED Inter Tight Bold) */}
           <div className="overflow-hidden py-1 -mt-1 sm:-mt-2 md:-mt-3">
             <span
               ref={line2Ref}
@@ -489,11 +489,11 @@ export default function Hero({ hero }: HeroProps) {
             </span>
           </div>
 
-          {/* LINE 03: EXPERIENCES. (#FF5108 Instrument Serif Italic) */}
+          {/* LINE 03: EXPERIENCES. (Inter Tight Italic Bold, Glowing Signature Orange) */}
           <div className="overflow-hidden py-1 -mt-1 sm:-mt-2 md:-mt-3">
             <span
               ref={line3Ref}
-              className="block will-change-transform font-instrument italic font-[400] md:font-[500] text-[#FF5108] tracking-[-0.02em] leading-[0.96] text-[48px] sm:text-[72px] md:text-[94px] lg:text-[118px] xl:text-[136px] drop-shadow-[0_0_24px_rgba(255,81,8,0.25)]"
+              className="block will-change-transform italic font-[700] md:font-[800] text-[#FF5108] tracking-[-0.03em] leading-[0.96] text-[48px] sm:text-[72px] md:text-[94px] lg:text-[118px] xl:text-[136px] drop-shadow-[0_0_24px_rgba(255,81,8,0.25)]"
             >
               EXPERIENCES.
             </span>

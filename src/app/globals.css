@@ -1,7 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&display=swap');
 @import "tailwindcss";
 
 :root {
+  --font-primary: var(--font-primary, 'Inter Tight', -apple-system, BlinkMacSystemFont, sans-serif);
   --background: #08090D;
   --foreground: #F4F2ED;
   --accent: #FF5108;
@@ -14,6 +15,10 @@
 }
 
 @theme {
+  --font-sans: var(--font-primary);
+  --font-serif: var(--font-primary);
+  --font-mono: var(--font-primary);
+  --font-primary: var(--font-primary);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-accent: var(--accent);
@@ -22,20 +27,35 @@
   --color-dark-surface: var(--dark-surface);
   --color-border-light: var(--border-light);
   --color-border-subtle: var(--border-subtle);
-  --font-serif: var(--font-serif);
 }
 
-body {
+*, ::before, ::after {
+  font-family: var(--font-primary);
+}
+
+html, body {
   color: var(--foreground);
   background: var(--background);
-  font-family: var(--font-manrope), 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--font-primary);
   overflow-x: hidden;
 }
 
 /* Base Headings */
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-manrope), 'Manrope', sans-serif;
+  font-family: var(--font-primary);
   font-weight: 700;
+}
+
+/* Ensure all form controls strictly inherit the single primary font */
+input, button, select, textarea, optgroup {
+  font-family: var(--font-primary) !important;
+}
+
+/* Force any legacy utility classes to resolve to Inter Tight */
+.font-serif,
+.font-instrument,
+.font-mono {
+  font-family: var(--font-primary) !important;
 }
 
 /* Custom Cursor Hiding (for desktop) */
@@ -109,16 +129,6 @@ h1, h2, h3, h4, h5, h6 {
   .animate-marquee {
     animation: none !important;
   }
-}
-
-/* Explicit Serif Font Class for Cormorant Garamond */
-.font-serif {
-  font-family: var(--font-serif), Georgia, Cambria, "Times New Roman", Times, serif;
-}
-
-/* Editorial Serif for Instrument Serif (with Cormorant / Georgia fallback) */
-.font-instrument {
-  font-family: 'Instrument Serif', var(--font-serif), Georgia, "Times New Roman", serif;
 }
 
 /* Refined Glass Surface (Section 5) */

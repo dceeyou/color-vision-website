@@ -3,12 +3,12 @@
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
-import { Manrope } from "next/font/google";
+import { Inter_Tight } from "next/font/google";
 import LaunchCursor from "@/components/launch/LaunchCursor";
 import LiquidBackgroundWebGL from "@/components/launch/LiquidBackgroundWebGL";
 import LaunchCountdown from "@/components/launch/LaunchCountdown";
 
-const manrope = Manrope({
+const interTight = Inter_Tight({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
   display: "swap",
@@ -45,7 +45,7 @@ export default function LaunchPage() {
   }, []);
 
   return (
-    <div ref={containerRef} className={`min-h-screen flex flex-col items-center justify-center bg-[#050608] text-foreground p-6 md:p-8 lg:p-12 relative overflow-hidden selection:bg-accent selection:text-black ${manrope.className}`}>
+    <div ref={containerRef} className={`min-h-screen flex flex-col items-center justify-center bg-[#050608] text-foreground p-6 md:p-8 lg:p-12 relative overflow-hidden selection:bg-accent selection:text-black ${interTight.className}`}>
       
       {/* Background System */}
       <div className="reveal-grid absolute inset-0 z-0 pointer-events-none">
