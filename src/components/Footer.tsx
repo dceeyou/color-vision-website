@@ -178,22 +178,20 @@ export default function Footer() {
             </div>
 
             {/* Privacy Policy & Terms */}
-            <div className="flex items-center gap-6 sm:gap-8">
-              <a
-                href="#"
-                onClick={(e) => e.preventDefault()}
+            <div className="flex items-center gap-6 sm:gap-8 md:pr-24 lg:pr-28">
+              <Link
+                href="/privacy-policy"
                 className="hover:text-[#F4F2ED] transition-colors duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#FF5108] rounded"
               >
                 Privacy Policy
-              </a>
+              </Link>
               <span className="text-white/[0.1]">•</span>
-              <a
-                href="#"
-                onClick={(e) => e.preventDefault()}
+              <Link
+                href="/terms-and-conditions"
                 className="hover:text-[#F4F2ED] transition-colors duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#FF5108] rounded"
               >
                 Terms and Conditions
-              </a>
+              </Link>
             </div>
           </div>
         </div>
