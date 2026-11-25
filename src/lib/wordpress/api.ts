@@ -77,13 +77,13 @@ export async function getHero(): Promise<HeroContent> {
   if (data?.hero) return data.hero;
   
   return {
-    eyebrow: "CREATIVE DESIGN STUDIO",
-    heading: "Design\nThat",
-    highlightedText: "Matters.",
-    description: "Color Vision is an independent design studio based in Sri Lanka, helping ambitious businesses turn ideas into clear brands, intuitive digital products, and meaningful experiences.",
+    eyebrow: "INDEPENDENT DESIGN STUDIO · SRI LANKA",
+    heading: "We transform ideas",
+    highlightedText: "into meaningful experiences.",
+    description: "Color Vision brings strategy, creativity and thoughtful design together to shape distinctive brands, intuitive digital products and meaningful digital experiences.",
     primaryCtaLabel: "VIEW OUR WORK →",
     primaryCtaUrl: "#work",
-    secondaryCtaLabel: "START A PROJECT",
+    secondaryCtaLabel: "START A PROJECT →",
     secondaryCtaUrl: "#contact"
   };
 }
