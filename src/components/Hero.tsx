@@ -9,6 +9,35 @@ interface HeroProps {
   hero?: HeroContent;
 }
 
+// Mathematical cubic-bezier(0.22, 1, 0.36, 1) evaluator
+function cubicBezier(p1x: number, p1y: number, p2x: number, p2y: number) {
+  return function (t: number) {
+    if (t <= 0) return 0;
+    if (t >= 1) return 1;
+    let u = t;
+    for (let i = 0; i < 8; i++) {
+      const currentX =
+        3 * (1 - u) * (1 - u) * u * p1x +
+        3 * (1 - u) * u * u * p2x +
+        u * u * u;
+      const dx =
+        3 * (1 - u) * (1 - u) * p1x +
+        6 * (1 - u) * u * (p2x - p1x) +
+        3 * u * u * (1 - p2x);
+      if (Math.abs(currentX - t) < 0.0001 || Math.abs(dx) < 1e-6) break;
+      u -= (currentX - t) / dx;
+      u = Math.max(0, Math.min(1, u));
+    }
+    return (
+      3 * (1 - u) * (1 - u) * u * p1y +
+      3 * (1 - u) * u * u * p2y +
+      u * u * u
+    );
+  };
+}
+
+const editorialEase = cubicBezier(0.22, 1, 0.36, 1);
+
 export default function Hero({ hero }: HeroProps) {
   const containerRef = useRef<HTMLElement>(null);
   const ambientLightRightRef = useRef<HTMLDivElement>(null);
@@ -17,6 +46,7 @@ export default function Hero({ hero }: HeroProps) {
   const mouseLightRef = useRef<HTMLDivElement>(null);
 
   // Content Refs for sequential kinetic typography entrance
+  const headlineRef = useRef<HTMLHeadingElement>(null);
   const eyebrowRef = useRef<HTMLDivElement>(null);
   const line1Ref = useRef<HTMLSpanElement>(null);
   const line2Ref = useRef<HTMLSpanElement>(null);
@@ -79,7 +109,16 @@ export default function Hero({ hero }: HeroProps) {
     ];
 
     if (isReduced) {
-      gsap.set(revealElements, { opacity: 1, y: 0, yPercent: 0, rotate: 0 });
+      gsap.set(revealElements, { opacity: 1, y: 0, yPercent: 0, rotate: 0, x: 0 });
+      if (line3Ref.current) {
+        gsap.set(line3Ref.current, {
+          clipPath: "inset(0 0% 0 0)",
+          x: 0,
+          y: 0,
+          opacity: 1,
+          filter: "drop-shadow(0 0 16px rgba(255, 81, 8, 0.22)) brightness(1.0)",
+        });
+      }
       if (ambientLightRightRef.current) gsap.set(ambientLightRightRef.current, { opacity: 0.18 });
       if (ambientLightLeftRef.current) gsap.set(ambientLightLeftRef.current, { opacity: 0.14 });
       if (peripheralDecorRef.current) gsap.set(peripheralDecorRef.current, { opacity: 0.10 });
@@ -89,16 +128,23 @@ export default function Hero({ hero }: HeroProps) {
     // =========================================================================
     // 1. KINETIC TYPOGRAPHY ENTRANCE SEQUENCE
     // =========================================================================
-    const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+    const tl = gsap.timeline({ defaults: { ease: editorialEase } });
 
     // Initial states
     gsap.set(
       [eyebrowRef.current, descRef.current, btnsRef.current, scrollIndRef.current],
       { opacity: 0 }
     );
-    gsap.set([line1Ref.current, line2Ref.current, line3Ref.current], {
-      yPercent: 115,
+    gsap.set([line1Ref.current, line2Ref.current], {
+      yPercent: 110,
       opacity: 0,
+    });
+    gsap.set(line3Ref.current, {
+      clipPath: "inset(0 100% 0 0)",
+      x: -24,
+      y: 8,
+      opacity: 0,
+      filter: "drop-shadow(0 0 24px rgba(255, 81, 8, 0.45)) brightness(1.15)",
     });
     if (ambientLightRightRef.current) gsap.set(ambientLightRightRef.current, { opacity: 0 });
     if (ambientLightLeftRef.current) gsap.set(ambientLightLeftRef.current, { opacity: 0 });
@@ -118,54 +164,69 @@ export default function Hero({ hero }: HeroProps) {
         { opacity: 0.10, duration: 1.5, ease: "power2.out" },
         0.15
       )
-      // Stage 01: Eyebrow badge fades and lifts
+      // Eyebrow badge fades and lifts
       .fromTo(
         eyebrowRef.current,
         { opacity: 0, y: 16 },
-        { opacity: 1, y: 0, duration: 0.65 },
+        { opacity: 1, y: 0, duration: 0.55, ease: "power2.out" },
         0.18
       )
-      // Stage 02: "WE TRANSFORM" smooth vertical clipping reveal
+      // Stage 01: Line 1 — "WE TRANSFORM" (Initial delay 300ms, duration 700ms)
       .fromTo(
         line1Ref.current,
-        { yPercent: 115, opacity: 0 },
-        { yPercent: 0, opacity: 1, duration: 0.9, ease: "power4.out" },
-        0.26
+        { yPercent: 110, opacity: 0 },
+        { yPercent: 0, opacity: 1, duration: 0.70, ease: editorialEase },
+        0.30
       )
-      // Stage 03: "IDEAS INTO" vertical clipping with slight stagger
+      // Stage 02: Line 2 — "IDEAS INTO" (250ms delay after Line 1, duration 700ms)
       .fromTo(
         line2Ref.current,
-        { yPercent: 115, opacity: 0 },
-        { yPercent: 0, opacity: 1, duration: 0.9, ease: "power4.out" },
-        0.4
+        { yPercent: 110, opacity: 0 },
+        { yPercent: 0, opacity: 1, duration: 0.70, ease: editorialEase },
+        0.55
       )
-      // Stage 04: "EXPERIENCES." expressive italic typography reveal
+      // Stage 03: Line 3 — "EXPERIENCES." (250ms delay after Line 2, duration 900ms)
+      // Expressive horizontal clipping mask reveal (left-to-right) + subtle translation + restrained illumination
       .fromTo(
         line3Ref.current,
-        { yPercent: 115, opacity: 0, rotate: 1.5 },
-        { yPercent: 0, opacity: 1, rotate: 0, duration: 0.95, ease: "power3.out" },
-        0.54
+        {
+          clipPath: "inset(0 100% 0 0)",
+          x: -24,
+          y: 8,
+          opacity: 0,
+          filter: "drop-shadow(0 0 24px rgba(255, 81, 8, 0.45)) brightness(1.15)",
+        },
+        {
+          clipPath: "inset(0 0% 0 0)",
+          x: 0,
+          y: 0,
+          opacity: 1,
+          filter: "drop-shadow(0 0 16px rgba(255, 81, 8, 0.22)) brightness(1.0)",
+          duration: 0.90,
+          ease: editorialEase,
+        },
+        0.80
       )
-      // Stage 05: Supporting studio description fades in
+      // Stage 04: Supporting studio description fades in
       .fromTo(
         descRef.current,
-        { opacity: 0, y: 18 },
-        { opacity: 1, y: 0, duration: 0.7 },
-        0.75
+        { opacity: 0, y: 16 },
+        { opacity: 1, y: 0, duration: 0.65, ease: "power2.out" },
+        1.70
       )
-      // Stage 06: CTA buttons appear with subtle upward transition
+      // Stage 05: CTA buttons appear with subtle upward transition
       .fromTo(
         btnsRef.current,
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.7 },
-        0.9
+        { opacity: 0, y: 18 },
+        { opacity: 1, y: 0, duration: 0.65, ease: "power2.out" },
+        1.95
       )
-      // Stage 07: Scroll indicator reveal
+      // Stage 06: Scroll indicator reveal
       .fromTo(
         scrollIndRef.current,
         { opacity: 0, y: 12 },
-        { opacity: 1, y: 0, duration: 0.65 },
-        1.05
+        { opacity: 1, y: 0, duration: 0.60, ease: "power2.out" },
+        2.15
       );
 
     // =========================================================================
@@ -208,6 +269,10 @@ export default function Hero({ hero }: HeroProps) {
           }
           if (peripheralDecorRef.current) {
             gsap.set(peripheralDecorRef.current, { y: self.progress * 50 });
+          }
+          // Subtle headline parallax (stationary background preserved)
+          if (headlineRef.current) {
+            gsap.set(headlineRef.current, { y: self.progress * 18 });
           }
         },
       });
@@ -468,7 +533,10 @@ export default function Hero({ hero }: HeroProps) {
         </div>
 
         {/* Large Expressive Three-Line Headline Composition */}
-        <h1 className="relative w-full max-w-[1240px] mx-auto flex flex-col items-center justify-center select-none">
+        <h1
+          ref={headlineRef}
+          className="relative w-full max-w-[1240px] mx-auto flex flex-col items-center justify-center select-none"
+        >
           {/* LINE 01: WE TRANSFORM (#F4F2ED Inter Tight Bold) */}
           <div className="overflow-hidden py-1">
             <span
@@ -490,10 +558,10 @@ export default function Hero({ hero }: HeroProps) {
           </div>
 
           {/* LINE 03: EXPERIENCES. (Instrument Serif Italic, Glowing Signature Orange) */}
-          <div className="overflow-hidden py-1 -mt-1 sm:-mt-2 md:-mt-3">
+          <div className="py-1 -mt-1 sm:-mt-2 md:-mt-3 relative">
             <span
               ref={line3Ref}
-              className="block will-change-transform font-editorial italic font-[400] text-[#FF5108] tracking-[-0.02em] leading-[0.96] text-[48px] sm:text-[72px] md:text-[94px] lg:text-[118px] xl:text-[136px] drop-shadow-[0_0_24px_rgba(255,81,8,0.25)]"
+              className="block will-change-transform font-editorial italic font-[400] text-[#FF5108] tracking-[-0.02em] leading-[0.96] text-[48px] sm:text-[72px] md:text-[94px] lg:text-[118px] xl:text-[136px] pr-2 sm:pr-4"
             >
               EXPERIENCES.
             </span>
