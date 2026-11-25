@@ -7,14 +7,14 @@ export default function QuoteBlock({ data }: { data: QuoteBlockData }) {
         {/* Subtle decorative background quote */}
         <span
           aria-hidden="true"
-          className="absolute -top-10 right-8 text-[180px] sm:text-[220px] text-white/[0.03] select-none pointer-events-none leading-none"
+          className="absolute -top-10 right-8 font-editorial text-[180px] sm:text-[220px] text-white/[0.03] select-none pointer-events-none leading-none"
         >
           “
         </span>
 
         <div className="relative z-10 max-w-[900px]">
           {/* Orange quote mark */}
-          <span className="text-[48px] sm:text-[60px] text-[#FF5108] leading-none block mb-4 select-none">
+          <span className="font-editorial text-[48px] sm:text-[60px] text-[#FF5108] leading-none block mb-4 select-none">
             “
           </span>
 

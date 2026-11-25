@@ -489,11 +489,11 @@ export default function Hero({ hero }: HeroProps) {
             </span>
           </div>
 
-          {/* LINE 03: EXPERIENCES. (Inter Tight Italic Bold, Glowing Signature Orange) */}
+          {/* LINE 03: EXPERIENCES. (Instrument Serif Italic, Glowing Signature Orange) */}
           <div className="overflow-hidden py-1 -mt-1 sm:-mt-2 md:-mt-3">
             <span
               ref={line3Ref}
-              className="block will-change-transform italic font-[700] md:font-[800] text-[#FF5108] tracking-[-0.03em] leading-[0.96] text-[48px] sm:text-[72px] md:text-[94px] lg:text-[118px] xl:text-[136px] drop-shadow-[0_0_24px_rgba(255,81,8,0.25)]"
+              className="block will-change-transform font-editorial italic font-[400] text-[#FF5108] tracking-[-0.02em] leading-[0.96] text-[48px] sm:text-[72px] md:text-[94px] lg:text-[118px] xl:text-[136px] drop-shadow-[0_0_24px_rgba(255,81,8,0.25)]"
             >
               EXPERIENCES.
             </span>

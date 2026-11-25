@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter_Tight } from "next/font/google";
+import { Inter_Tight, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import CustomCursor from "@/components/CustomCursor";
@@ -10,6 +10,14 @@ const interTight = Inter_Tight({
   style: ["normal", "italic"],
   display: "swap",
   variable: "--font-primary",
+});
+
+const instrumentSerif = Instrument_Serif({
+  subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
+  display: "swap",
+  variable: "--font-editorial",
 });
 
 export const metadata: Metadata = {
@@ -24,7 +32,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={interTight.variable}>
+    <html lang="en" className={`${interTight.variable} ${instrumentSerif.variable}`}>
       <body className={`antialiased min-h-screen bg-[#08090D] text-[#F4F2ED] ${interTight.className}`}>
         <div className="noise-overlay" />
         <div className="tech-grid" />
