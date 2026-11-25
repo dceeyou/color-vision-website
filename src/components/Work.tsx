@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useMemo } from "react";
+import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Project } from "@/lib/wordpress/types";
@@ -36,8 +37,8 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
       year: "2025",
       featuredImage: null,
       galleryImages: [],
-      projectUrl: "#contact",
-      caseStudyUrl: "#contact",
+      projectUrl: "/work/elegant-ai",
+      caseStudyUrl: "/work/elegant-ai",
       servicesUsed: ["Interface Design", "Product Strategy", "Design System"],
       featuredProject: true,
     },
@@ -56,8 +57,8 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
       year: "2025",
       featuredImage: null,
       galleryImages: [],
-      projectUrl: "#contact",
-      caseStudyUrl: "#contact",
+      projectUrl: "/work/vehicle-service-platform",
+      caseStudyUrl: "/work/vehicle-service-platform",
       servicesUsed: ["Web Application", "Mobile Experience", "Service Design"],
       featuredProject: true,
     },
@@ -76,8 +77,8 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
       year: "2024",
       featuredImage: null,
       galleryImages: [],
-      projectUrl: "#contact",
-      caseStudyUrl: "#contact",
+      projectUrl: "/work/cr-cricket-bar",
+      caseStudyUrl: "/work/cr-cricket-bar",
       servicesUsed: ["Visual Identity", "Environmental Design", "Print & Signage"],
       featuredProject: false,
     },
@@ -96,8 +97,8 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
       year: "2024",
       featuredImage: null,
       galleryImages: [],
-      projectUrl: "#contact",
-      caseStudyUrl: "#contact",
+      projectUrl: "/work/goodly",
+      caseStudyUrl: "/work/goodly",
       servicesUsed: ["Brand Strategy", "Packaging System", "Visual Identity"],
       featuredProject: true,
     },
@@ -116,8 +117,8 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
       year: "2024",
       featuredImage: null,
       galleryImages: [],
-      projectUrl: "#contact",
-      caseStudyUrl: "#contact",
+      projectUrl: "/work/my-little-kevi",
+      caseStudyUrl: "/work/my-little-kevi",
       servicesUsed: ["Mobile UI/UX", "User Research", "Interaction Design"],
       featuredProject: false,
     },
@@ -136,8 +137,8 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
       year: "2024",
       featuredImage: null,
       galleryImages: [],
-      projectUrl: "#contact",
-      caseStudyUrl: "#contact",
+      projectUrl: "/work/baps",
+      caseStudyUrl: "/work/baps",
       servicesUsed: ["Brand Identity", "Web Experience", "Design Guidelines"],
       featuredProject: false,
     },
@@ -488,10 +489,9 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
   const renderTwoColumnCard = (p: ExtendedProject) => {
     const isHovered = hoveredId === p.id;
     return (
-      <a
+      <Link
         key={p.id}
-        href="#contact"
-        onClick={handleScrollToContact}
+        href={`/work/${p.slug}`}
         onMouseEnter={() => setHoveredId(p.id)}
         onMouseLeave={() => setHoveredId(null)}
         className="project-card group block w-full p-6 sm:p-8 bg-white/[0.015] border border-white/[0.08] hover:border-[#FF5108]/40 rounded-xl transition-all duration-500 relative focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#FF5108] flex flex-col justify-between"
@@ -566,7 +566,7 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
             </span>
           </div>
         </div>
-      </a>
+      </Link>
     );
   };
 
@@ -574,10 +574,9 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
   const renderFeaturedProject01 = (p: ExtendedProject) => {
     const isHovered = hoveredId === p.id;
     return (
-      <a
+      <Link
         key={p.id}
-        href="#contact"
-        onClick={handleScrollToContact}
+        href={`/work/${p.slug}`}
         onMouseEnter={() => setHoveredId(p.id)}
         onMouseLeave={() => setHoveredId(null)}
         className="project-card group block w-full p-6 sm:p-8 md:p-12 bg-white/[0.015] border border-white/[0.08] hover:border-[#FF5108]/40 rounded-xl transition-all duration-500 relative focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#FF5108]"
@@ -656,7 +655,7 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
             {renderProjectVisual(p.id, p.title)}
           </div>
         </div>
-      </a>
+      </Link>
     );
   };
 
@@ -664,10 +663,9 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
   const renderHorizontalFeature04 = (p: ExtendedProject) => {
     const isHovered = hoveredId === p.id;
     return (
-      <a
+      <Link
         key={p.id}
-        href="#contact"
-        onClick={handleScrollToContact}
+        href={`/work/${p.slug}`}
         onMouseEnter={() => setHoveredId(p.id)}
         onMouseLeave={() => setHoveredId(null)}
         className="project-card group block w-full p-6 sm:p-8 md:p-12 bg-white/[0.015] border border-white/[0.08] hover:border-[#FF5108]/40 rounded-xl transition-all duration-500 relative focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#FF5108]"
@@ -733,7 +731,7 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
             </div>
           </div>
         </div>
-      </a>
+      </Link>
     );
   };
 

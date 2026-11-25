@@ -2,6 +2,8 @@ import {
   SiteSettings, HeroContent, Stat, Service, 
   Project, ProcessStep, AboutContent, Testimonial, ContactContent 
 } from './types';
+import { CaseStudyProject } from '../types/caseStudy';
+import { demoCaseStudies } from './caseStudies';
 
 const WP_URL = process.env.NEXT_PUBLIC_WORDPRESS_URL || 'https://cms.colorvision.lk';
 const GRAPHQL_ENDPOINT = `${WP_URL}/graphql`;
@@ -217,10 +219,10 @@ export async function getProjects(): Promise<Project[]> {
       fullDescription: "A clearer digital experience for AI-powered technology, making complex capabilities easier to understand and use.",
       clientName: "Elegant AI Labs",
       year: "2025",
-      featuredImage: null,
+      featuredImage: "/case-studies/elegant-ai-hero.svg",
       galleryImages: [],
-      projectUrl: "#contact",
-      caseStudyUrl: "#contact",
+      projectUrl: "/work/elegant-ai",
+      caseStudyUrl: "/work/elegant-ai",
       servicesUsed: ["Interface Design", "Product Strategy", "Design System"],
       featuredProject: true
     },
@@ -233,10 +235,10 @@ export async function getProjects(): Promise<Project[]> {
       fullDescription: "A connected product experience designed to simplify vehicle servicing workflows and everyday operations.",
       clientName: "FleetMotion Mobility",
       year: "2025",
-      featuredImage: null,
+      featuredImage: "/case-studies/elegant-ai-redesign.svg",
       galleryImages: [],
-      projectUrl: "#contact",
-      caseStudyUrl: "#contact",
+      projectUrl: "/work/vehicle-service-platform",
+      caseStudyUrl: "/work/vehicle-service-platform",
       servicesUsed: ["Web Application", "Mobile Experience", "Service Design"],
       featuredProject: true
     },
@@ -249,10 +251,10 @@ export async function getProjects(): Promise<Project[]> {
       fullDescription: "A distinctive identity translating the energy of cricket culture into a bold and memorable brand.",
       clientName: "CR Hospitality",
       year: "2024",
-      featuredImage: null,
+      featuredImage: "/case-studies/goodly-hero.svg",
       galleryImages: [],
-      projectUrl: "#contact",
-      caseStudyUrl: "#contact",
+      projectUrl: "/work/cr-cricket-bar",
+      caseStudyUrl: "/work/cr-cricket-bar",
       servicesUsed: ["Visual Identity", "Environmental Design", "Print & Signage"],
       featuredProject: false
     },
@@ -265,10 +267,10 @@ export async function getProjects(): Promise<Project[]> {
       fullDescription: "A fresh visual identity for a healthy snack brand, balancing an approachable personality with contemporary packaging design.",
       clientName: "Goodly Organics",
       year: "2024",
-      featuredImage: null,
+      featuredImage: "/case-studies/goodly-hero.svg",
       galleryImages: [],
-      projectUrl: "#contact",
-      caseStudyUrl: "#contact",
+      projectUrl: "/work/goodly",
+      caseStudyUrl: "/work/goodly",
       servicesUsed: ["Brand Strategy", "Packaging System", "Visual Identity"],
       featuredProject: false
     },
@@ -281,10 +283,10 @@ export async function getProjects(): Promise<Project[]> {
       fullDescription: "A thoughtful mobile experience designed around pregnancy tracking and everyday personal care.",
       clientName: "Kevi Healthcare",
       year: "2024",
-      featuredImage: null,
+      featuredImage: "/case-studies/elegant-ai-hero.svg",
       galleryImages: [],
-      projectUrl: "#contact",
-      caseStudyUrl: "#contact",
+      projectUrl: "/work/elegant-ai",
+      caseStudyUrl: "/work/elegant-ai",
       servicesUsed: ["Mobile UI/UX", "User Research", "Interaction Design"],
       featuredProject: false
     },
@@ -297,10 +299,10 @@ export async function getProjects(): Promise<Project[]> {
       fullDescription: "A cohesive visual identity and digital presentation designed to establish a consistent brand experience.",
       clientName: "BAPS Group",
       year: "2024",
-      featuredImage: null,
+      featuredImage: "/case-studies/goodly-hero.svg",
       galleryImages: [],
-      projectUrl: "#contact",
-      caseStudyUrl: "#contact",
+      projectUrl: "/work/goodly",
+      caseStudyUrl: "/work/goodly",
       servicesUsed: ["Brand Identity", "Web Experience", "Design Guidelines"],
       featuredProject: false
     }
@@ -435,3 +437,67 @@ export async function getContact(): Promise<ContactContent> {
     formSuccessMessage: "Thanks for reaching out. We've received your project details and will get back to you soon."
   };
 }
+
+/**
+ * Universal Case Study getter by project slug.
+ * Supports Headless WordPress GraphQL with fallback to local mock repository.
+ */
+export async function getCaseStudyBySlug(slug: string): Promise<CaseStudyProject | null> {
+  const data = await fetchWP(
+    `query CaseStudyBySlug($slug: ID!) {
+      project(id: $slug, idType: SLUG) {
+        id title slug
+        projectFields {
+          subtitle
+          shortDescription
+          fullDescription
+          client
+          year
+          duration
+          industry
+        }
+      }
+    }`,
+    { slug }
+  );
+
+  if (data?.project) {
+    // If live WordPress CMS returns project, format into CaseStudyProject
+    const p = data.project;
+    return {
+      id: p.id,
+      title: p.title,
+      slug: p.slug,
+      subtitle: p.projectFields?.subtitle || "",
+      shortDescription: p.projectFields?.shortDescription || "",
+      fullDescription: p.projectFields?.fullDescription || "",
+      projectType: "Brand & Digital",
+      industry: p.projectFields?.industry || "Technology",
+      client: p.projectFields?.client || "Client Partner",
+      year: p.projectFields?.year || "2025",
+      duration: p.projectFields?.duration || "12 Weeks",
+      projectStatus: "Completed",
+      featured: true,
+      displayOrder: 1,
+      categories: ["UI/UX", "Branding"],
+      services: ["Strategy", "Design System"],
+      toolsAndTechnologies: ["Figma"],
+      projectTeam: [],
+      projectCredits: [],
+      thumbnailImage: null,
+      heroImage: null,
+      galleryImages: [],
+      seoTitle: `${p.title} — Case Study | Color Vision`,
+      seoDescription: p.projectFields?.shortDescription || "",
+      sections: demoCaseStudies[slug]?.sections || []
+    };
+  }
+
+  // Graceful local demonstration data adapter
+  return demoCaseStudies[slug] || null;
+}
+
+export async function getAllCaseStudySlugs(): Promise<string[]> {
+  return Object.keys(demoCaseStudies);
+}
+

@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" width="100%" height="100%">
+  <defs>
+    <radialGradient id="bgGlow" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#FF5108" stop-opacity="0.18"/>
+      <stop offset="60%" stop-color="#FF5108" stop-opacity="0.02"/>
+      <stop offset="100%" stop-color="#08090D" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="panelGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#181B22"/>
+      <stop offset="100%" stop-color="#0F1116"/>
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FF5108"/>
+      <stop offset="100%" stop-color="#FF8A00"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="700" fill="#0A0B10"/>
+  <rect width="1200" height="700" fill="url(#bgGlow)"/>
+
+  <!-- Technical Grid -->
+  <g opacity="0.15" stroke="#FFFFFF" stroke-width="0.5">
+    <line x1="100" y1="0" x2="100" y2="700"/>
+    <line x1="300" y1="0" x2="300" y2="700"/>
+    <line x1="500" y1="0" x2="500" y2="700"/>
+    <line x1="700" y1="0" x2="700" y2="700"/>
+    <line x1="900" y1="0" x2="900" y2="700"/>
+    <line x1="1100" y1="0" x2="1100" y2="700"/>
+    <line x1="0" y1="100" x2="1200" y2="100"/>
+    <line x1="0" y1="250" x2="1200" y2="250"/>
+    <line x1="0" y1="400" x2="1200" y2="400"/>
+    <line x1="0" y1="550" x2="1200" y2="550"/>
+  </g>
+
+  <!-- Main Application Window Shell -->
+  <rect x="80" y="60" width="1040" height="580" rx="16" fill="url(#panelGrad)" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+  
+  <!-- Window Top Bar -->
+  <rect x="80" y="60" width="1040" height="48" rx="16" fill="#14171E"/>
+  <rect x="80" y="92" width="1040" height="16" fill="#14171E"/>
+  <line x1="80" y1="108" x2="1120" y2="108" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+  
+  <!-- Window Controls -->
+  <circle cx="110" cy="84" r="6" fill="#FF5108" opacity="0.8"/>
+  <circle cx="130" cy="84" r="6" fill="#8E9098" opacity="0.4"/>
+  <circle cx="150" cy="84" r="6" fill="#8E9098" opacity="0.4"/>
+  <text x="560" y="89" fill="#8E9098" font-family="monospace" font-size="12" text-anchor="middle" letter-spacing="2">ELEGANT AI // MULTI-AGENT CANVAS v2.4</text>
+
+  <!-- Left Sidebar Panel -->
+  <rect x="80" y="108" width="220" height="532" fill="#111319" opacity="0.8"/>
+  <line x1="300" y1="108" x2="300" y2="640" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+  
+  <text x="110" y="145" fill="#8E9098" font-family="sans-serif" font-size="11" font-weight="700" letter-spacing="1.5">WORKSPACES</text>
+  <rect x="100" y="160" width="180" height="36" rx="8" fill="#1B1E28" stroke="#FF5108" stroke-width="1"/>
+  <circle cx="120" cy="178" r="4" fill="#FF5108"/>
+  <text x="135" y="182" fill="#F4F2ED" font-family="sans-serif" font-size="13" font-weight="600">Production Pipeline</text>
+
+  <rect x="100" y="206" width="180" height="34" rx="8" fill="rgba(255,255,255,0.02)"/>
+  <circle cx="120" cy="223" r="4" fill="#8E9098"/>
+  <text x="135" y="227" fill="#8E9098" font-family="sans-serif" font-size="13">Evaluation Suite</text>
+
+  <rect x="100" y="248" width="180" height="34" rx="8" fill="rgba(255,255,255,0.02)"/>
+  <circle cx="120" cy="265" r="4" fill="#8E9098"/>
+  <text x="135" y="269" fill="#8E9098" font-family="sans-serif" font-size="13">Model Fine-Tuning</text>
+
+  <!-- Interactive Node Canvas Area -->
+  <!-- Conduits / Connecting Lines -->
+  <path d="M 440,240 C 520,240 540,340 620,340" fill="none" stroke="#FF5108" stroke-width="2.5" stroke-dasharray="6 4"/>
+  <path d="M 440,240 C 520,240 540,160 620,160" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+  <path d="M 800,160 C 860,160 880,240 940,240" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+  <path d="M 800,340 C 860,340 880,240 940,240" fill="none" stroke="#FF5108" stroke-width="2.5"/>
+
+  <!-- Node 1: Orchestrator -->
+  <rect x="330" y="200" width="140" height="80" rx="12" fill="#181B24" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+  <rect x="330" y="200" width="140" height="24" rx="12" fill="#202430"/>
+  <text x="345" y="216" fill="#FF5108" font-family="sans-serif" font-size="10" font-weight="700">AGENT 01</text>
+  <text x="345" y="246" fill="#F4F2ED" font-family="sans-serif" font-size="13" font-weight="700">Orchestrator</text>
+  <text x="345" y="264" fill="#8E9098" font-family="monospace" font-size="10">state: ACTIVE</text>
+
+  <!-- Node 2: Reasoning Engine -->
+  <rect x="620" y="120" width="180" height="90" rx="12" fill="#181B24" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+  <rect x="620" y="120" width="180" height="24" rx="12" fill="#202430"/>
+  <text x="635" y="136" fill="#8E9098" font-family="sans-serif" font-size="10" font-weight="700">AGENT 02</text>
+  <text x="635" y="166" fill="#F4F2ED" font-family="sans-serif" font-size="13" font-weight="700">Contextual Reasoning</text>
+  <text x="635" y="186" fill="#8E9098" font-family="monospace" font-size="10">latency: 18ms · tokens: 4.2k</text>
+
+  <!-- Node 3: Synthesis (Highlighted with glow) -->
+  <rect x="620" y="300" width="180" height="90" rx="12" fill="#1E222D" stroke="#FF5108" stroke-width="2" filter="drop-shadow(0 0 16px rgba(255,81,8,0.25))"/>
+  <rect x="620" y="300" width="180" height="24" rx="12" fill="#2A1B14"/>
+  <text x="635" y="316" fill="#FF5108" font-family="sans-serif" font-size="10" font-weight="700">AGENT 03 // ACTIVE</text>
+  <text x="635" y="346" fill="#F4F2ED" font-family="sans-serif" font-size="13" font-weight="700">Code Synthesis</text>
+  <text x="635" y="366" fill="#FF5108" font-family="monospace" font-size="10">eval: 99.4% accuracy</text>
+
+  <!-- Node 4: Output Validator -->
+  <rect x="940" y="200" width="140" height="80" rx="12" fill="#181B24" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+  <rect x="940" y="200" width="140" height="24" rx="12" fill="#202430"/>
+  <text x="955" y="216" fill="#8E9098" font-family="sans-serif" font-size="10" font-weight="700">VALIDATOR</text>
+  <text x="955" y="246" fill="#F4F2ED" font-family="sans-serif" font-size="13" font-weight="700">Safe Output</text>
+  <text x="955" y="264" fill="#8E9098" font-family="monospace" font-size="10">status: PASSED</text>
+
+  <!-- Bottom Metrics Panel -->
+  <rect x="330" y="440" width="750" height="150" rx="12" fill="#13151D" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+  <text x="355" y="475" fill="#8E9098" font-family="sans-serif" font-size="11" font-weight="700" letter-spacing="1.5">INFERENCE METRICS & SYSTEM TELEMETRY</text>
+
+  <g transform="translate(355, 495)">
+    <rect x="0" y="0" width="220" height="75" rx="8" fill="#1A1D27"/>
+    <text x="15" y="28" fill="#8E9098" font-family="sans-serif" font-size="11">Throughput Rate</text>
+    <text x="15" y="58" fill="#F4F2ED" font-family="sans-serif" font-size="22" font-weight="800">4,820 <tspan font-size="12" fill="#FF5108">t/s</tspan></text>
+  </g>
+
+  <g transform="translate(595, 495)">
+    <rect x="0" y="0" width="220" height="75" rx="8" fill="#1A1D27"/>
+    <text x="15" y="28" fill="#8E9098" font-family="sans-serif" font-size="11">Average Latency</text>
+    <text x="15" y="58" fill="#F4F2ED" font-family="sans-serif" font-size="22" font-weight="800">42 <tspan font-size="12" fill="#FF5108">ms</tspan></text>
+  </g>
+
+  <g transform="translate(835, 495)">
+    <rect x="0" y="0" width="220" height="75" rx="8" fill="#1A1D27"/>
+    <text x="15" y="28" fill="#8E9098" font-family="sans-serif" font-size="11">Token Efficiency</text>
+    <text x="15" y="58" fill="#F4F2ED" font-family="sans-serif" font-size="22" font-weight="800">+62%</text>
+  </g>
+</svg>

@@ -48,6 +48,9 @@ export default function Navigation() {
         behavior: "smooth",
       });
       setActiveSection(id);
+    } else {
+      // If target element is not on current page (e.g. browsing /work/[slug]), navigate to home anchor
+      window.location.href = `/${href}`;
     }
 
     if (menuOpen) {

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" width="100%" height="100%">
+  <rect width="1000" height="600" fill="#0D0E13"/>
+  <rect x="40" y="40" width="920" height="520" rx="12" fill="#14171E" stroke="#333742" stroke-width="1.5"/>
+  <rect x="40" y="40" width="920" height="40" rx="12" fill="#1C202A"/>
+  <circle cx="65" cy="60" r="5" fill="#E54D4D"/>
+  <circle cx="82" cy="60" r="5" fill="#E5A84D"/>
+  <circle cx="99" cy="60" r="5" fill="#4DE56A"/>
+  <text x="125" y="65" fill="#788090" font-family="monospace" font-size="12">legacy-cli-runner --agent-id=04918-v1</text>
+  
+  <text x="70" y="120" fill="#A0AAB8" font-family="monospace" font-size="13">$ agent-daemon start --verbose --log-level=debug</text>
+  <text x="70" y="145" fill="#4D7CE5" font-family="monospace" font-size="13">[INFO] Initializing multi-process socket pool on :9042...</text>
+  <text x="70" y="170" fill="#E5A84D" font-family="monospace" font-size="13">[WARN] Thread contention detected: node-orchestrator latency spiked +240ms</text>
+  <text x="70" y="195" fill="#788090" font-family="monospace" font-size="13">[STACK] CoreEngine.dispatch(task_id="eval-8921") -> PipelineTimeout</text>
+  <text x="70" y="220" fill="#E54D4D" font-family="monospace" font-size="13">[ERR] Unhandled agent state exception: circular graph dependency at node_id=14</text>
+  <text x="70" y="245" fill="#788090" font-family="monospace" font-size="13">  at NodeExecutor.run (/usr/local/ai/worker.py:412)</text>
+  <text x="70" y="270" fill="#788090" font-family="monospace" font-size="13">  at GraphResolver.solve (/usr/local/ai/graph.py:89)</text>
+
+  <!-- Cluttered raw JSON table -->
+  <rect x="70" y="310" width="860" height="200" rx="8" fill="#0A0B0E" stroke="#222630" stroke-width="1"/>
+  <text x="90" y="340" fill="#8E9098" font-family="monospace" font-size="12">{"status": "stalled", "workers": 8, "active_threads": 42, "unresolved_tokens": 12849, "mem_mb": 4281}</text>
+  <text x="90" y="370" fill="#8E9098" font-family="monospace" font-size="12">{"queue_depth": 84, "retry_count": 14, "backoff_ms": 2400, "telemetry_drop_rate": "12.4%"}</text>
+  <text x="90" y="400" fill="#E54D4D" font-family="monospace" font-size="12">ERROR: Manual intervention required to prune corrupted context checkpoints.</text>
+  <text x="90" y="430" fill="#8E9098" font-family="monospace" font-size="12">Press [Ctrl+C] to abort batch execution or pass --force-skip to resume.</text>
+  <text x="90" y="480" fill="#4D7CE5" font-family="monospace" font-size="13">legacy-cli &gt; _</text>
+</svg>
