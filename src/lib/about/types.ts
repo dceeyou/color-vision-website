@@ -3,6 +3,14 @@ export interface AboutHeroData {
   headingLine1: string;
   headingLine2: string;
   description: string;
+  primaryAction?: {
+    label: string;
+    href: string;
+  };
+  secondaryAction?: {
+    label: string;
+    href: string;
+  };
 }
 
 export interface StoryParagraph {

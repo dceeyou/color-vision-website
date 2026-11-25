@@ -43,9 +43,10 @@ export default function StudioStory({ data }: StudioStoryProps) {
 
   return (
     <section
+      id="story"
       ref={containerRef}
       aria-label="Color Vision Story"
-      className="relative w-full py-20 sm:py-28 md:py-32 border-b border-white/[0.08] overflow-hidden"
+      className="relative w-full py-20 sm:py-28 md:py-32 border-b border-white/[0.08] overflow-hidden scroll-mt-28"
     >
       <div className="w-full max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}

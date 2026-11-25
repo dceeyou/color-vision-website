@@ -2,11 +2,19 @@ import { AboutPageData } from "./types";
 
 export const aboutData: AboutPageData = {
   hero: {
-    eyebrow: "GET TO KNOW US / ABOUT COLOR VISION",
+    eyebrow: "ABOUT COLOR VISION / INDEPENDENT DESIGN STUDIO",
     headingLine1: "Design with purpose.",
     headingLine2: "Create with intention.",
     description:
       "We're an independent design studio helping businesses turn ideas into clear brands, intuitive digital products and meaningful digital experiences.",
+    primaryAction: {
+      label: "EXPLORE OUR STORY",
+      href: "#story",
+    },
+    secondaryAction: {
+      label: "MEET THE FOUNDER",
+      href: "#founder",
+    },
   },
 
   story: {
