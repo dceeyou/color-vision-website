@@ -1,6 +1,7 @@
 import GlobalProgress from "@/components/GlobalProgress";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import FloatingActions from "@/components/FloatingActions";
 
 export default function MainLayout({
   children,
@@ -13,6 +14,7 @@ export default function MainLayout({
       <Navigation />
       {children}
       <Footer />
+      <FloatingActions />
     </>
   );
 }

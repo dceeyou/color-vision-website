@@ -35,13 +35,6 @@ export default function Footer() {
     }
   };
 
-  const handleScrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
-
   return (
     <footer className="relative w-full bg-[#08090D] pt-20 md:pt-28 lg:pt-36 pb-12 md:pb-16 border-t border-white/[0.06] overflow-hidden">
       {/* Background Subtle Grid Texture */}
@@ -201,23 +194,6 @@ export default function Footer() {
               >
                 Terms and Conditions
               </a>
-            </div>
-
-            {/* Back to Top */}
-            <div>
-              <button
-                type="button"
-                onClick={handleScrollToTop}
-                className="group inline-flex items-center gap-2.5 text-[#8E9098] hover:text-[#FF5108] transition-colors duration-200 uppercase tracking-[0.14em] text-[11px] font-mono font-[600] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#FF5108] rounded py-1 px-2"
-                aria-label="Scroll back to top of page"
-              >
-                <span>BACK TO TOP</span>
-                <div className="w-7 h-7 rounded-full border border-white/20 group-hover:border-[#FF5108] group-hover:bg-[#FF5108] group-hover:text-[#08090D] flex items-center justify-center transition-all duration-300">
-                  <span className="transition-transform duration-300 group-hover:-translate-y-0.5 font-bold text-xs">
-                    ↑
-                  </span>
-                </div>
-              </button>
             </div>
           </div>
         </div>
