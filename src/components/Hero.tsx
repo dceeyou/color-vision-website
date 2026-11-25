@@ -10,17 +10,21 @@ interface HeroProps {
 
 export default function Hero({ hero }: HeroProps) {
   const containerRef = useRef<HTMLElement>(null);
-  const ambientLightRef = useRef<HTMLDivElement>(null);
-  const mouseGlowRef = useRef<HTMLDivElement>(null);
+  const ambientFieldRef = useRef<HTMLDivElement>(null);
+  const mouseLightRef = useRef<HTMLDivElement>(null);
+  const bgGeoLayer1Ref = useRef<HTMLDivElement>(null);
+  const bgGeoLayer2Ref = useRef<HTMLDivElement>(null);
+
+  // Content Refs for sequential kinetic typography entrance
   const eyebrowRef = useRef<HTMLDivElement>(null);
-  const headline1Ref = useRef<HTMLHeadingElement>(null);
-  const headline2Ref = useRef<HTMLHeadingElement>(null);
-  const headlineGlowRef = useRef<HTMLDivElement>(null);
+  const line1Ref = useRef<HTMLSpanElement>(null);
+  const line2Ref = useRef<HTMLSpanElement>(null);
+  const line3Ref = useRef<HTMLSpanElement>(null);
   const descRef = useRef<HTMLParagraphElement>(null);
   const btnsRef = useRef<HTMLDivElement>(null);
   const scrollIndRef = useRef<HTMLDivElement>(null);
 
-  // Smooth scroll handler
+  // Smooth scroll handler for anchor targets
   const scrollToAnchor = (
     e: React.MouseEvent<HTMLAnchorElement>,
     targetId: string
@@ -39,12 +43,12 @@ export default function Hero({ hero }: HeroProps) {
     }
   };
 
-  // Smooth scroll down to next section
+  // Smooth scroll down to explore next section
   const handleScrollDown = () => {
     const nextSection =
       document.getElementById("work") ||
       document.getElementById("services") ||
-      document.querySelector("section:nth-of-type(2)");
+      document.querySelector("main > section:nth-of-type(2)");
     if (nextSection) {
       const headerOffset = 80;
       const elementPosition = nextSection.getBoundingClientRect().top;
@@ -62,114 +66,192 @@ export default function Hero({ hero }: HeroProps) {
       "(prefers-reduced-motion: reduce)"
     ).matches;
 
-    // Elements to reveal
     const revealElements = [
       eyebrowRef.current,
-      headline1Ref.current,
-      headline2Ref.current,
+      line1Ref.current,
+      line2Ref.current,
+      line3Ref.current,
       descRef.current,
       btnsRef.current,
       scrollIndRef.current,
     ];
 
     if (isReduced) {
-      gsap.set(revealElements, { opacity: 1, y: 0 });
-      if (ambientLightRef.current) {
-        gsap.set(ambientLightRef.current, { opacity: 1 });
-      }
+      gsap.set(revealElements, { opacity: 1, y: 0, yPercent: 0, rotate: 0 });
+      if (ambientFieldRef.current) gsap.set(ambientFieldRef.current, { opacity: 1 });
       return;
     }
 
-    // GSAP Timeline for sequential entrance
+    // =========================================================================
+    // 1. KINETIC TYPOGRAPHY ENTRANCE SEQUENCE (1.2–1.6s confident studio timing)
+    // =========================================================================
     const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
     // Initial states
     gsap.set(
-      [
-        eyebrowRef.current,
-        headline1Ref.current,
-        headline2Ref.current,
-        descRef.current,
-        btnsRef.current,
-        scrollIndRef.current,
-      ],
+      [eyebrowRef.current, descRef.current, btnsRef.current, scrollIndRef.current],
       { opacity: 0 }
     );
-    if (ambientLightRef.current) {
-      gsap.set(ambientLightRef.current, { opacity: 0 });
-    }
+    gsap.set([line1Ref.current, line2Ref.current, line3Ref.current], {
+      yPercent: 115,
+      opacity: 0,
+    });
+    if (ambientFieldRef.current) gsap.set(ambientFieldRef.current, { opacity: 0 });
 
-    tl.fromTo(
-      eyebrowRef.current,
-      { opacity: 0, y: 16 },
-      { opacity: 1, y: 0, duration: 0.7 },
-      0.15
-    )
+    tl
+      // Ambient atmospheric warmth fades in
       .fromTo(
-        headline1Ref.current,
-        { opacity: 0, y: 32 },
-        { opacity: 1, y: 0, duration: 0.9, ease: "power3.out" },
-        0.32
+        ambientFieldRef.current,
+        { opacity: 0 },
+        { opacity: 1, duration: 1.2, ease: "power2.out" },
+        0.05
       )
+      // Stage 01: Eyebrow badge fades and lifts
       .fromTo(
-        headline2Ref.current,
-        { opacity: 0, y: 32 },
-        { opacity: 1, y: 0, duration: 0.95, ease: "power3.out" },
-        0.48
+        eyebrowRef.current,
+        { opacity: 0, y: 16 },
+        { opacity: 1, y: 0, duration: 0.65 },
+        0.12
       )
+      // Stage 02: "WE TRANSFORM" smooth vertical clipping reveal
+      .fromTo(
+        line1Ref.current,
+        { yPercent: 115, opacity: 0 },
+        { yPercent: 0, opacity: 1, duration: 0.9, ease: "power4.out" },
+        0.22
+      )
+      // Stage 03: "IDEAS INTO" vertical clipping with slight stagger
+      .fromTo(
+        line2Ref.current,
+        { yPercent: 115, opacity: 0 },
+        { yPercent: 0, opacity: 1, duration: 0.9, ease: "power4.out" },
+        0.36
+      )
+      // Stage 04: "EXPERIENCES." expressive italic typography reveal
+      .fromTo(
+        line3Ref.current,
+        { yPercent: 115, opacity: 0, rotate: 1.5 },
+        { yPercent: 0, opacity: 1, rotate: 0, duration: 0.95, ease: "power3.out" },
+        0.5
+      )
+      // Stage 05: Supporting studio description fades in
       .fromTo(
         descRef.current,
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.8 },
-        0.7
+        { opacity: 0, y: 18 },
+        { opacity: 1, y: 0, duration: 0.7 },
+        0.72
       )
+      // Stage 06: CTA buttons appear with subtle upward transition
       .fromTo(
         btnsRef.current,
         { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.75 },
+        { opacity: 1, y: 0, duration: 0.7 },
         0.88
       )
-      .fromTo(
-        ambientLightRef.current,
-        { opacity: 0 },
-        { opacity: 1, duration: 1.6, ease: "power2.out" },
-        0.3
-      )
+      // Scroll indicator reveal
       .fromTo(
         scrollIndRef.current,
         { opacity: 0, y: 12 },
-        { opacity: 1, y: 0, duration: 0.8 },
-        1.1
+        { opacity: 1, y: 0, duration: 0.65 },
+        1.05
       );
 
-    // Interactive mouse-following ambient glow on desktop
+    // =========================================================================
+    // 2. ORANGE DIMENSION & TYPOGRAPHY CURSOR INTERACTION (Fine Pointer Desktop)
+    // =========================================================================
     const container = containerRef.current;
-    const mouseGlow = mouseGlowRef.current;
+    const mouseLight = mouseLightRef.current;
+    const geoLayer1 = bgGeoLayer1Ref.current;
+    const geoLayer2 = bgGeoLayer2Ref.current;
+    const line1 = line1Ref.current;
+    const line2 = line2Ref.current;
+    const line3 = line3Ref.current;
 
-    let quickX: ((value: number) => void) | null = null;
-    let quickY: ((value: number) => void) | null = null;
+    const hasFinePointer = window.matchMedia(
+      "(hover: hover) and (pointer: fine)"
+    ).matches;
 
-    if (
-      mouseGlow &&
-      container &&
-      window.matchMedia("(hover: hover) and (pointer: fine)").matches
-    ) {
-      quickX = gsap.quickTo(mouseGlow, "x", { duration: 0.8, ease: "power2.out" });
-      quickY = gsap.quickTo(mouseGlow, "y", { duration: 0.8, ease: "power2.out" });
+    if (container && hasFinePointer) {
+      // Light field quickTo
+      const lightX = mouseLight ? gsap.quickTo(mouseLight, "x", { duration: 0.9, ease: "power2.out" }) : null;
+      const lightY = mouseLight ? gsap.quickTo(mouseLight, "y", { duration: 0.9, ease: "power2.out" }) : null;
+
+      // Parallax geometry quickTo
+      const geo1X = geoLayer1 ? gsap.quickTo(geoLayer1, "x", { duration: 1.2, ease: "power2.out" }) : null;
+      const geo1Y = geoLayer1 ? gsap.quickTo(geoLayer1, "y", { duration: 1.2, ease: "power2.out" }) : null;
+      const geo2X = geoLayer2 ? gsap.quickTo(geoLayer2, "x", { duration: 1.5, ease: "power2.out" }) : null;
+      const geo2Y = geoLayer2 ? gsap.quickTo(geoLayer2, "y", { duration: 1.5, ease: "power2.out" }) : null;
+
+      // Restrained typography displacement quickTo (max 3-4px)
+      const t1X = line1 ? gsap.quickTo(line1, "x", { duration: 0.8, ease: "power2.out" }) : null;
+      const t1Y = line1 ? gsap.quickTo(line1, "y", { duration: 0.8, ease: "power2.out" }) : null;
+      const t2X = line2 ? gsap.quickTo(line2, "x", { duration: 0.85, ease: "power2.out" }) : null;
+      const t2Y = line2 ? gsap.quickTo(line2, "y", { duration: 0.85, ease: "power2.out" }) : null;
+      const t3X = line3 ? gsap.quickTo(line3, "x", { duration: 0.9, ease: "power2.out" }) : null;
+      const t3Y = line3 ? gsap.quickTo(line3, "y", { duration: 0.9, ease: "power2.out" }) : null;
 
       const handleMouseMove = (e: MouseEvent) => {
         const rect = container.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        if (quickX && quickY) {
-          quickX(x);
-          quickY(y);
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+
+        // Normalized relative to center (-1 to 1)
+        const normX = (mouseX / rect.width - 0.5) * 2;
+        const normY = (mouseY / rect.height - 0.5) * 2;
+
+        if (lightX && lightY && mouseLight) {
+          lightX(mouseX);
+          lightY(mouseY);
+          gsap.to(mouseLight, { opacity: 0.75, duration: 0.4 });
         }
-        gsap.to(mouseGlow, { opacity: 0.65, duration: 0.4 });
+
+        // Geometric layers subtle parallax
+        if (geo1X && geo1Y) {
+          geo1X(normX * 12);
+          geo1Y(normY * 10);
+        }
+        if (geo2X && geo2Y) {
+          geo2X(normX * -18);
+          geo2Y(normY * -14);
+        }
+
+        // Kinetic typography micro-displacement (strictly 2–4px)
+        if (t1X && t1Y) {
+          t1X(normX * 3.0);
+          t1Y(normY * 2.5);
+        }
+        if (t2X && t2Y) {
+          t2X(normX * -2.8);
+          t2Y(normY * 3.0);
+        }
+        if (t3X && t3Y) {
+          t3X(normX * 3.5);
+          t3Y(normY * -2.5);
+        }
       };
 
       const handleMouseLeave = () => {
-        gsap.to(mouseGlow, { opacity: 0, duration: 0.6 });
+        if (mouseLight) gsap.to(mouseLight, { opacity: 0, duration: 0.6 });
+        if (geo1X && geo1Y) {
+          geo1X(0);
+          geo1Y(0);
+        }
+        if (geo2X && geo2Y) {
+          geo2X(0);
+          geo2Y(0);
+        }
+        if (t1X && t1Y) {
+          t1X(0);
+          t1Y(0);
+        }
+        if (t2X && t2Y) {
+          t2X(0);
+          t2Y(0);
+        }
+        if (t3X && t3Y) {
+          t3X(0);
+          t3Y(0);
+        }
       };
 
       container.addEventListener("mousemove", handleMouseMove);
@@ -189,12 +271,9 @@ export default function Hero({ hero }: HeroProps) {
 
   const eyebrowText =
     hero?.eyebrow || "INDEPENDENT DESIGN STUDIO · SRI LANKA";
-  const line1Text = hero?.heading || "We transform ideas";
-  const line2Text =
-    hero?.highlightedText || "into meaningful experiences.";
   const descriptionText =
     hero?.description ||
-    "Color Vision brings strategy, creativity and thoughtful design together to shape distinctive brands, intuitive digital products and meaningful digital experiences.";
+    "Strategy, creativity and thoughtful design come together to shape distinctive brands, intuitive digital products and meaningful digital experiences.";
   const primaryLabel = hero?.primaryCtaLabel || "VIEW OUR WORK →";
   const secondaryLabel = hero?.secondaryCtaLabel || "START A PROJECT →";
 
@@ -202,146 +281,220 @@ export default function Hero({ hero }: HeroProps) {
     <section
       ref={containerRef}
       id="hero"
-      aria-label="Color Vision Hero"
-      className="relative w-full min-h-screen bg-[#08090D] flex flex-col justify-between items-center overflow-hidden pt-36 md:pt-40 lg:pt-44 pb-12 sm:pb-16 select-none"
+      aria-label="Color Vision Hero: Orange Dimension × Kinetic Typography"
+      className="relative w-full min-h-[100svh] bg-[#FF5108] text-[#08090D] flex flex-col justify-between items-center overflow-hidden pt-36 md:pt-40 lg:pt-44 pb-12 sm:pb-16 select-none"
     >
       {/* =========================================================================
-          ATMOSPHERIC BACKGROUND LIGHTING SYSTEM
+          ORANGE DIMENSION: BACKGROUND VISUAL SYSTEM
           ========================================================================= */}
       <div
-        ref={ambientLightRef}
+        ref={ambientFieldRef}
         className="absolute inset-0 pointer-events-none z-0 overflow-hidden"
         aria-hidden="true"
       >
-        {/* Left vertical flowing light curtain */}
+        {/* Rich atmospheric illumination gradient across the orange canvas */}
         <div
-          className="absolute -left-[20%] sm:-left-[12%] lg:-left-[6%] top-[8%] w-[420px] sm:w-[540px] lg:w-[680px] h-[720px] lg:h-[900px] rounded-full animate-curtain-left"
+          className="absolute inset-0"
           style={{
             background:
-              "radial-gradient(ellipse at center, rgba(255, 81, 8, 0.32) 0%, rgba(255, 81, 8, 0.14) 42%, rgba(255, 81, 8, 0.02) 70%, transparent 80%)",
-            filter: "blur(75px)",
+              "radial-gradient(ellipse 90% 70% at 50% 32%, #FF621E 0%, #FF5108 55%, #E84600 100%)",
           }}
         />
 
-        {/* Right vertical flowing light curtain */}
+        {/* Soft atmospheric top-right highlight */}
         <div
-          className="absolute -right-[20%] sm:-right-[12%] lg:-right-[6%] top-[12%] w-[420px] sm:w-[540px] lg:w-[680px] h-[720px] lg:h-[900px] rounded-full animate-curtain-right"
+          className="absolute -top-32 -right-24 w-[600px] h-[600px] rounded-full"
           style={{
             background:
-              "radial-gradient(ellipse at center, rgba(255, 81, 8, 0.28) 0%, rgba(255, 81, 8, 0.12) 42%, rgba(255, 81, 8, 0.02) 70%, transparent 80%)",
-            filter: "blur(80px)",
-          }}
-        />
-
-        {/* Bottom-left ambient corner illumination */}
-        <div
-          className="absolute -bottom-24 -left-20 w-[480px] h-[380px] rounded-full pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(circle at bottom left, rgba(255, 81, 8, 0.18) 0%, rgba(255, 81, 8, 0.04) 50%, transparent 75%)",
+              "radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.03) 45%, transparent 70%)",
             filter: "blur(60px)",
           }}
         />
 
-        {/* Bottom-right ambient corner illumination */}
+        {/* Soft atmospheric bottom-left warmth */}
         <div
-          className="absolute -bottom-24 -right-20 w-[480px] h-[380px] rounded-full pointer-events-none"
+          className="absolute -bottom-24 -left-20 w-[540px] h-[540px] rounded-full"
           style={{
             background:
-              "radial-gradient(circle at bottom right, rgba(255, 81, 8, 0.16) 0%, rgba(255, 81, 8, 0.03) 50%, transparent 75%)",
-            filter: "blur(60px)",
+              "radial-gradient(circle, rgba(0, 0, 0, 0.12) 0%, rgba(0, 0, 0, 0.03) 50%, transparent 75%)",
+            filter: "blur(50px)",
           }}
         />
 
-        {/* Central dark vignette to ensure pristine typography legibility */}
+        {/* GEOMETRIC LAYER 1: Technical coordinates & subtle circular grid */}
         <div
-          className="absolute inset-0 pointer-events-none"
+          ref={bgGeoLayer1Ref}
+          className="absolute inset-0 flex items-center justify-center transition-transform duration-300 pointer-events-none"
+        >
+          {/* Studio Watermark & Technical Identifiers */}
+          <div className="absolute top-28 left-6 sm:left-12 lg:left-20 text-[10px] font-mono tracking-[0.25em] text-[#08090D]/35 uppercase">
+            ORANGE DIMENSION // CV-SYS.01
+          </div>
+          <div className="absolute top-28 right-6 sm:right-12 lg:right-20 text-[10px] font-mono tracking-[0.25em] text-[#08090D]/35 uppercase hidden sm:block">
+            07°00&apos;N · 80°00&apos;E
+          </div>
+          <div className="absolute bottom-28 left-6 sm:left-12 lg:left-20 text-[10px] font-mono tracking-[0.22em] text-[#08090D]/30 uppercase hidden md:block">
+            KINETIC // EDITORIAL
+          </div>
+          <div className="absolute bottom-28 right-6 sm:right-12 lg:right-20 text-[10px] font-mono tracking-[0.22em] text-[#08090D]/30 uppercase hidden md:block">
+            INDEPENDENT STUDIO
+          </div>
+
+          {/* Large delicate circular orbits */}
+          <svg
+            viewBox="0 0 1000 1000"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-[780px] sm:w-[940px] lg:w-[1100px] h-[780px] sm:h-[940px] lg:h-[1100px] opacity-25"
+          >
+            <circle
+              cx="500"
+              cy="500"
+              r="460"
+              stroke="#08090D"
+              strokeWidth="1"
+              strokeDasharray="6 6"
+            />
+            <circle
+              cx="500"
+              cy="500"
+              r="340"
+              stroke="#08090D"
+              strokeWidth="0.8"
+              opacity="0.6"
+            />
+            <circle
+              cx="500"
+              cy="500"
+              r="220"
+              stroke="#08090D"
+              strokeWidth="0.6"
+              strokeDasharray="4 4"
+              opacity="0.4"
+            />
+          </svg>
+        </div>
+
+        {/* GEOMETRIC LAYER 2: Abstract Brand Geometry & Cropped Arcs */}
+        <div
+          ref={bgGeoLayer2Ref}
+          className="absolute inset-0 flex items-center justify-center transition-transform duration-500 pointer-events-none"
+        >
+          <svg
+            viewBox="0 0 1200 800"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-full h-full max-w-[1400px] opacity-[0.09]"
+          >
+            {/* Diagonal precision lines */}
+            <line x1="100" y1="150" x2="1100" y2="650" stroke="#08090D" strokeWidth="1" />
+            <line x1="1100" y1="150" x2="100" y2="650" stroke="#08090D" strokeWidth="0.8" strokeDasharray="8 8" />
+            {/* Cropped architectural arcs */}
+            <path
+              d="M 200,400 A 350,350 0 0,1 1000,400"
+              stroke="#08090D"
+              strokeWidth="1.5"
+            />
+            <path
+              d="M 300,400 A 250,250 0 0,0 900,400"
+              stroke="#08090D"
+              strokeWidth="1"
+              strokeDasharray="6 6"
+            />
+          </svg>
+        </div>
+
+        {/* Natural Transition Gradient into the Dark Website Below */}
+        <div
+          className="absolute bottom-0 left-0 right-0 h-40 sm:h-48 md:h-56 pointer-events-none"
           style={{
             background:
-              "radial-gradient(ellipse at center, rgba(8, 9, 13, 0.88) 0%, rgba(8, 9, 13, 0.65) 55%, rgba(8, 9, 13, 0.2) 100%)",
+              "linear-gradient(to bottom, transparent 0%, rgba(8, 9, 13, 0.08) 45%, rgba(8, 9, 13, 0.45) 80%, #08090D 100%)",
           }}
         />
       </div>
 
-      {/* Interactive mouse-following glow (desktop fine pointer only) */}
+      {/* Interactive mouse-following soft light field (fine pointer desktop only) */}
       <div
-        ref={mouseGlowRef}
-        className="absolute top-0 left-0 w-[460px] h-[460px] -translate-x-1/2 -translate-y-1/2 rounded-full pointer-events-none opacity-0 z-[1] transition-opacity duration-500 hidden md:block"
+        ref={mouseLightRef}
+        className="absolute top-0 left-0 w-[520px] h-[520px] -translate-x-1/2 -translate-y-1/2 rounded-full pointer-events-none opacity-0 z-[1] transition-opacity duration-500 hidden md:block"
         style={{
           background:
-            "radial-gradient(circle, rgba(255, 81, 8, 0.15) 0%, rgba(255, 81, 8, 0.04) 45%, transparent 70%)",
-          filter: "blur(50px)",
+            "radial-gradient(circle, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.05) 40%, transparent 70%)",
+          filter: "blur(55px)",
         }}
         aria-hidden="true"
       />
 
       {/* =========================================================================
-          CENTERED HERO CONTENT
+          HERO EDITORIAL CONTENT & KINETIC TYPOGRAPHY
           ========================================================================= */}
       <div className="relative z-10 w-full max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center my-auto">
-        {/* Eyebrow badge */}
+        {/* 1. Small Studio Identification Label / Eyebrow */}
         <div
           ref={eyebrowRef}
-          className="opacity-0 mb-6 sm:mb-8 flex items-center justify-center gap-2.5 px-4 py-1.5 rounded-full border border-white/[0.08] bg-white/[0.02] backdrop-blur-md"
+          className="opacity-0 mb-6 sm:mb-8 flex items-center justify-center gap-2.5 px-4 py-1.5 rounded-full border border-[#08090D]/20 bg-[#08090D]/[0.06] backdrop-blur-sm"
         >
           <span
-            className="w-1.5 h-1.5 rounded-full bg-[#FF5108] inline-block shadow-[0_0_10px_rgba(255,81,8,0.9)] animate-pulse"
+            className="w-1.5 h-1.5 rounded-full bg-[#08090D] inline-block shadow-[0_0_8px_rgba(8,9,13,0.5)]"
             aria-hidden="true"
           />
-          <span className="uppercase tracking-[0.24em] text-[11px] sm:text-[12px] md:text-[13px] font-[600] text-[#A6A8AE]">
+          <span className="uppercase tracking-[0.24em] text-[11px] sm:text-[12px] md:text-[13px] font-[700] text-[#08090D]">
             {eyebrowText}
           </span>
         </div>
 
-        {/* Headline Container with Background Reflection */}
-        <div className="relative w-full max-w-[1120px] mx-auto flex flex-col items-center">
-          {/* Subtle animated orange light reflection directly behind the italic headline */}
-          <div
-            ref={headlineGlowRef}
-            className="absolute top-[65%] left-1/2 w-[340px] sm:w-[580px] lg:w-[780px] h-[160px] sm:h-[220px] rounded-full pointer-events-none animate-reflection-glow z-0"
-            style={{
-              background:
-                "radial-gradient(ellipse at center, rgba(255, 81, 8, 0.32) 0%, rgba(255, 81, 8, 0.12) 50%, transparent 75%)",
-              filter: "blur(55px)",
-            }}
-            aria-hidden="true"
-          />
+        {/* 2. Large Expressive Three-Line Headline Composition */}
+        <h1 className="relative w-full max-w-[1240px] mx-auto flex flex-col items-center justify-center select-none">
+          {/* LINE 01: WE TRANSFORM (Manrope Bold, Deep Black) */}
+          <div className="overflow-hidden py-1">
+            <span
+              ref={line1Ref}
+              className="block will-change-transform font-[800] text-[#08090D] uppercase tracking-[-0.035em] leading-[0.94] text-[44px] sm:text-[64px] md:text-[84px] lg:text-[104px] xl:text-[120px]"
+            >
+              WE TRANSFORM
+            </span>
+          </div>
 
-          {/* Line 1: We transform ideas */}
-          <h1
-            ref={headline1Ref}
-            className="relative z-10 text-[36px] sm:text-[54px] md:text-[72px] lg:text-[88px] xl:text-[98px] font-[500] leading-[1.08] text-[#F4F2ED] tracking-[-0.03em]"
-          >
-            {line1Text}
-          </h1>
+          {/* LINE 02: IDEAS INTO (Manrope Bold, Deep Black) */}
+          <div className="overflow-hidden py-1 -mt-1 sm:-mt-2 md:-mt-3">
+            <span
+              ref={line2Ref}
+              className="block will-change-transform font-[800] text-[#08090D] uppercase tracking-[-0.035em] leading-[0.94] text-[44px] sm:text-[64px] md:text-[84px] lg:text-[104px] xl:text-[120px]"
+            >
+              IDEAS INTO
+            </span>
+          </div>
 
-          {/* Line 2: into meaningful experiences. (Cormorant Garamond italic serif) */}
-          <h2
-            ref={headline2Ref}
-            className="relative z-10 font-serif italic text-[40px] sm:text-[60px] md:text-[80px] lg:text-[98px] xl:text-[108px] font-[400] md:font-[500] leading-[1.08] text-[#F4F2ED] tracking-[-0.02em] mt-1 sm:mt-2 text-balance drop-shadow-[0_2px_24px_rgba(255,81,8,0.18)]"
-          >
-            {line2Text}
-          </h2>
-        </div>
+          {/* LINE 03: EXPERIENCES. (Instrument Serif Italic, Warm White Contrast) */}
+          <div className="overflow-hidden py-1 -mt-1 sm:-mt-2 md:-mt-3">
+            <span
+              ref={line3Ref}
+              className="block will-change-transform font-instrument italic font-[400] md:font-[500] text-[#F4F2ED] tracking-[-0.02em] leading-[0.96] text-[48px] sm:text-[72px] md:text-[94px] lg:text-[118px] xl:text-[136px] drop-shadow-[0_4px_30px_rgba(8,9,13,0.25)]"
+            >
+              EXPERIENCES.
+            </span>
+          </div>
+        </h1>
 
-        {/* Supporting Studio Description */}
+        {/* 3. Supporting Studio Description */}
         <p
           ref={descRef}
-          className="opacity-0 text-[#A6A8AE] text-[15px] sm:text-[16px] md:text-[18px] leading-[1.7] max-w-[620px] mx-auto mt-6 sm:mt-8 md:mt-9 font-[400]"
+          className="opacity-0 text-[#08090D]/85 text-[15px] sm:text-[16px] md:text-[18px] leading-[1.65] font-[500] max-w-[520px] mx-auto mt-6 sm:mt-8 md:mt-10"
         >
           {descriptionText}
         </p>
 
-        {/* Call to Action Buttons */}
+        {/* 4. Call to Action Buttons */}
         <div
           ref={btnsRef}
-          className="opacity-0 mt-8 sm:mt-10 md:mt-12 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5 w-full sm:w-auto"
+          className="opacity-0 mt-8 sm:mt-10 md:mt-11 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5 w-full sm:w-auto"
         >
-          {/* Primary CTA: Warm white pill with orange hover */}
+          {/* Primary CTA: Deep black pill with warm-white text */}
           <a
             href="#work"
             onClick={(e) => scrollToAnchor(e, "work")}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 bg-[#F4F2ED] text-[#08090D] px-8 sm:px-9 py-3.5 sm:py-4 font-[700] uppercase tracking-[0.08em] text-[12px] sm:text-[13px] rounded-full hover:bg-[#FF5108] hover:text-[#08090D] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 shadow-[0_4px_20px_rgba(255,81,8,0.15)] group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#FF5108]"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-[#08090D] text-[#F4F2ED] border border-[#08090D] px-8 sm:px-9 py-3.5 sm:py-4 font-[700] uppercase tracking-[0.1em] text-[12px] sm:text-[13px] rounded-full hover:bg-[#1A1D24] hover:shadow-[0_8px_30px_rgba(8,9,13,0.35)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#08090D]"
           >
             <span>{primaryLabel}</span>
             <span
@@ -352,11 +505,11 @@ export default function Hero({ hero }: HeroProps) {
             </span>
           </a>
 
-          {/* Secondary CTA: Transparent dark with subtle border */}
+          {/* Secondary CTA: Transparent with deep black border and text */}
           <a
             href="#contact"
             onClick={(e) => scrollToAnchor(e, "contact")}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 border border-white/15 bg-white/[0.03] text-[#F4F2ED] px-8 sm:px-9 py-3.5 sm:py-4 font-[600] uppercase tracking-[0.08em] text-[12px] sm:text-[13px] rounded-full hover:border-[#FF5108] hover:text-[#FF5108] hover:bg-[#FF5108]/[0.08] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 backdrop-blur-sm group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#FF5108]"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-transparent text-[#08090D] border-2 border-[#08090D] px-8 sm:px-9 py-3.5 sm:py-4 font-[700] uppercase tracking-[0.1em] text-[12px] sm:text-[13px] rounded-full hover:bg-[#08090D] hover:text-[#F4F2ED] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#08090D]"
           >
             <span>{secondaryLabel}</span>
             <span
@@ -370,7 +523,7 @@ export default function Hero({ hero }: HeroProps) {
       </div>
 
       {/* =========================================================================
-          BOTTOM SCROLL INDICATOR
+          5. MINIMAL SCROLL INDICATOR
           ========================================================================= */}
       <div
         ref={scrollIndRef}
@@ -384,13 +537,13 @@ export default function Hero({ hero }: HeroProps) {
           }
         }}
         aria-label="Scroll down to explore work"
-        className="relative z-10 mt-10 sm:mt-12 flex flex-col items-center gap-2.5 cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5108] rounded-md px-3 py-1"
+        className="relative z-10 mt-10 sm:mt-12 flex flex-col items-center gap-2 cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#08090D] rounded-md px-3 py-1"
       >
-        <span className="text-[10px] sm:text-[11px] font-[600] tracking-[0.28em] text-[#8E9098] uppercase group-hover:text-[#FF5108] transition-colors duration-300">
-          SCROLL
+        <span className="text-[11px] sm:text-[12px] font-[700] tracking-[0.24em] text-[#08090D]/75 uppercase group-hover:text-[#08090D] transition-colors duration-300">
+          SCROLL TO EXPLORE
         </span>
-        <div className="w-[1.5px] h-8 bg-white/10 relative overflow-hidden rounded-full">
-          <div className="absolute inset-0 bg-[#FF5108] animate-scroll-line" />
+        <div className="w-[1.5px] h-7 bg-[#08090D]/20 relative overflow-hidden rounded-full">
+          <div className="absolute inset-0 bg-[#08090D] animate-scroll-line" />
         </div>
       </div>
     </section>

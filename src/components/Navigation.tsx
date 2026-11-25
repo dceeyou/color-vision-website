@@ -3,10 +3,14 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import gsap from "gsap";
 import { Menu, X } from "lucide-react";
 
 export default function Navigation() {
+  const pathname = usePathname();
+  const isHomePage = pathname === "/" || pathname === "";
+
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("");
@@ -16,7 +20,7 @@ export default function Navigation() {
   const links = [
     { label: "Work", href: "#work", id: "work" },
     { label: "Services", href: "#services", id: "services" },
-    { label: "About Us", href: "#about", id: "about" },
+    { label: "About", href: "#about", id: "about" },
     { label: "Process", href: "#process", id: "process" },
     { label: "Contact", href: "#contact", id: "contact" },
   ];
@@ -134,12 +138,16 @@ export default function Navigation() {
     }
   }, [menuOpen]);
 
+  const isOverOrangeHero = isHomePage && !scrolled;
+
   return (
     <>
       <header
         className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 border-b ${
           scrolled
-            ? "bg-[#08090D]/90 backdrop-blur-md border-white/[0.08] py-4 shadow-xl shadow-black/40"
+            ? "bg-[#08090D]/95 backdrop-blur-md border-white/[0.08] py-4 shadow-xl shadow-black/40"
+            : isOverOrangeHero
+            ? "bg-transparent border-[#08090D]/10 py-5 md:py-6"
             : "bg-[#08090D]/50 backdrop-blur-sm border-white/[0.04] py-6 md:py-7"
         }`}
       >
@@ -155,7 +163,9 @@ export default function Navigation() {
                 alt="Color Vision"
                 width={160}
                 height={63}
-                className="h-8 md:h-9 w-auto object-contain"
+                className={`h-8 md:h-9 w-auto object-contain transition-all duration-300 ${
+                  isOverOrangeHero ? "brightness-0" : ""
+                }`}
                 priority
               />
             </div>
@@ -164,7 +174,7 @@ export default function Navigation() {
           {/* Desktop Right Navigation */}
           <nav
             aria-label="Main Navigation"
-            className="hidden md:flex items-center gap-7 lg:gap-8 text-[12px] md:text-[13px] font-[600] uppercase tracking-[0.14em]"
+            className="hidden md:flex items-center gap-7 lg:gap-8 text-[12px] md:text-[13px] uppercase tracking-[0.14em]"
           >
             {links.map((link) => {
               const isActive = activeSection === link.id;
@@ -174,15 +184,21 @@ export default function Navigation() {
                   href={link.href}
                   onClick={(e) => scrollToSection(e, link.href)}
                   className={`relative py-1 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#FF5108] rounded group ${
-                    isActive ? "text-[#FF5108]" : "text-[#8E9098] hover:text-[#F4F2ED]"
+                    isOverOrangeHero
+                      ? isActive
+                        ? "text-[#08090D] font-[800]"
+                        : "text-[#08090D]/80 hover:text-[#08090D] font-[700]"
+                      : isActive
+                      ? "text-[#FF5108] font-[600]"
+                      : "text-[#8E9098] hover:text-[#F4F2ED] font-[600]"
                   }`}
                 >
                   <span>{link.label}</span>
                   {/* Subtle active/hover indicator */}
                   <span
-                    className={`absolute -bottom-1 left-0 h-[1.5px] bg-[#FF5108] transition-all duration-300 ease-out ${
-                      isActive ? "w-full" : "w-0 group-hover:w-full"
-                    }`}
+                    className={`absolute -bottom-1 left-0 h-[1.5px] transition-all duration-300 ease-out ${
+                      isOverOrangeHero ? "bg-[#08090D]" : "bg-[#FF5108]"
+                    } ${isActive ? "w-full" : "w-0 group-hover:w-full"}`}
                   />
                 </a>
               );
@@ -192,7 +208,11 @@ export default function Navigation() {
           {/* Mobile Menu Button */}
           <button
             type="button"
-            className="md:hidden z-50 p-2 text-[#F4F2ED] hover:text-[#FF5108] transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#FF5108] rounded"
+            className={`md:hidden z-50 p-2 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#FF5108] rounded ${
+              isOverOrangeHero && !menuOpen
+                ? "text-[#08090D] hover:text-[#08090D]/70"
+                : "text-[#F4F2ED] hover:text-[#FF5108]"
+            }`}
             onClick={() => setMenuOpen(!menuOpen)}
             aria-expanded={menuOpen}
             aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}

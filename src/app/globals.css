@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
 @import "tailwindcss";
 
 :root {
@@ -108,6 +109,11 @@ h1, h2, h3, h4, h5, h6 {
 /* Explicit Serif Font Class for Cormorant Garamond */
 .font-serif {
   font-family: var(--font-serif), Georgia, Cambria, "Times New Roman", Times, serif;
+}
+
+/* Editorial Serif for Instrument Serif (with Cormorant / Georgia fallback) */
+.font-instrument {
+  font-family: 'Instrument Serif', var(--font-serif), Georgia, "Times New Roman", serif;
 }
 
 /* Atmospheric Hero Keyframes and Utilities */
