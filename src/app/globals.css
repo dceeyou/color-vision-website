@@ -195,11 +195,26 @@ h1, h2, h3, h4, h5, h6 {
   will-change: transform;
 }
 
+@keyframes carousel-progress {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+.animate-carousel-progress {
+  animation: carousel-progress 5s linear forwards;
+  will-change: width;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-curtain-left,
   .animate-curtain-right,
   .animate-reflection-glow,
-  .animate-scroll-line {
+  .animate-scroll-line,
+  .animate-carousel-progress {
     animation: none !important;
   }
 }

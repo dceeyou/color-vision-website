@@ -354,6 +354,7 @@ export async function getTestimonials(): Promise<Testimonial[]> {
       clientName: "Client Partner [Demo Placeholder]",
       clientRole: "Product Director",
       companyName: "Fintech & Mobility Ecosystem",
+      serviceCategory: "UI/UX & Product Design",
       testimonial: "Working with Color Vision brought clarity to our product structure from day one. Their team took the time to understand the underlying problem before touching a single wireframe, resulting in an interface that our users found genuinely intuitive.",
       clientPhoto: null,
       companyLogo: null,
@@ -364,6 +365,7 @@ export async function getTestimonials(): Promise<Testimonial[]> {
       clientName: "Design Director [Demo Placeholder]",
       clientRole: "Brand Strategy Lead",
       companyName: "Digital Technology Group",
+      serviceCategory: "Brand Identity & Design System",
       testimonial: "The visual identity and design system created by Color Vision gave our brand a distinct, enduring presence. Their disciplined approach to typography, layout, and purpose-driven design set a completely new benchmark for our team.",
       clientPhoto: null,
       companyLogo: null,
@@ -374,10 +376,44 @@ export async function getTestimonials(): Promise<Testimonial[]> {
       clientName: "Founder & CEO [Demo Placeholder]",
       clientRole: "Executive Leadership",
       companyName: "Consumer Goods & Retail",
+      serviceCategory: "Packaging & E-Commerce",
       testimonial: "Color Vision's collaborative process is remarkably focused and transparent. They transformed complex technical requirements into a clean, purposeful digital experience that scaled effortlessly across our entire platform.",
       clientPhoto: null,
       companyLogo: null,
       projectReference: "04 — Goodly Packaging & Web"
+    },
+    {
+      id: "demo-4",
+      clientName: "VP of Engineering [Demo Placeholder]",
+      clientRole: "Platform Architecture",
+      companyName: "Cloud Infrastructure Labs",
+      serviceCategory: "Design Systems & Web",
+      testimonial: "Their attention to technical feasibility and design system modularity saved us months of rework. Every component, token, and responsive state was documented with exceptional rigor and craft.",
+      clientPhoto: null,
+      companyLogo: null,
+      projectReference: "03 — Enterprise Design System"
+    },
+    {
+      id: "demo-5",
+      clientName: "Managing Director [Demo Placeholder]",
+      clientRole: "Brand Experience",
+      companyName: "CR Hospitality Group",
+      serviceCategory: "Brand Identity & Environmental",
+      testimonial: "From spatial signage to digital touchpoints, Color Vision captured the raw energy of our concept and refined it into an unforgettable, cohesive brand world that customers constantly comment on.",
+      clientPhoto: null,
+      companyLogo: null,
+      projectReference: "05 — CR Cricket Bar"
+    },
+    {
+      id: "demo-6",
+      clientName: "Head of Product [Demo Placeholder]",
+      clientRole: "Mobile & Health",
+      companyName: "CarePulse Health Technologies",
+      serviceCategory: "UI/UX & Mobile Experience",
+      testimonial: "Color Vision brought empathy and clarity to an intricate personal care workflow. Their design decisions were always backed by clear reasoning, resulting in rapid adoption and deep user trust.",
+      clientPhoto: null,
+      companyLogo: null,
+      projectReference: "06 — My Little Kevi Mobile"
     }
   ];
 }

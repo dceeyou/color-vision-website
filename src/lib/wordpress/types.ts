@@ -85,6 +85,7 @@ export interface Testimonial {
   clientPhoto: string | null;
   companyLogo: string | null;
   projectReference?: string;
+  serviceCategory?: string;
 }
 
 export interface ContactContent {
