@@ -107,19 +107,26 @@ export default function Testimonials({ testimonials: propTestimonials }: Testimo
     [rawTestimonials]
   );
 
-  // Start at the middle set (index = count)
+  // Carousel state
   const [currentIndex, setCurrentIndex] = useState<number>(count);
   const [isTransitioning, setIsTransitioning] = useState<boolean>(true);
   const [containerWidth, setContainerWidth] = useState<number>(1280);
-  const [isHoveredOrFocused, setIsHoveredOrFocused] = useState<boolean>(false);
-  const [isSectionVisible, setIsSectionVisible] = useState<boolean>(true);
-  const [isManualPaused, setIsManualPaused] = useState<boolean>(false);
   const [dragOffset, setDragOffset] = useState<number>(0);
   const [isDragging, setIsDragging] = useState<boolean>(false);
-  const [progressKey, setProgressKey] = useState<number>(0);
+  const [timerResetKey, setTimerResetKey] = useState<number>(0);
+
+  // Environmental visibility states for strictly sanctioned pause conditions
+  const [isSectionVisible, setIsSectionVisible] = useState<boolean>(true);
+  const [isDocumentVisible, setIsDocumentVisible] = useState<boolean>(true);
+  const [isReducedMotion, setIsReducedMotion] = useState<boolean>(false);
+
+  // Refs to prevent stale closures and race conditions
+  const currentIndexRef = useRef<number>(currentIndex);
+  currentIndexRef.current = currentIndex;
 
   const dragStartXRef = useRef<number | null>(null);
   const isAnimatingRef = useRef<boolean>(false);
+  const transitionSafetyTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Measure container width responsively via ResizeObserver
   useEffect(() => {
@@ -134,6 +141,51 @@ export default function Testimonials({ testimonials: propTestimonials }: Testimo
     resizeObserver.observe(el);
 
     return () => resizeObserver.disconnect();
+  }, []);
+
+  // Track browser document visibility (pause only when tab is hidden)
+  useEffect(() => {
+    const handleVisibility = () => {
+      const visible = document.visibilityState === "visible";
+      setIsDocumentVisible(visible);
+    };
+
+    setIsDocumentVisible(document.visibilityState === "visible");
+    document.addEventListener("visibilitychange", handleVisibility);
+    return () => document.removeEventListener("visibilitychange", handleVisibility);
+  }, []);
+
+  // Track prefers-reduced-motion
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setIsReducedMotion(mediaQuery.matches);
+
+    const handleMotionChange = (e: MediaQueryListEvent) => {
+      setIsReducedMotion(e.matches);
+    };
+
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener("change", handleMotionChange);
+      return () => mediaQuery.removeEventListener("change", handleMotionChange);
+    }
+  }, []);
+
+  // IntersectionObserver to detect when testimonials section is in viewport
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsSectionVisible(entry.isIntersecting);
+        });
+      },
+      { threshold: 0.05, rootMargin: "60px 0px" }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
   }, []);
 
   // Responsive card and gap measurements:
@@ -154,88 +206,103 @@ export default function Testimonials({ testimonials: propTestimonials }: Testimo
   );
   const stepWidth = cardWidth + gap;
 
+  // Handle seamless infinite wrap-around on transition end
+  const handleTransitionEnd = useCallback(() => {
+    if (transitionSafetyTimerRef.current) {
+      clearTimeout(transitionSafetyTimerRef.current);
+      transitionSafetyTimerRef.current = null;
+    }
+
+    isAnimatingRef.current = false;
+    const current = currentIndexRef.current;
+
+    // If we advanced past the second set, quietly jump back to the middle set
+    if (current >= count * 2) {
+      setIsTransitioning(false);
+      setCurrentIndex(current - count);
+    }
+    // If we stepped back past the first set, quietly jump forward to the middle set
+    else if (current < count) {
+      setIsTransitioning(false);
+      setCurrentIndex(current + count);
+    }
+  }, [count]);
+
   // Navigation callbacks
   const goToNext = useCallback(() => {
     if (isAnimatingRef.current) return;
     isAnimatingRef.current = true;
     setIsTransitioning(true);
     setCurrentIndex((prev) => prev + 1);
-    setProgressKey((prev) => prev + 1);
-  }, []);
+    setTimerResetKey((prev) => prev + 1);
+
+    // Safety timeout in case transitionend event is missed
+    if (transitionSafetyTimerRef.current) {
+      clearTimeout(transitionSafetyTimerRef.current);
+    }
+    transitionSafetyTimerRef.current = setTimeout(() => {
+      handleTransitionEnd();
+    }, 850);
+  }, [handleTransitionEnd]);
 
   const goToPrev = useCallback(() => {
     if (isAnimatingRef.current) return;
     isAnimatingRef.current = true;
     setIsTransitioning(true);
     setCurrentIndex((prev) => prev - 1);
-    setProgressKey((prev) => prev + 1);
-  }, []);
+    setTimerResetKey((prev) => prev + 1);
+
+    // Safety timeout in case transitionend event is missed
+    if (transitionSafetyTimerRef.current) {
+      clearTimeout(transitionSafetyTimerRef.current);
+    }
+    transitionSafetyTimerRef.current = setTimeout(() => {
+      handleTransitionEnd();
+    }, 850);
+  }, [handleTransitionEnd]);
 
   // Jump to specific logical index (0 to count - 1)
   const goToLogicalIndex = (targetLogical: number) => {
     if (isAnimatingRef.current) return;
     isAnimatingRef.current = true;
     setIsTransitioning(true);
-    const currentLogical = ((currentIndex % count) + count) % count;
+    const currentLogical = ((currentIndexRef.current % count) + count) % count;
     const diff = targetLogical - currentLogical;
     setCurrentIndex((prev) => prev + diff);
-    setProgressKey((prev) => prev + 1);
+    setTimerResetKey((prev) => prev + 1);
+
+    if (transitionSafetyTimerRef.current) {
+      clearTimeout(transitionSafetyTimerRef.current);
+    }
+    transitionSafetyTimerRef.current = setTimeout(() => {
+      handleTransitionEnd();
+    }, 850);
   };
 
-  // Handle seamless infinite wrap-around on transition end
-  const handleTransitionEnd = () => {
-    isAnimatingRef.current = false;
+  // Determine active autoplay condition:
+  // PAUSED ONLY IF:
+  // 1. Browser tab is hidden (!isDocumentVisible)
+  // 2. Carousel is outside viewport (!isSectionVisible)
+  // 3. User enabled prefers-reduced-motion (isReducedMotion)
+  // 4. User is actively dragging with touch/pointer (isDragging)
+  // Cursor hover NEVER stops autoplay.
+  const isAutoplayRunning =
+    isSectionVisible && isDocumentVisible && !isReducedMotion && !isDragging;
 
-    // If we advanced past the second set, quietly jump back to the middle set
-    if (currentIndex >= count * 2) {
-      setIsTransitioning(false);
-      setCurrentIndex((prev) => prev - count);
-    }
-    // If we stepped back past the first set, quietly jump forward to the middle set
-    else if (currentIndex < count) {
-      setIsTransitioning(false);
-      setCurrentIndex((prev) => prev + count);
-    }
-  };
-
-  // IntersectionObserver to pause autoplay when offscreen
+  // Single reliable interval timer synchronized with reset trigger
   useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          setIsSectionVisible(entry.isIntersecting);
-        });
-      },
-      { threshold: 0.15 }
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
-  // Autoplay timer: ~5 seconds interval
-  const isPaused =
-    isHoveredOrFocused ||
-    !isSectionVisible ||
-    isDragging ||
-    isManualPaused;
-
-  useEffect(() => {
-    const isReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (isReduced || isPaused) {
+    if (!isAutoplayRunning) {
       return;
     }
 
     const interval = setInterval(() => {
-      if (document.hidden) return;
       goToNext();
     }, 5000);
 
-    return () => clearInterval(interval);
-  }, [isPaused, goToNext]);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [isAutoplayRunning, timerResetKey, goToNext]);
 
   // Touch and pointer dragging interactions
   const handlePointerDown = (e: React.PointerEvent) => {
@@ -336,10 +403,6 @@ export default function Testimonials({ testimonials: propTestimonials }: Testimo
       ref={containerRef}
       tabIndex={0}
       onKeyDown={handleKeyDown}
-      onMouseEnter={() => setIsHoveredOrFocused(true)}
-      onMouseLeave={() => setIsHoveredOrFocused(false)}
-      onFocus={() => setIsHoveredOrFocused(true)}
-      onBlur={() => setIsHoveredOrFocused(false)}
       aria-label="Client Testimonials and Reviews"
       className="relative w-full bg-[#08090D] py-24 md:py-32 lg:py-40 border-b border-white/[0.08] overflow-hidden focus-visible:outline-none"
     >
@@ -574,35 +637,30 @@ export default function Testimonials({ testimonials: propTestimonials }: Testimo
             {/* Animated progress bar line */}
             <div className="w-20 sm:w-28 h-1 bg-white/10 rounded-full overflow-hidden relative">
               <div
-                key={progressKey}
+                key={timerResetKey}
                 className={`h-full bg-[#FF5108] rounded-full ${
-                  isPaused ? "opacity-30" : "animate-carousel-progress"
+                  isAutoplayRunning ? "animate-carousel-progress" : "opacity-30"
                 }`}
                 style={{
-                  animationPlayState: isPaused ? "paused" : "running",
+                  animationPlayState: isAutoplayRunning ? "running" : "paused",
                 }}
               />
             </div>
 
-            {/* Status indicator and pause toggle */}
-            <button
-              type="button"
-              onClick={() => setIsManualPaused(!isManualPaused)}
-              className="flex items-center gap-2 hover:text-[#F4F2ED] transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#FF5108] rounded px-1.5 py-0.5"
-              aria-label={isManualPaused ? "Resume autoplay" : "Pause autoplay"}
-            >
+            {/* Live Autoplay status indicator */}
+            <div className="flex items-center gap-2 px-1.5 py-0.5 select-none">
               <span
                 className={`w-1.5 h-1.5 rounded-full ${
-                  isPaused
-                    ? "bg-[#737680]"
-                    : "bg-[#FF5108] shadow-[0_0_6px_rgba(255,81,8,0.8)]"
+                  isAutoplayRunning
+                    ? "bg-[#FF5108] shadow-[0_0_8px_rgba(255,81,8,0.8)] animate-pulse"
+                    : "bg-[#737680]"
                 }`}
                 aria-hidden="true"
               />
-              <span className="uppercase tracking-wider">
-                {isPaused ? "PAUSED" : "AUTO (5S)"}
+              <span className="uppercase tracking-wider font-[600]">
+                {isAutoplayRunning ? "RUNNING" : "PAUSED"}
               </span>
-            </button>
+            </div>
           </div>
         </div>
       </div>
