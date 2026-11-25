@@ -494,7 +494,7 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
         href={`/work/${p.slug}`}
         onMouseEnter={() => setHoveredId(p.id)}
         onMouseLeave={() => setHoveredId(null)}
-        className="project-card group block w-full p-6 sm:p-8 bg-white/[0.015] border border-white/[0.08] hover:border-[#FF5108]/40 rounded-xl transition-all duration-500 relative focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#FF5108] flex flex-col justify-between"
+        className="project-card group block w-full p-6 sm:p-8 bg-[#08090D]/80 backdrop-blur-md border border-white/[0.1] hover:border-[#FF5108]/50 rounded-xl transition-all duration-500 relative focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#FF5108] flex flex-col justify-between shadow-[0_16px_40px_rgba(0,0,0,0.35)]"
       >
         <div>
           {/* Visual Canvas */}
@@ -579,7 +579,7 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
         href={`/work/${p.slug}`}
         onMouseEnter={() => setHoveredId(p.id)}
         onMouseLeave={() => setHoveredId(null)}
-        className="project-card group block w-full p-6 sm:p-8 md:p-12 bg-white/[0.015] border border-white/[0.08] hover:border-[#FF5108]/40 rounded-xl transition-all duration-500 relative focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#FF5108]"
+        className="project-card group block w-full p-6 sm:p-8 md:p-12 bg-[#08090D]/80 backdrop-blur-md border border-white/[0.1] hover:border-[#FF5108]/50 rounded-xl transition-all duration-500 relative focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#FF5108] shadow-[0_16px_40px_rgba(0,0,0,0.35)]"
       >
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           {/* Left Column: Metadata & Typography */}
@@ -668,7 +668,7 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
         href={`/work/${p.slug}`}
         onMouseEnter={() => setHoveredId(p.id)}
         onMouseLeave={() => setHoveredId(null)}
-        className="project-card group block w-full p-6 sm:p-8 md:p-12 bg-white/[0.015] border border-white/[0.08] hover:border-[#FF5108]/40 rounded-xl transition-all duration-500 relative focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#FF5108]"
+        className="project-card group block w-full p-6 sm:p-8 md:p-12 bg-[#08090D]/80 backdrop-blur-md border border-white/[0.1] hover:border-[#FF5108]/50 rounded-xl transition-all duration-500 relative focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#FF5108] shadow-[0_16px_40px_rgba(0,0,0,0.35)]"
       >
         {/* Wide Panoramic Visual Canvas */}
         <div className="w-full aspect-[21/9] sm:aspect-[20/8] rounded-lg overflow-hidden border border-white/[0.08] mb-8">
@@ -739,7 +739,7 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
     <section
       id="work"
       ref={containerRef}
-      className="relative w-full bg-[#08090D] py-24 md:py-32 lg:py-40 border-b border-white/[0.08]"
+      className="relative w-full bg-transparent py-24 md:py-32 lg:py-40 border-b border-white/[0.06]"
     >
       <div className="w-full max-w-[1280px] mx-auto px-4 md:px-6 lg:px-0">
         {/* Section Introduction */}
@@ -853,7 +853,7 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
         {/* Section Closing Banner */}
         <div
           ref={ctaBannerRef}
-          className="mt-20 md:mt-28 lg:mt-32 p-8 sm:p-12 md:p-16 rounded-xl border border-white/[0.08] bg-white/[0.015] flex flex-col md:flex-row items-start md:items-center justify-between gap-8 relative overflow-hidden"
+          className="mt-20 md:mt-28 lg:mt-32 p-8 sm:p-12 md:p-16 rounded-xl border border-white/[0.1] bg-[#08090D]/85 backdrop-blur-md shadow-[0_16px_40px_rgba(0,0,0,0.4)] flex flex-col md:flex-row items-start md:items-center justify-between gap-8 relative overflow-hidden"
         >
           <div className="absolute top-0 right-0 w-80 h-80 bg-[radial-gradient(circle_at_top_right,rgba(255,81,8,0.08)_0%,transparent_70%)] pointer-events-none" />
 

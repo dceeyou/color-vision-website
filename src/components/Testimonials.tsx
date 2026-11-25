@@ -404,7 +404,7 @@ export default function Testimonials({ testimonials: propTestimonials }: Testimo
       tabIndex={0}
       onKeyDown={handleKeyDown}
       aria-label="Client Testimonials and Reviews"
-      className="relative w-full bg-[#08090D] py-24 md:py-32 lg:py-40 border-b border-white/[0.08] overflow-hidden focus-visible:outline-none"
+      className="relative w-full bg-transparent py-24 md:py-32 lg:py-40 border-b border-white/[0.06] overflow-hidden focus-visible:outline-none"
     >
       <div className="w-full max-w-[1280px] mx-auto px-4 md:px-6 lg:px-0">
         {/* =========================================================================

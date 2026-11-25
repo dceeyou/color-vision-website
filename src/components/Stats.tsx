@@ -61,20 +61,20 @@ export default function Stats({ stats: propStats }: { stats?: Stat[] }) {
   }, [stats]);
 
   return (
-    <section ref={containerRef} className="px-6 md:px-12 py-16 relative">
-      <div className="stat-divider absolute top-0 left-0 w-full h-[1px] bg-border-light origin-left" />
-      <div className="stat-divider absolute bottom-0 left-0 w-full h-[1px] bg-border-light origin-left" />
+    <section ref={containerRef} className="px-6 md:px-12 py-16 relative bg-transparent">
+      <div className="stat-divider absolute top-0 left-0 w-full h-[1px] bg-[#FF5108]/25 origin-left" />
+      <div className="stat-divider absolute bottom-0 left-0 w-full h-[1px] bg-[#FF5108]/25 origin-left" />
       
       <div className="flex flex-wrap justify-between items-center gap-10 max-w-7xl mx-auto py-8">
         {stats.map((stat, i) => (
           <div key={i} className="text-center md:text-left flex-1 min-w-[120px]">
             <h3 
               ref={(el) => {numRefs.current[i] = el}} 
-              className="text-5xl md:text-6xl font-bold mb-3 text-foreground"
+              className="text-5xl md:text-6xl font-extrabold mb-3 text-[#F4F2ED]"
             >
               0{stat.suffix}
             </h3>
-            <p className="text-muted font-bold tracking-[0.2em] text-xs uppercase">{stat.label}</p>
+            <p className="text-[#FF5108] font-[700] tracking-[0.2em] text-xs uppercase">{stat.label}</p>
           </div>
         ))}
       </div>

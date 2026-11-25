@@ -149,7 +149,7 @@ export default function Process({ steps: propSteps }: ProcessProps) {
       id="process"
       ref={containerRef}
       aria-label="Color Vision Process"
-      className="relative w-full bg-[#08090D] py-20 md:py-24 lg:py-28 border-b border-white/[0.08] overflow-hidden select-none"
+      className="relative w-full bg-transparent py-20 md:py-24 lg:py-28 border-b border-white/[0.06] overflow-hidden select-none"
     >
       <div className="w-full max-w-[1280px] mx-auto px-4 md:px-6 lg:px-8">
         {/* =========================================================================

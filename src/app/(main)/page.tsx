@@ -7,6 +7,7 @@ import Process from "@/components/Process";
 import Statement from "@/components/Statement";
 import Testimonials from "@/components/Testimonials";
 import Contact from "@/components/Contact";
+import ContinuousBackground from "@/components/ContinuousBackground";
 import { getHero, getAbout, getStats, getServices, getProjects, getProcessSteps, getTestimonials, getContact } from "@/lib/wordpress/api";
 
 export default async function Home() {
@@ -22,7 +23,8 @@ export default async function Home() {
   ]);
 
   return (
-    <main className="flex flex-col">
+    <main className="flex flex-col relative w-full overflow-hidden">
+      <ContinuousBackground />
       <Hero hero={hero} />
       <Marquee />
       <Services services={services} />

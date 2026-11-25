@@ -43,7 +43,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="relative w-full bg-[#08090D] pt-20 md:pt-28 lg:pt-36 pb-12 md:pb-16 border-t border-white/[0.08] overflow-hidden">
+    <footer className="relative w-full bg-[#08090D] pt-20 md:pt-28 lg:pt-36 pb-12 md:pb-16 border-t border-white/[0.06] overflow-hidden">
       {/* Background Subtle Grid Texture */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
 

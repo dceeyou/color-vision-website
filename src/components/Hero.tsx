@@ -402,15 +402,6 @@ export default function Hero({ hero }: HeroProps) {
             />
           </svg>
         </div>
-
-        {/* Natural Transition Gradient into the Dark Website Below */}
-        <div
-          className="absolute bottom-0 left-0 right-0 h-40 sm:h-48 md:h-56 pointer-events-none"
-          style={{
-            background:
-              "linear-gradient(to bottom, transparent 0%, rgba(8, 9, 13, 0.08) 45%, rgba(8, 9, 13, 0.45) 80%, #08090D 100%)",
-          }}
-        />
       </div>
 
       {/* Interactive mouse-following soft light field (fine pointer desktop only) */}
