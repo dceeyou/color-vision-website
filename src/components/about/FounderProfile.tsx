@@ -1,9 +1,10 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
+import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Camera, MapPin, Sparkles } from "lucide-react";
+import { MapPin, Sparkles } from "lucide-react";
 import { AboutFounderData } from "@/lib/about/types";
 
 interface FounderProfileProps {
@@ -85,49 +86,47 @@ export default function FounderProfile({ data }: FounderProfileProps) {
               <div className="absolute -top-20 -right-20 w-56 h-56 rounded-full bg-[#FF5108]/15 blur-3xl pointer-events-none group-hover:bg-[#FF5108]/25 transition-colors duration-500" />
 
               {/* Portrait Frame */}
-              <div className="relative aspect-[3/4] w-full rounded-xl bg-[#08090D] border border-white/[0.08] flex flex-col justify-between p-6 overflow-hidden">
-                {/* Tech grid background */}
+              <div className="relative aspect-[3/4] w-full rounded-xl bg-[#08090D] border border-white/[0.08] flex flex-col justify-between p-4 sm:p-5 overflow-hidden group/portrait shadow-[inset_0_0_40px_rgba(0,0,0,0.8)]">
+                {/* Real Founder Portrait Photograph */}
+                <Image
+                  src={data.imageSrc || "/founder/dilshan-udawatta.webp"}
+                  alt={data.imageAlt || "Dilshan Udawatta — Founder and Lead Designer of Color Vision."}
+                  fill
+                  priority
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 45vw, 420px"
+                  className="object-cover object-[50%_18%] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                />
+
+                {/* Subtle dark cinematic gradients to ensure framing clarity & badge legibility */}
                 <div
-                  className="absolute inset-0 opacity-15 pointer-events-none bg-[radial-gradient(#F4F2ED_1px,transparent_1px)] [background-size:16px_16px]"
+                  className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#08090D]/80 via-[#08090D]/20 to-transparent pointer-events-none"
+                  aria-hidden="true"
+                />
+                <div
+                  className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#08090D]/90 via-[#08090D]/30 to-transparent pointer-events-none"
                   aria-hidden="true"
                 />
 
                 {/* Top Meta Header */}
-                <div className="relative z-10 flex items-center justify-between border-b border-white/[0.08] pb-3">
+                <div className="relative z-10 flex items-center justify-between border-b border-white/[0.08] pb-2.5 backdrop-blur-[2px]">
                   <div className="flex items-center gap-2">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#FF5108] animate-pulse" />
-                    <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#8E9098]">
+                    <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#F4F2ED]/90">
                       STUDIO PORTRAIT
                     </span>
                   </div>
-                  <span className="font-mono text-[10px] text-[#737680]">
+                  <span className="font-mono text-[10px] text-[#8E9098]">
                     REF // DU-01
                   </span>
                 </div>
 
-                {/* Central Architectural Monogram / Placeholder Display */}
-                <div className="relative z-10 flex flex-col items-center justify-center my-auto text-center py-8">
-                  <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full border border-white/10 bg-white/[0.02] flex items-center justify-center mb-5 group-hover:border-[#FF5108]/40 transition-colors duration-300">
-                    <Camera className="w-8 h-8 text-[#FF5108] stroke-[1.5]" />
-                  </div>
-                  <h4 className="text-[20px] sm:text-[22px] font-[800] text-[#F4F2ED] tracking-[-0.02em] mb-1">
-                    Dilshan Udawatta
-                  </h4>
-                  <p className="text-[12px] font-mono uppercase tracking-[0.16em] text-[#FF5108] mb-4">
-                    Founder & Lead Designer
-                  </p>
-                  <p className="text-[12px] text-[#737680] max-w-[240px] leading-relaxed">
-                    Official photographic portrait placeholder. High-resolution portrait photograph will be mounted here.
-                  </p>
-                </div>
-
                 {/* Bottom Spec Footer */}
-                <div className="relative z-10 pt-3 border-t border-white/[0.08] flex items-center justify-between text-[11px] font-mono text-[#8E9098]">
+                <div className="relative z-10 pt-2.5 border-t border-white/[0.08] flex items-center justify-between text-[11px] font-mono text-[#B2B4BC] backdrop-blur-[2px]">
                   <span className="flex items-center gap-1.5">
                     <MapPin className="w-3 h-3 text-[#FF5108]" />
-                    <span>Colombo, LK</span>
+                    <span>{data.location || "Colombo, LK"}</span>
                   </span>
-                  <span>Est. May 2020</span>
+                  <span>Est. {data.foundedDate || "May 2020"}</span>
                 </div>
               </div>
 

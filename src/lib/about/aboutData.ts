@@ -69,7 +69,8 @@ export const aboutData: AboutPageData = {
     experienceYears: "8+ Years",
     foundedDate: "May 2020",
     signatureText: "Dilshan Udawatta",
-    imageAlt: "Dilshan Udawatta — Founder & Lead Designer at Color Vision",
+    imageAlt: "Dilshan Udawatta — Founder and Lead Designer of Color Vision.",
+    imageSrc: "/founder/dilshan-udawatta.webp",
     bioParagraphs: [
       "I'm Dilshan Udawatta, founder of Color Vision and a designer with over eight years of experience across graphic design, brand identity and digital product design.",
       "My journey began in graphic design, where I developed an appreciation for visual communication and brand storytelling. Over time, my interest in understanding people, solving problems and creating meaningful digital experiences led me into UI/UX and product design.",
