@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { HeroContent } from "@/lib/wordpress/types";
@@ -708,9 +709,8 @@ export default function Hero({ hero }: HeroProps) {
           </a>
 
           {/* Secondary CTA: Sleek Glass Surface with White/Orange Hover Border */}
-          <a
-            href="#contact"
-            onClick={(e) => scrollToAnchor(e, "contact")}
+          <Link
+            href="/contact"
             className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 bg-white/[0.035] backdrop-blur-md text-[#F4F2ED] border border-white/[0.14] px-7 sm:px-8 py-3.5 sm:py-4 font-[700] uppercase tracking-[0.1em] text-[12px] sm:text-[13px] rounded-full hover:border-[#FF5108] hover:text-white hover:bg-white/[0.07] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#FF5108]"
           >
             <span>{secondaryText}</span>
@@ -720,7 +720,7 @@ export default function Hero({ hero }: HeroProps) {
             >
               →
             </span>
-          </a>
+          </Link>
         </div>
       </div>
 

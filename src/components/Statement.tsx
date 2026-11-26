@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { AboutContent } from "@/lib/wordpress/types";
@@ -248,9 +249,8 @@ export default function Statement({ about }: { about?: AboutContent }) {
               </div>
 
               {/* Direct Action Link */}
-              <a
-                href="#contact"
-                onClick={handleScrollToContact}
+              <Link
+                href="/contact"
                 className="group inline-flex items-center gap-4 text-[#F4F2ED] hover:text-[#FF5108] transition-colors duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#FF5108] rounded"
               >
                 <span className="text-[13px] md:text-[14px] font-[700] uppercase tracking-[0.16em]">
@@ -261,7 +261,7 @@ export default function Statement({ about }: { about?: AboutContent }) {
                     ↗
                   </span>
                 </div>
-              </a>
+              </Link>
             </div>
           </div>
         </div>

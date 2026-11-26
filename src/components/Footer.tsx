@@ -9,7 +9,7 @@ export default function Footer() {
     { name: "Services", href: "/#services" },
     { name: "About Us", href: "/about" },
     { name: "Process", href: "/#process" },
-    { name: "Contact", href: "/#contact" },
+    { name: "Contact", href: "/contact" },
   ];
 
   // Configurable social destinations (kept clean and inactive until live handles are configured)
@@ -21,7 +21,7 @@ export default function Footer() {
   ];
 
   const handleScrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    if (href === "/about") {
+    if (href === "/about" || href === "/contact") {
       return;
     }
     const targetId = href.replace(/^\/?#/, "");

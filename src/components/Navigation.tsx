@@ -22,13 +22,13 @@ export default function Navigation() {
     { label: "Services", href: "/#services", id: "services" },
     { label: "About", href: "/about", id: "about" },
     { label: "Process", href: "/#process", id: "process" },
-    { label: "Contact", href: "/#contact", id: "contact" },
+    { label: "Contact", href: "/contact", id: "contact" },
   ];
 
   // Helper for smooth anchor scrolling with header offset
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    if (href === "/about") {
-      if (pathname === "/about") {
+    if (href === "/about" || href === "/contact") {
+      if (pathname === href) {
         e.preventDefault();
         window.scrollTo({
           top: 0,
@@ -68,7 +68,7 @@ export default function Navigation() {
       setScrolled(window.scrollY > 20);
 
       // Track active section for navigation highlighting
-      const sections = ["work", "services", "about", "process", "contact"];
+      const sections = ["work", "services", "about", "process", "faq"];
       const scrollPosition = window.scrollY + 250;
 
       for (const sectionId of sections) {
@@ -175,6 +175,8 @@ export default function Navigation() {
               const isActive =
                 pathname === "/about"
                   ? link.id === "about"
+                  : pathname === "/contact"
+                  ? link.id === "contact"
                   : activeSection === link.id;
               return (
                 <Link
@@ -223,6 +225,8 @@ export default function Navigation() {
             const isActive =
               pathname === "/about"
                 ? link.id === "about"
+                : pathname === "/contact"
+                ? link.id === "contact"
                 : activeSection === link.id;
             return (
               <Link

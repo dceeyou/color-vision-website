@@ -1034,14 +1034,13 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
             </h3>
           </div>
 
-          <a
-            href="#contact"
-            onClick={handleScrollToContact}
+          <Link
+            href="/contact"
             className="group inline-flex items-center gap-3 px-7 py-4 rounded-full bg-[#FF5108] text-[#08090D] font-[700] text-[13px] uppercase tracking-[0.16em] transition-all duration-300 hover:bg-[#F4F2ED] hover:shadow-[0_0_24px_rgba(255,81,8,0.4)] shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5108]"
           >
             <span>START A PROJECT</span>
             <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
-          </a>
+          </Link>
         </div>
       </div>
     </section>

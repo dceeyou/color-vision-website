@@ -138,7 +138,7 @@ export const aboutData: AboutPageData = {
       "Whether you're building a new brand, improving a digital product or exploring a new opportunity, let's start with a conversation.",
     primaryAction: {
       label: "START A PROJECT",
-      href: "/#contact",
+      href: "/contact",
     },
     secondaryAction: {
       label: "EXPLORE OUR WORK",

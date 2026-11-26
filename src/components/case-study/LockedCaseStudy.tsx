@@ -123,7 +123,7 @@ export default function LockedCaseStudy({ project }: LockedCaseStudyProps) {
               </Link>
 
               <Link
-                href="/#contact"
+                href="/contact"
                 className="px-6 py-3.5 rounded-full border border-white/15 bg-white/[0.02] text-[#F4F2ED] font-[600] text-[12px] tracking-[0.14em] uppercase hover:border-[#FF5108]/60 hover:text-[#FF5108] transition-all duration-300 flex items-center gap-2 group"
               >
                 <span>Inquire About A Similar Project</span>

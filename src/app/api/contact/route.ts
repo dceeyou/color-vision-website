@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, email, service, details } = body;
+    const { name, email, company, service, budget, details } = body;
 
     // Server-side validation
     if (!name || typeof name !== "string" || name.trim().length < 2) {
@@ -22,12 +22,15 @@ export async function POST(request: Request) {
     }
 
     const validServices = [
-      "Brand Identity",
+      "Brand Identity Design",
       "UI/UX Design",
       "Digital Product Design",
       "Web Design",
       "Design Systems",
       "Visual Communication",
+      "Something Else",
+      // Backwards-compatible matches
+      "Brand Identity",
       "Something else",
     ];
 
@@ -53,6 +56,9 @@ export async function POST(request: Request) {
     const webhookUrl = process.env.CONTACT_WEBHOOK_URL;
     const recipientEmail = process.env.CONTACT_NOTIFICATION_EMAIL || "info@colorvision.lk";
 
+    const formattedCompany = company && typeof company === "string" ? company.trim() : "Not specified";
+    const formattedBudget = budget && typeof budget === "string" ? budget.trim() : "Not specified";
+
     // 1. If Resend is configured
     if (resendApiKey) {
       try {
@@ -67,7 +73,7 @@ export async function POST(request: Request) {
             to: [recipientEmail],
             reply_to: email.trim(),
             subject: `[New Inquiry] ${service} — ${name.trim()}`,
-            text: `New project inquiry received:\n\nName: ${name.trim()}\nEmail: ${email.trim()}\nService: ${service}\n\nProject Details:\n${details.trim()}`,
+            text: `New project inquiry received:\n\nName: ${name.trim()}\nEmail: ${email.trim()}\nCompany: ${formattedCompany}\nService: ${service}\nBudget: ${formattedBudget}\n\nProject Details:\n${details.trim()}`,
           }),
         });
 
@@ -109,7 +115,9 @@ export async function POST(request: Request) {
           body: JSON.stringify({
             name: name.trim(),
             email: email.trim(),
+            company: formattedCompany,
             service,
+            budget: formattedBudget,
             details: details.trim(),
             submittedAt: new Date().toISOString(),
           }),

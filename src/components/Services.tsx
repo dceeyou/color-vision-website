@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Service } from "@/lib/wordpress/types";
@@ -177,10 +178,9 @@ export default function Services({ services: propServices }: { services?: Servic
             const isDimmed = hoveredIdx !== null && hoveredIdx !== idx;
 
             return (
-              <a
+              <Link
                 key={service.id || idx}
-                href="#contact"
-                onClick={handleServiceClick}
+                href="/contact"
                 onMouseEnter={() => setHoveredIdx(idx)}
                 onMouseLeave={() => setHoveredIdx(null)}
                 className={`service-row group block w-full py-8 sm:py-10 md:py-12 border-b border-white/[0.08] transition-all duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#FF5108] relative hover:bg-white/[0.02] ${
@@ -300,7 +300,7 @@ export default function Services({ services: propServices }: { services?: Servic
                     {service.shortDescription || service.longDescription}
                   </p>
                 </div>
-              </a>
+              </Link>
             );
           })}
         </div>

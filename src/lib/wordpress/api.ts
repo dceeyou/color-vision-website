@@ -86,7 +86,7 @@ export async function getHero(): Promise<HeroContent> {
     primaryCtaLabel: "VIEW OUR WORK →",
     primaryCtaUrl: "#work",
     secondaryCtaLabel: "START A PROJECT →",
-    secondaryCtaUrl: "#contact"
+    secondaryCtaUrl: "/contact"
   };
 }
 
@@ -101,7 +101,7 @@ export async function getAbout(): Promise<AboutContent> {
     description: "Color Vision is an independent design studio based in Sri Lanka, working across brand identity, UI/UX design, digital products, websites, design systems, and visual communication.",
     secondaryDescription: "We believe good design sits between what a business needs to achieve and what people need to understand. That's why we don't begin with colours, screens, or trends. We begin with the problem.",
     ctaLabel: "LET'S TALK ABOUT YOUR PROJECT",
-    ctaUrl: "#contact"
+    ctaUrl: "/contact"
   };
 }
 
