@@ -145,9 +145,7 @@ export interface CaseStudyProject {
   year: string;
   duration: string;
   projectStatus: string;
-  status?: "AVAILABLE" | "COMING_SOON" | "CONCEPT";
-  statusNote?: string;
-  hasPresentation?: boolean;
+  status?: "COMING_SOON";
   featured: boolean;
   displayOrder: number;
 

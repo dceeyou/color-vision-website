@@ -62,11 +62,8 @@ export default async function CaseStudyPage({ params }: PageProps) {
     notFound();
   }
 
-  // Intercept locked projects (Coming Soon or non-navigable Concept presentations)
-  if (
-    project.status === "COMING_SOON" ||
-    (project.status === "CONCEPT" && !project.hasPresentation)
-  ) {
+  // Intercept Coming Soon case studies
+  if (project.status === "COMING_SOON") {
     return <LockedCaseStudy project={project} />;
   }
 

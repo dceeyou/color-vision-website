@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { Lock, ArrowLeft, ArrowUpRight, Sparkles } from "lucide-react";
+import { Lock, ArrowLeft, ArrowUpRight } from "lucide-react";
 import { CaseStudyProject } from "@/lib/types/caseStudy";
 
 interface LockedCaseStudyProps {
@@ -10,21 +10,6 @@ interface LockedCaseStudyProps {
 }
 
 export default function LockedCaseStudy({ project }: LockedCaseStudyProps) {
-  const isComingSoon = project.status === "COMING_SOON";
-  const isConcept = project.status === "CONCEPT";
-
-  const eyebrowLabel = isComingSoon
-    ? "CASE STUDY IN DEVELOPMENT"
-    : "DESIGN CONCEPT PRESENTATION";
-
-  const statusLabel = isComingSoon ? "COMING SOON" : "CONCEPT";
-
-  const statusDescription =
-    project.statusNote ||
-    (isComingSoon
-      ? "This case study is currently in active development. Our design team is documenting the design process, interface systems, and creative outcomes for this project."
-      : "This project represents an exploratory design concept. A full presentation of the visual system and interface architecture is currently being prepared.");
-
   return (
     <section className="relative min-h-[90vh] bg-[#08090D] text-[#F4F2ED] pt-32 sm:pt-40 md:pt-44 pb-20 sm:pb-28 overflow-hidden select-none">
       {/* Ambient background glow */}
@@ -52,7 +37,7 @@ export default function LockedCaseStudy({ project }: LockedCaseStudyProps) {
             aria-hidden="true"
           />
           <p className="uppercase tracking-[0.24em] text-[11px] sm:text-[12px] font-mono font-[600] text-[#FF5108]">
-            {eyebrowLabel}
+            CASE STUDY IN DEVELOPMENT
           </p>
         </div>
 
@@ -75,26 +60,20 @@ export default function LockedCaseStudy({ project }: LockedCaseStudyProps) {
             {/* Status Icon Badge */}
             <div className="flex items-center gap-3 mb-6">
               <div className="w-12 h-12 rounded-full bg-[#08090D] border border-white/15 flex items-center justify-center text-[#FF5108] shadow-lg">
-                {isComingSoon ? (
-                  <Lock className="w-5 h-5 stroke-[2]" />
-                ) : (
-                  <Sparkles className="w-5 h-5 stroke-[2]" />
-                )}
+                <Lock className="w-5 h-5 stroke-[2]" />
               </div>
               <span className="px-3.5 py-1 rounded-full bg-[#08090D] border border-white/10 font-mono text-[11px] uppercase tracking-[0.2em] font-[700] text-[#F4F2ED]">
-                {statusLabel}
+                COMING SOON
               </span>
             </div>
 
             {/* Explanation Prose */}
             <h3 className="text-[22px] sm:text-[26px] font-[700] tracking-[-0.02em] text-[#F4F2ED] mb-4">
-              {isComingSoon
-                ? "This case study is being prepared for presentation."
-                : "This conceptual design is being documented."}
+              This case study is being prepared for presentation.
             </h3>
 
             <p className="text-[#92939B] text-[15px] sm:text-[16px] leading-[1.75] mb-8 sm:mb-10">
-              {statusDescription}
+              Our design team is documenting the design process, interface systems, and creative outcomes for this project.
             </p>
 
             {/* Technical Specifications Matrix */}
@@ -128,7 +107,7 @@ export default function LockedCaseStudy({ project }: LockedCaseStudyProps) {
                   Availability
                 </span>
                 <span className="text-[#FF5108] font-[700] block">
-                  {statusLabel}
+                  COMING SOON
                 </span>
               </div>
             </div>

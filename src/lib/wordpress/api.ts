@@ -225,7 +225,6 @@ export async function getProjects(): Promise<Project[]> {
       caseStudyUrl: "/work/elegant-ai",
       servicesUsed: ["Interface Design", "Product Strategy", "Design System"],
       featuredProject: true,
-      status: "AVAILABLE",
     },
     {
       id: "vehicle-service-platform",
@@ -242,7 +241,6 @@ export async function getProjects(): Promise<Project[]> {
       caseStudyUrl: "/work/vehicle-service-platform",
       servicesUsed: ["Web Application", "Mobile Experience", "Service Design"],
       featuredProject: true,
-      status: "AVAILABLE",
     },
     {
       id: "cr-cricket-bar",
@@ -259,7 +257,6 @@ export async function getProjects(): Promise<Project[]> {
       caseStudyUrl: "/work/cr-cricket-bar",
       servicesUsed: ["Visual Identity", "Environmental Design", "Print & Signage"],
       featuredProject: false,
-      status: "AVAILABLE",
     },
     {
       id: "goodly",
@@ -276,7 +273,6 @@ export async function getProjects(): Promise<Project[]> {
       caseStudyUrl: "/work/goodly",
       servicesUsed: ["Brand Strategy", "Packaging System", "Visual Identity"],
       featuredProject: false,
-      status: "AVAILABLE",
     },
     {
       id: "my-little-kevi",
@@ -294,7 +290,6 @@ export async function getProjects(): Promise<Project[]> {
       servicesUsed: ["Mobile UI/UX", "User Research", "Interaction Design"],
       featuredProject: false,
       status: "COMING_SOON",
-      statusNote: "Case study currently in development.",
     },
     {
       id: "baps",
@@ -311,9 +306,7 @@ export async function getProjects(): Promise<Project[]> {
       caseStudyUrl: "/work/baps",
       servicesUsed: ["Brand Identity", "Web Experience", "Design Guidelines"],
       featuredProject: false,
-      status: "CONCEPT",
-      statusNote: "Design presentation in preparation.",
-      hasPresentation: false,
+      status: "COMING_SOON",
     }
   ];
 }
@@ -504,13 +497,10 @@ export async function getCaseStudyBySlug(slug: string): Promise<CaseStudyProject
 
   // Graceful local demonstration data adapter
   if (demoCaseStudies[slug]) {
-    return {
-      ...demoCaseStudies[slug],
-      status: demoCaseStudies[slug].status || "AVAILABLE",
-    };
+    return demoCaseStudies[slug];
   }
 
-  // Check fallback project definitions for Coming Soon / Concept projects
+  // Check fallback project definitions for Coming Soon and demo projects
   const fallbackProjects = await getProjects();
   const matchedProject = fallbackProjects.find((p) => p.slug === slug);
   if (matchedProject) {
@@ -526,10 +516,8 @@ export async function getCaseStudyBySlug(slug: string): Promise<CaseStudyProject
       client: matchedProject.clientName || "Studio Partner",
       year: matchedProject.year || "2025",
       duration: "In Progress",
-      projectStatus: matchedProject.status === "COMING_SOON" ? "In Development" : "Concept Exploration",
-      status: matchedProject.status || "COMING_SOON",
-      statusNote: matchedProject.statusNote || "Case study currently in development.",
-      hasPresentation: matchedProject.hasPresentation ?? false,
+      projectStatus: matchedProject.status === "COMING_SOON" ? "In Development" : "Completed",
+      status: matchedProject.status,
       featured: matchedProject.featuredProject,
       displayOrder: 1,
       categories: matchedProject.category,
@@ -540,8 +528,10 @@ export async function getCaseStudyBySlug(slug: string): Promise<CaseStudyProject
       thumbnailImage: null,
       heroImage: null,
       galleryImages: [],
-      seoTitle: `${matchedProject.title} — Case Study Coming Soon | Color Vision`,
-      seoDescription: `${matchedProject.shortDescription} Case study currently in development at Color Vision.`,
+      seoTitle: matchedProject.status === "COMING_SOON"
+        ? `${matchedProject.title} — Case Study Coming Soon | Color Vision`
+        : `${matchedProject.title} — Case Study | Color Vision`,
+      seoDescription: `${matchedProject.shortDescription} Case study at Color Vision.`,
       sections: [],
     };
   }

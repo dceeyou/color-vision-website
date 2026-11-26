@@ -41,7 +41,7 @@ export interface Service {
   slug: string;
 }
 
-export type ProjectAvailabilityStatus = "AVAILABLE" | "COMING_SOON" | "CONCEPT";
+export type ProjectAvailabilityStatus = "COMING_SOON";
 
 export interface Project {
   id: string;
@@ -58,9 +58,7 @@ export interface Project {
   caseStudyUrl: string;
   servicesUsed: string[];
   featuredProject: boolean;
-  status?: ProjectAvailabilityStatus;
-  statusNote?: string;
-  hasPresentation?: boolean;
+  status?: "COMING_SOON";
 }
 
 export interface ProcessStep {

@@ -4,8 +4,8 @@ import { useEffect, useRef, useState, useMemo } from "react";
 import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Lock, Sparkles } from "lucide-react";
-import { Project, ProjectAvailabilityStatus } from "@/lib/wordpress/types";
+import { Lock } from "lucide-react";
+import { Project } from "@/lib/wordpress/types";
 
 interface ExtendedProject extends Project {
   number: string;
@@ -28,8 +28,6 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
       number: "01",
       title: "Elegant AI",
       slug: "elegant-ai",
-      status: "AVAILABLE",
-      hasPresentation: true,
       category: ["UI/UX", "Digital", "UI/UX / Digital Product"],
       filterCategories: ["ALL", "UI/UX", "DIGITAL"],
       shortDescription:
@@ -50,8 +48,6 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
       number: "02",
       title: "Vehicle Service Platform",
       slug: "vehicle-service-platform",
-      status: "AVAILABLE",
-      hasPresentation: true,
       category: ["UI/UX", "Digital", "UI/UX / Product Design"],
       filterCategories: ["ALL", "UI/UX", "DIGITAL"],
       shortDescription:
@@ -72,8 +68,6 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
       number: "03",
       title: "CR Cricket Bar",
       slug: "cr-cricket-bar",
-      status: "AVAILABLE",
-      hasPresentation: true,
       category: ["Branding", "Graphic Design", "Brand Identity / Visual Design"],
       filterCategories: ["ALL", "BRANDING", "GRAPHIC DESIGN"],
       shortDescription:
@@ -94,8 +88,6 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
       number: "04",
       title: "Goodly",
       slug: "goodly",
-      status: "AVAILABLE",
-      hasPresentation: true,
       category: ["Branding", "Graphic Design", "Brand Identity / Packaging"],
       filterCategories: ["ALL", "BRANDING", "GRAPHIC DESIGN"],
       shortDescription:
@@ -117,8 +109,6 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
       title: "My Little Kevi",
       slug: "my-little-kevi",
       status: "COMING_SOON",
-      statusNote: "Case study in development.",
-      hasPresentation: false,
       category: ["UI/UX", "Digital", "UI/UX / Mobile"],
       filterCategories: ["ALL", "UI/UX", "DIGITAL"],
       shortDescription:
@@ -139,9 +129,6 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
       number: "06",
       title: "BAPS",
       slug: "baps",
-      status: "CONCEPT",
-      statusNote: "Design presentation in preparation.",
-      hasPresentation: false,
       category: ["Branding", "Digital", "Graphic Design", "Branding / Web Design"],
       filterCategories: ["ALL", "BRANDING", "DIGITAL", "GRAPHIC DESIGN"],
       shortDescription:
@@ -156,6 +143,7 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
       caseStudyUrl: "/work/baps",
       servicesUsed: ["Brand Identity", "Web Experience", "Design Guidelines"],
       featuredProject: false,
+      status: "COMING_SOON",
     },
   ];
 
@@ -169,12 +157,8 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
           ...(matchingProp || {}),
           number: `0${idx + 1}`,
           filterCategories: dp.filterCategories,
-          status: matchingProp?.status || dp.status,
-          statusNote: matchingProp?.statusNote || dp.statusNote,
-          hasPresentation:
-            matchingProp?.hasPresentation !== undefined
-              ? matchingProp.hasPresentation
-              : dp.hasPresentation,
+          status:
+            matchingProp?.status !== undefined ? matchingProp.status : dp.status,
         };
       });
     }
@@ -507,32 +491,25 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
   };
 
   // Helper to determine if a project allows navigation to a dedicated case study
-  const isProjectNavigable = (p: ExtendedProject): boolean => {
-    if (p.status === "COMING_SOON") return false;
-    if (p.status === "CONCEPT" && !p.hasPresentation) return false;
-    return true;
-  };
+  const isProjectNavigable = (p: ExtendedProject): boolean => p.status !== "COMING_SOON";
 
-  // Unified visual thumbnail renderer supporting blurred, darkened, and locked status overlays
+  // Reusable visual thumbnail renderer supporting Coming Soon treatment
   const renderCardThumbnail = (
     p: ExtendedProject,
     containerClasses: string,
     isHovered: boolean
   ) => {
     const isComingSoon = p.status === "COMING_SOON";
-    const isConceptLocked = p.status === "CONCEPT" && !p.hasPresentation;
 
     return (
       <div
         className={`${containerClasses} rounded-lg overflow-hidden border border-white/[0.08] relative group/thumb select-none`}
       >
-        {/* Base visual layer with blur & dimming for locked states */}
+        {/* Base visual layer with persistent 5-8px blur on hover for Coming Soon */}
         <div
           className={`w-full h-full transition-transform duration-700 ease-out ${
             isComingSoon
               ? "filter blur-[6px] brightness-[0.80] scale-105 pointer-events-none"
-              : isConceptLocked
-              ? "filter blur-[5px] brightness-[0.82] scale-105 pointer-events-none"
               : isHovered
               ? "scale-105"
               : "scale-100"
@@ -541,41 +518,18 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
           {renderProjectVisual(p.id, p.title)}
         </div>
 
-        {/* Coming Soon Locked Center Overlay */}
+        {/* Centred Coming Soon Lock & Label Overlay */}
         {isComingSoon && (
-          <div className="absolute inset-0 bg-[#08090D]/55 flex flex-col items-center justify-center p-5 text-center z-10 backdrop-blur-[2px]">
-            <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-[#08090D]/90 border border-white/20 flex items-center justify-center text-[#FF5108] mb-3 shadow-[0_8px_24px_rgba(0,0,0,0.6)]">
+          <div className="absolute inset-0 bg-[#08090D]/50 flex flex-col items-center justify-center p-4 text-center z-10">
+            {/* Centred lock icon with subtle #FF5108 accent and hover transition */}
+            <div className="w-12 h-12 rounded-full bg-[#08090D]/90 border border-white/15 flex items-center justify-center text-[#FF5108] mb-2.5 shadow-lg group-hover:scale-110 group-hover:border-[#FF5108]/40 transition-all duration-300">
               <Lock className="w-5 h-5 stroke-[2]" />
             </div>
-            <span className="px-3 py-1 rounded-full bg-[#08090D]/90 border border-white/15 text-[10px] sm:text-[11px] font-mono uppercase tracking-[0.2em] font-[700] text-[#F4F2ED] mb-1.5 shadow-sm">
+            {/* Clear COMING SOON label */}
+            <span className="text-[11px] sm:text-[12px] font-mono uppercase tracking-[0.2em] font-[700] text-[#F4F2ED] flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#FF5108] inline-block shadow-[0_0_6px_rgba(255,81,8,0.8)]" />
               COMING SOON
             </span>
-            <span className="text-[11px] sm:text-[12px] font-sans text-[#A0A2AB] tracking-wide max-w-[220px]">
-              {p.statusNote || "Case study in development."}
-            </span>
-          </div>
-        )}
-
-        {/* Concept Locked Center Overlay */}
-        {isConceptLocked && (
-          <div className="absolute inset-0 bg-[#08090D]/50 flex flex-col items-center justify-center p-5 text-center z-10 backdrop-blur-[1px]">
-            <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-[#08090D]/90 border border-white/20 flex items-center justify-center text-[#FF5108] mb-3 shadow-[0_8px_24px_rgba(0,0,0,0.6)]">
-              <Sparkles className="w-5 h-5 stroke-[2]" />
-            </div>
-            <span className="px-3 py-1 rounded-full bg-[#08090D]/90 border border-white/15 text-[10px] sm:text-[11px] font-mono uppercase tracking-[0.2em] font-[700] text-[#FF5108] mb-1.5 shadow-sm">
-              CONCEPT DESIGN
-            </span>
-            <span className="text-[11px] sm:text-[12px] font-sans text-[#A0A2AB] tracking-wide max-w-[220px]">
-              {p.statusNote || "Presentation in preparation."}
-            </span>
-          </div>
-        )}
-
-        {/* Concept Navigable Corner Badge */}
-        {p.status === "CONCEPT" && p.hasPresentation && (
-          <div className="absolute top-3 right-3 z-10 px-3 py-1 rounded-full bg-[#08090D]/90 border border-[#FF5108]/30 text-[10px] font-mono uppercase tracking-[0.2em] font-[700] text-[#FF5108] shadow-sm flex items-center gap-1.5">
-            <Sparkles className="w-3 h-3" />
-            <span>CONCEPT</span>
           </div>
         )}
       </div>
@@ -584,28 +538,19 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
 
   // Reusable action footer matching status & navigation capability
   const renderCardFooter = (p: ExtendedProject, isHovered: boolean) => {
-    const navigable = isProjectNavigable(p);
     const isComingSoon = p.status === "COMING_SOON";
 
-    if (!navigable) {
+    if (isComingSoon) {
       return (
         <div className="mt-8 pt-4 border-t border-white/[0.06] flex items-center justify-between">
-          <div className="flex items-center gap-2 text-[#7E8088]">
-            {isComingSoon ? (
-              <Lock className="w-3.5 h-3.5 text-[#FF5108]" />
-            ) : (
-              <Sparkles className="w-3.5 h-3.5 text-[#FF5108]" />
-            )}
+          <div className="flex items-center gap-2 text-[#8E9098]">
+            <Lock className="w-3.5 h-3.5 text-[#FF5108]" />
             <span className="text-[12px] font-[600] uppercase tracking-[0.14em]">
-              {isComingSoon ? "Case Study in Development" : "Presentation in Preparation"}
+              Coming Soon
             </span>
           </div>
-          <div className="w-9 h-9 rounded-full border border-white/10 text-white/30 bg-white/[0.02] flex items-center justify-center">
-            {isComingSoon ? (
-              <Lock className="w-3.5 h-3.5 text-white/40" />
-            ) : (
-              <Sparkles className="w-3.5 h-3.5 text-white/40" />
-            )}
+          <div className="w-9 h-9 rounded-full border border-white/10 text-[#FF5108] bg-white/[0.02] flex items-center justify-center">
+            <Lock className="w-3.5 h-3.5" />
           </div>
         </div>
       );
@@ -618,7 +563,7 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
             isHovered ? "text-[#FF5108]" : "text-[#8E9098]"
           }`}
         >
-          {p.status === "CONCEPT" ? "Explore Concept" : "Explore Case"}
+          Explore Case
         </span>
         <div
           className={`w-9 h-9 rounded-full border flex items-center justify-center transition-all duration-300 ${
@@ -638,7 +583,7 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
   // Standard Two-Column Card Component (Used for Projects 02, 03, 05, 06 or filtered cards)
   const renderTwoColumnCard = (p: ExtendedProject) => {
     const isHovered = hoveredId === p.id;
-    const navigable = isProjectNavigable(p);
+    const isComingSoon = p.status === "COMING_SOON";
 
     const cardContent = (
       <>
@@ -650,32 +595,20 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
           <div className="flex items-center justify-between mb-3">
             <span
               className={`font-[800] text-[28px] sm:text-[32px] leading-none transition-colors duration-300 ${
-                navigable && isHovered ? "text-[#FF5108]" : "text-white/20"
+                !isComingSoon && isHovered ? "text-[#FF5108]" : "text-white/20"
               }`}
             >
               {p.number}
             </span>
-            <div className="flex items-center gap-2">
-              {p.status === "COMING_SOON" && (
-                <span className="text-[10px] font-mono uppercase tracking-[0.16em] px-2 py-0.5 rounded bg-white/[0.06] border border-white/10 text-[#A0A2AB]">
-                  COMING SOON
-                </span>
-              )}
-              {p.status === "CONCEPT" && (
-                <span className="text-[10px] font-mono uppercase tracking-[0.16em] px-2 py-0.5 rounded bg-[#FF5108]/10 border border-[#FF5108]/20 text-[#FF5108]">
-                  CONCEPT
-                </span>
-              )}
-              <span className="text-[#FF5108] text-[11px] font-[600] uppercase tracking-[0.2em]">
-                {p.category?.[2] || p.category?.[0]}
-              </span>
-            </div>
+            <span className="text-[#FF5108] text-[11px] font-[600] uppercase tracking-[0.2em]">
+              {p.category?.[2] || p.category?.[0]}
+            </span>
           </div>
 
           {/* Project Title (Remains 100% sharp and readable) */}
           <h3
             className={`text-[26px] sm:text-[32px] font-[800] tracking-[-0.03em] leading-tight transition-all duration-300 ${
-              navigable && isHovered ? "text-[#FF5108] translate-x-2" : "text-[#F4F2ED] translate-x-0"
+              !isComingSoon && isHovered ? "text-[#FF5108] translate-x-2" : "text-[#F4F2ED] translate-x-0"
             }`}
           >
             {p.title}
@@ -707,12 +640,12 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
     );
 
     const baseClassName = `project-card group block w-full p-6 sm:p-8 bg-[#08090D]/80 backdrop-blur-md border border-white/[0.1] ${
-      navigable
+      !isComingSoon
         ? "hover:border-[#FF5108]/50 cursor-pointer"
         : "cursor-default border-white/[0.08]"
     } rounded-xl transition-all duration-500 relative focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#FF5108] flex flex-col justify-between shadow-[0_16px_40px_rgba(0,0,0,0.35)]`;
 
-    if (navigable) {
+    if (!isComingSoon) {
       return (
         <Link
           key={p.id}
@@ -743,7 +676,6 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
   // Project 01 Featured Full-Width Card
   const renderFeaturedProject01 = (p: ExtendedProject) => {
     const isHovered = hoveredId === p.id;
-    const navigable = isProjectNavigable(p);
     const isComingSoon = p.status === "COMING_SOON";
 
     const cardContent = (
@@ -754,26 +686,14 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
             <div className="flex items-center justify-between mb-4">
               <span
                 className={`font-[800] text-[48px] md:text-[64px] leading-none transition-colors duration-300 ${
-                  navigable && isHovered ? "text-[#FF5108]" : "text-white/20"
+                  !isComingSoon && isHovered ? "text-[#FF5108]" : "text-white/20"
                 }`}
               >
                 {p.number}
               </span>
-              <div className="flex items-center gap-2">
-                {isComingSoon && (
-                  <span className="text-[10px] font-mono uppercase tracking-[0.16em] px-2.5 py-1 rounded bg-white/[0.06] border border-white/10 text-[#A0A2AB]">
-                    COMING SOON
-                  </span>
-                )}
-                {p.status === "CONCEPT" && (
-                  <span className="text-[10px] font-mono uppercase tracking-[0.16em] px-2.5 py-1 rounded bg-[#FF5108]/10 border border-[#FF5108]/20 text-[#FF5108]">
-                    CONCEPT
-                  </span>
-                )}
-                <span className="text-[#FF5108] text-[11px] font-[600] uppercase tracking-[0.2em] px-2.5 py-1 rounded bg-[#FF5108]/10 border border-[#FF5108]/20">
-                  FEATURED WORK
-                </span>
-              </div>
+              <span className="text-[#FF5108] text-[11px] font-[600] uppercase tracking-[0.2em] px-2.5 py-1 rounded bg-[#FF5108]/10 border border-[#FF5108]/20">
+                FEATURED WORK
+              </span>
             </div>
 
             <p className="text-[#FF5108] uppercase text-[12px] font-[600] tracking-[0.18em] mb-2">
@@ -782,7 +702,7 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
 
             <h3
               className={`text-[32px] sm:text-[42px] lg:text-[48px] font-[800] tracking-[-0.03em] leading-tight transition-all duration-300 ${
-                navigable && isHovered ? "text-[#FF5108] translate-x-2" : "text-[#F4F2ED] translate-x-0"
+                !isComingSoon && isHovered ? "text-[#FF5108] translate-x-2" : "text-[#F4F2ED] translate-x-0"
               }`}
             >
               {p.title}
@@ -807,14 +727,14 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
           </div>
 
           {/* Action Row */}
-          {navigable ? (
+          {!isComingSoon ? (
             <div className="mt-8 flex items-center gap-4">
               <span
                 className={`text-[12px] font-[700] uppercase tracking-[0.14em] transition-colors duration-300 ${
                   isHovered ? "text-[#FF5108]" : "text-[#F4F2ED]"
                 }`}
               >
-                {p.status === "CONCEPT" ? "View Concept Details" : "View Project Details"}
+                View Project Details
               </span>
               <div
                 className={`w-10 h-10 rounded-full border flex items-center justify-center transition-all duration-300 ${
@@ -829,15 +749,9 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
               </div>
             </div>
           ) : (
-            <div className="mt-8 flex items-center gap-3 text-[#7E8088]">
-              {isComingSoon ? (
-                <Lock className="w-4 h-4 text-[#FF5108]" />
-              ) : (
-                <Sparkles className="w-4 h-4 text-[#FF5108]" />
-              )}
-              <span className="text-[12px] font-[600] uppercase tracking-[0.14em]">
-                {isComingSoon ? "Case Study in Development" : "Presentation in Preparation"}
-              </span>
+            <div className="mt-8 flex items-center gap-2.5 text-[#8E9098]">
+              <Lock className="w-4 h-4 text-[#FF5108]" />
+              <span className="text-[12px] font-[600] uppercase tracking-[0.14em]">Coming Soon</span>
             </div>
           )}
         </div>
@@ -850,10 +764,10 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
     );
 
     const baseClassName = `project-card group block w-full p-6 sm:p-8 md:p-12 bg-[#08090D]/80 backdrop-blur-md border border-white/[0.1] ${
-      navigable ? "hover:border-[#FF5108]/50 cursor-pointer" : "cursor-default border-white/[0.08]"
+      !isComingSoon ? "hover:border-[#FF5108]/50 cursor-pointer" : "cursor-default border-white/[0.08]"
     } rounded-xl transition-all duration-500 relative focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#FF5108] shadow-[0_16px_40px_rgba(0,0,0,0.35)]`;
 
-    if (navigable) {
+    if (!isComingSoon) {
       return (
         <Link
           key={p.id}
@@ -884,7 +798,6 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
   // Project 04 Large Horizontal Feature Card
   const renderHorizontalFeature04 = (p: ExtendedProject) => {
     const isHovered = hoveredId === p.id;
-    const navigable = isProjectNavigable(p);
     const isComingSoon = p.status === "COMING_SOON";
 
     const cardContent = (
@@ -898,32 +811,20 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
             <div className="flex items-center gap-4 mb-2">
               <span
                 className={`font-[800] text-[28px] md:text-[36px] transition-colors duration-300 ${
-                  navigable && isHovered ? "text-[#FF5108]" : "text-white/30"
+                  !isComingSoon && isHovered ? "text-[#FF5108]" : "text-white/30"
                 }`}
               >
                 {p.number}
               </span>
-              <div className="flex items-center gap-2">
-                {isComingSoon && (
-                  <span className="text-[10px] font-mono uppercase tracking-[0.16em] px-2 py-0.5 rounded bg-white/[0.06] border border-white/10 text-[#A0A2AB]">
-                    COMING SOON
-                  </span>
-                )}
-                {p.status === "CONCEPT" && (
-                  <span className="text-[10px] font-mono uppercase tracking-[0.16em] px-2 py-0.5 rounded bg-[#FF5108]/10 border border-[#FF5108]/20 text-[#FF5108]">
-                    CONCEPT
-                  </span>
-                )}
-                <span className="text-[#FF5108] text-[11px] font-[600] uppercase tracking-[0.2em]">
-                  {p.category?.[2] || p.category?.[0]}
-                </span>
-              </div>
+              <span className="text-[#FF5108] text-[11px] font-[600] uppercase tracking-[0.2em]">
+                {p.category?.[2] || p.category?.[0]}
+              </span>
               <span className="text-[#8E9098] font-mono text-[11px]">{p.year}</span>
             </div>
 
             <h3
               className={`text-[28px] sm:text-[36px] md:text-[42px] font-[800] tracking-[-0.03em] leading-tight transition-all duration-300 ${
-                navigable && isHovered ? "text-[#FF5108] translate-x-2" : "text-[#F4F2ED] translate-x-0"
+                !isComingSoon && isHovered ? "text-[#FF5108] translate-x-2" : "text-[#F4F2ED] translate-x-0"
               }`}
             >
               {p.title}
@@ -947,7 +848,7 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
             <p className="text-[#8E9098] text-[14px] sm:text-[15px] leading-[1.65]">
               {p.shortDescription}
             </p>
-            {navigable ? (
+            {!isComingSoon ? (
               <div
                 className={`w-10 h-10 rounded-full border flex items-center justify-center transition-all duration-300 shrink-0 ${
                   isHovered
@@ -960,12 +861,8 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
                 </span>
               </div>
             ) : (
-              <div className="w-10 h-10 rounded-full border border-white/10 text-white/30 bg-white/[0.02] flex items-center justify-center shrink-0">
-                {isComingSoon ? (
-                  <Lock className="w-4 h-4 text-white/40" />
-                ) : (
-                  <Sparkles className="w-4 h-4 text-white/40" />
-                )}
+              <div className="w-10 h-10 rounded-full border border-white/10 text-[#FF5108] bg-white/[0.02] flex items-center justify-center shrink-0">
+                <Lock className="w-4 h-4" />
               </div>
             )}
           </div>
@@ -974,10 +871,10 @@ export default function Work({ projects: propProjects }: { projects?: Project[] 
     );
 
     const baseClassName = `project-card group block w-full p-6 sm:p-8 md:p-12 bg-[#08090D]/80 backdrop-blur-md border border-white/[0.1] ${
-      navigable ? "hover:border-[#FF5108]/50 cursor-pointer" : "cursor-default border-white/[0.08]"
+      !isComingSoon ? "hover:border-[#FF5108]/50 cursor-pointer" : "cursor-default border-white/[0.08]"
     } rounded-xl transition-all duration-500 relative focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#FF5108] shadow-[0_16px_40px_rgba(0,0,0,0.35)]`;
 
-    if (navigable) {
+    if (!isComingSoon) {
       return (
         <Link
           key={p.id}
