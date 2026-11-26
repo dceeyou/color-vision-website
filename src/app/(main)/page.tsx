@@ -2,19 +2,17 @@ import Hero from "@/components/Hero";
 import Marquee from "@/components/Marquee";
 import Services from "@/components/Services";
 import Work from "@/components/Work";
-import Stats from "@/components/Stats";
 import Process from "@/components/Process";
 import Statement from "@/components/Statement";
 import Testimonials from "@/components/Testimonials";
 import Contact from "@/components/Contact";
 import ContinuousBackground from "@/components/ContinuousBackground";
-import { getHero, getAbout, getStats, getServices, getProjects, getProcessSteps, getTestimonials, getContact } from "@/lib/wordpress/api";
+import { getHero, getAbout, getServices, getProjects, getProcessSteps, getTestimonials, getContact } from "@/lib/wordpress/api";
 
 export default async function Home() {
-  const [hero, about, stats, services, projects, processSteps, testimonials, contact] = await Promise.all([
+  const [hero, about, services, projects, processSteps, testimonials, contact] = await Promise.all([
     getHero(),
     getAbout(),
-    getStats(),
     getServices(),
     getProjects(),
     getProcessSteps(),
@@ -29,7 +27,6 @@ export default async function Home() {
       <Marquee />
       <Services services={services} />
       <Work projects={projects} />
-      <Stats stats={stats} />
       <Process steps={processSteps} />
       <Statement about={about} />
       <Testimonials testimonials={testimonials} />
