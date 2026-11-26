@@ -53,8 +53,11 @@ input, button, select, textarea, optgroup {
 
 /* Explicit Editorial Serif Utility Classes */
 .font-editorial,
+.font-editorial *,
 .font-serif,
-.font-instrument {
+.font-serif *,
+.font-instrument,
+.font-instrument * {
   font-family: var(--font-editorial, 'Instrument Serif', Georgia, serif) !important;
   font-weight: 400 !important;
 }
@@ -254,12 +257,27 @@ input, button, select, textarea, optgroup {
   will-change: width;
 }
 
+@keyframes hero-cursor-blink {
+  0%, 49% {
+    opacity: 1;
+  }
+  50%, 100% {
+    opacity: 0;
+  }
+}
+
+.animate-hero-cursor {
+  animation: hero-cursor-blink 0.5s step-end infinite;
+  will-change: opacity;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-curtain-left,
   .animate-curtain-right,
   .animate-reflection-glow,
   .animate-scroll-line,
-  .animate-carousel-progress {
+  .animate-carousel-progress,
+  .animate-hero-cursor {
     animation: none !important;
   }
 }

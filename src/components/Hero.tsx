@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { HeroContent } from "@/lib/wordpress/types";
@@ -8,6 +8,21 @@ import { HeroContent } from "@/lib/wordpress/types";
 interface HeroProps {
   hero?: HeroContent;
 }
+
+// Character mapping for staggered kinetic reveals
+const LINE1_WORDS = [
+  { word: "WE", chars: ["W", "E"] },
+  { word: "TRANSFORM", chars: ["T", "R", "A", "N", "S", "F", "O", "R", "M"] },
+];
+
+const LINE2_WORDS = [
+  { word: "IDEAS", chars: ["I", "D", "E", "A", "S"] },
+  { word: "INTO", chars: ["I", "N", "T", "O"] },
+];
+
+const FULL_WORD = "EXPERIENCES.";
+// Natural keystroke delay sequence (approximately 55-75ms, subtle pauses for human cadence)
+const KEYSTROKE_DELAYS = [65, 70, 65, 80, 60, 65, 70, 65, 75, 65, 80, 110];
 
 // Mathematical cubic-bezier(0.22, 1, 0.36, 1) evaluator
 function cubicBezier(p1x: number, p1y: number, p2x: number, p2y: number) {
@@ -54,6 +69,11 @@ export default function Hero({ hero }: HeroProps) {
   const descRef = useRef<HTMLParagraphElement>(null);
   const btnsRef = useRef<HTMLDivElement>(null);
   const scrollIndRef = useRef<HTMLDivElement>(null);
+
+  // Typewriter state for line 3
+  const [typedCount, setTypedCount] = useState<number>(0);
+  const [showCursor, setShowCursor] = useState<boolean>(false);
+  const timersRef = useRef<NodeJS.Timeout[]>([]);
 
   // Smooth scroll handler for anchor targets
   const scrollToAnchor = (
@@ -109,14 +129,21 @@ export default function Hero({ hero }: HeroProps) {
     ];
 
     if (isReduced) {
-      gsap.set(revealElements, { opacity: 1, y: 0, yPercent: 0, rotate: 0, x: 0 });
-      if (line3Ref.current) {
-        gsap.set(line3Ref.current, {
-          clipPath: "inset(0 0% 0 0)",
-          x: 0,
-          y: 0,
+      setTypedCount(FULL_WORD.length);
+      setShowCursor(false);
+      gsap.set(revealElements, { opacity: 1, y: 0, yPercent: 0, rotate: 0, x: 0, filter: "none" });
+      if (line1Ref.current) {
+        gsap.set(line1Ref.current.querySelectorAll(".kinetic-char-1"), {
+          yPercent: 0,
           opacity: 1,
-          filter: "drop-shadow(0 0 16px rgba(255, 81, 8, 0.22)) brightness(1.0)",
+          filter: "none",
+        });
+      }
+      if (line2Ref.current) {
+        gsap.set(line2Ref.current.querySelectorAll(".kinetic-char-2"), {
+          yPercent: 0,
+          opacity: 1,
+          filter: "none",
         });
       }
       if (ambientLightRightRef.current) gsap.set(ambientLightRightRef.current, { opacity: 0.18 });
@@ -135,17 +162,26 @@ export default function Hero({ hero }: HeroProps) {
       [eyebrowRef.current, descRef.current, btnsRef.current, scrollIndRef.current],
       { opacity: 0 }
     );
-    gsap.set([line1Ref.current, line2Ref.current], {
-      yPercent: 110,
+
+    const chars1 = line1Ref.current
+      ? line1Ref.current.querySelectorAll(".kinetic-char-1")
+      : [];
+    const chars2 = line2Ref.current
+      ? line2Ref.current.querySelectorAll(".kinetic-char-2")
+      : [];
+
+    gsap.set(chars1, {
+      yPercent: 115,
       opacity: 0,
+      filter: "blur(5px)",
     });
-    gsap.set(line3Ref.current, {
-      clipPath: "inset(0 100% 0 0)",
-      x: -24,
-      y: 8,
+
+    gsap.set(chars2, {
+      yPercent: 115,
       opacity: 0,
-      filter: "drop-shadow(0 0 24px rgba(255, 81, 8, 0.45)) brightness(1.15)",
+      filter: "blur(5px)",
     });
+
     if (ambientLightRightRef.current) gsap.set(ambientLightRightRef.current, { opacity: 0 });
     if (ambientLightLeftRef.current) gsap.set(ambientLightLeftRef.current, { opacity: 0 });
     if (peripheralDecorRef.current) gsap.set(peripheralDecorRef.current, { opacity: 0 });
@@ -171,63 +207,84 @@ export default function Hero({ hero }: HeroProps) {
         { opacity: 1, y: 0, duration: 0.55, ease: "power2.out" },
         0.18
       )
-      // Stage 01: Line 1 — "WE TRANSFORM" (Initial delay 300ms, duration 700ms)
+      // Stage 01: Line 1 — "WE TRANSFORM" (Start at ~250ms, duration 800ms with character stagger)
       .fromTo(
-        line1Ref.current,
-        { yPercent: 110, opacity: 0 },
-        { yPercent: 0, opacity: 1, duration: 0.70, ease: editorialEase },
-        0.30
-      )
-      // Stage 02: Line 2 — "IDEAS INTO" (250ms delay after Line 1, duration 700ms)
-      .fromTo(
-        line2Ref.current,
-        { yPercent: 110, opacity: 0 },
-        { yPercent: 0, opacity: 1, duration: 0.70, ease: editorialEase },
-        0.55
-      )
-      // Stage 03: Line 3 — "EXPERIENCES." (250ms delay after Line 2, duration 900ms)
-      // Expressive horizontal clipping mask reveal (left-to-right) + subtle translation + restrained illumination
-      .fromTo(
-        line3Ref.current,
+        chars1,
+        { yPercent: 115, opacity: 0, filter: "blur(5px)" },
         {
-          clipPath: "inset(0 100% 0 0)",
-          x: -24,
-          y: 8,
-          opacity: 0,
-          filter: "drop-shadow(0 0 24px rgba(255, 81, 8, 0.45)) brightness(1.15)",
-        },
-        {
-          clipPath: "inset(0 0% 0 0)",
-          x: 0,
-          y: 0,
+          yPercent: 0,
           opacity: 1,
-          filter: "drop-shadow(0 0 16px rgba(255, 81, 8, 0.22)) brightness(1.0)",
-          duration: 0.90,
+          filter: "blur(0px)",
+          duration: 0.80,
+          stagger: 0.02,
           ease: editorialEase,
         },
-        0.80
+        0.25
       )
-      // Stage 04: Supporting studio description fades in
+      // Stage 02: Line 2 — "IDEAS INTO" (Start 300ms after Line 1 at 0.55s, duration 800ms with character stagger)
+      .fromTo(
+        chars2,
+        { yPercent: 115, opacity: 0, filter: "blur(5px)" },
+        {
+          yPercent: 0,
+          opacity: 1,
+          filter: "blur(0px)",
+          duration: 0.80,
+          stagger: 0.02,
+          ease: editorialEase,
+        },
+        0.55
+      )
+      // Stage 04: Supporting studio description fades in (after typewriter finishes)
       .fromTo(
         descRef.current,
         { opacity: 0, y: 16 },
         { opacity: 1, y: 0, duration: 0.65, ease: "power2.out" },
-        1.70
+        2.65
       )
       // Stage 05: CTA buttons appear with subtle upward transition
       .fromTo(
         btnsRef.current,
         { opacity: 0, y: 18 },
         { opacity: 1, y: 0, duration: 0.65, ease: "power2.out" },
-        1.95
+        2.90
       )
       // Stage 06: Scroll indicator reveal
       .fromTo(
         scrollIndRef.current,
         { opacity: 0, y: 12 },
         { opacity: 1, y: 0, duration: 0.60, ease: "power2.out" },
-        2.15
+        3.15
       );
+
+    // =========================================================================
+    // 2. TYPEWRITER ANIMATION FOR LINE 03 ("EXPERIENCES.")
+    // Begins right after the first two lines complete their entrance (~1.45s)
+    // =========================================================================
+    const typewriterStartDelay = 1450;
+
+    const startTimer = setTimeout(() => {
+      setShowCursor(true);
+
+      let cumulativeDelay = 0;
+      for (let i = 0; i < FULL_WORD.length; i++) {
+        cumulativeDelay += KEYSTROKE_DELAYS[i] || 65;
+        const charTimer = setTimeout(() => {
+          setTypedCount(i + 1);
+
+          // Once final period is typed, hold cursor for 450ms then remove permanently
+          if (i === FULL_WORD.length - 1) {
+            const finishTimer = setTimeout(() => {
+              setShowCursor(false);
+            }, 450);
+            timersRef.current.push(finishTimer);
+          }
+        }, cumulativeDelay);
+        timersRef.current.push(charTimer);
+      }
+    }, typewriterStartDelay);
+
+    timersRef.current.push(startTimer);
 
     // =========================================================================
     // 2. RESTRAINED PERIPHERAL AMBIENT LIGHT DRIFT
@@ -359,6 +416,8 @@ export default function Hero({ hero }: HeroProps) {
     }
 
     return () => {
+      timersRef.current.forEach((t) => clearTimeout(t));
+      timersRef.current = [];
       tl.kill();
       glowAnimRight.kill();
       glowAnimLeft.kill();
@@ -536,34 +595,93 @@ export default function Hero({ hero }: HeroProps) {
         <h1
           ref={headlineRef}
           className="relative w-full max-w-[1240px] mx-auto flex flex-col items-center justify-center select-none"
+          aria-label="We transform ideas into experiences."
         >
+          {/* Accessible screen reader announcement (avoids announcing character-by-character changes) */}
+          <span className="sr-only">WE TRANSFORM IDEAS INTO EXPERIENCES.</span>
+
           {/* LINE 01: WE TRANSFORM (#F4F2ED Inter Tight Bold) */}
-          <div className="overflow-hidden py-1">
+          <div className="overflow-hidden py-1" aria-hidden="true">
             <span
               ref={line1Ref}
-              className="block will-change-transform font-[800] text-[#F4F2ED] uppercase tracking-[-0.035em] leading-[0.94] text-[44px] sm:text-[64px] md:text-[84px] lg:text-[104px] xl:text-[120px]"
+              className="inline-flex flex-wrap items-center justify-center font-[800] text-[#F4F2ED] uppercase tracking-[-0.035em] leading-[0.94] text-[44px] sm:text-[64px] md:text-[84px] lg:text-[104px] xl:text-[120px]"
             >
-              WE TRANSFORM
+              {LINE1_WORDS.map((w, wIdx) => (
+                <span key={w.word} className="inline-flex whitespace-nowrap">
+                  {w.chars.map((char, cIdx) => (
+                    <span
+                      key={cIdx}
+                      className="kinetic-char-1 inline-block will-change-transform"
+                    >
+                      {char}
+                    </span>
+                  ))}
+                  {wIdx < LINE1_WORDS.length - 1 && (
+                    <span className="inline-block">&nbsp;</span>
+                  )}
+                </span>
+              ))}
             </span>
           </div>
 
           {/* LINE 02: IDEAS INTO (#F4F2ED Inter Tight Bold) */}
-          <div className="overflow-hidden py-1 -mt-1 sm:-mt-2 md:-mt-3">
+          <div className="overflow-hidden py-1 -mt-1 sm:-mt-2 md:-mt-3" aria-hidden="true">
             <span
               ref={line2Ref}
-              className="block will-change-transform font-[800] text-[#F4F2ED] uppercase tracking-[-0.035em] leading-[0.94] text-[44px] sm:text-[64px] md:text-[84px] lg:text-[104px] xl:text-[120px]"
+              className="inline-flex flex-wrap items-center justify-center font-[800] text-[#F4F2ED] uppercase tracking-[-0.035em] leading-[0.94] text-[44px] sm:text-[64px] md:text-[84px] lg:text-[104px] xl:text-[120px]"
             >
-              IDEAS INTO
+              {LINE2_WORDS.map((w, wIdx) => (
+                <span key={w.word} className="inline-flex whitespace-nowrap">
+                  {w.chars.map((char, cIdx) => (
+                    <span
+                      key={cIdx}
+                      className="kinetic-char-2 inline-block will-change-transform"
+                    >
+                      {char}
+                    </span>
+                  ))}
+                  {wIdx < LINE2_WORDS.length - 1 && (
+                    <span className="inline-block">&nbsp;</span>
+                  )}
+                </span>
+              ))}
             </span>
           </div>
 
-          {/* LINE 03: EXPERIENCES. (Instrument Serif Italic, Glowing Signature Orange) */}
-          <div className="py-1 -mt-1 sm:-mt-2 md:-mt-3 relative">
+          {/* LINE 03: EXPERIENCES. (Instrument Serif Italic, Signature Orange with Typewriter Reveal) */}
+          <div className="py-1 -mt-1 sm:-mt-2 md:-mt-3 relative flex items-center justify-center font-editorial italic" aria-hidden="true">
             <span
               ref={line3Ref}
-              className="block will-change-transform font-editorial italic font-[400] text-[#FF5108] tracking-[-0.02em] leading-[0.96] text-[48px] sm:text-[72px] md:text-[94px] lg:text-[118px] xl:text-[136px] pr-2 sm:pr-4"
+              className="relative inline-block font-editorial italic font-[400] text-[#FF5108] tracking-[-0.02em] leading-[0.96] text-[48px] sm:text-[72px] md:text-[94px] lg:text-[118px] xl:text-[136px] pr-2 sm:pr-4"
+              style={{ fontFamily: "var(--font-editorial, 'Instrument Serif', Georgia, serif)" }}
             >
-              EXPERIENCES.
+              {/* Invisible ghost placeholder that guarantees zero layout shift or container collapse */}
+              <span
+                className="invisible select-none pointer-events-none font-editorial italic"
+                style={{ fontFamily: "var(--font-editorial, 'Instrument Serif', Georgia, serif)" }}
+                aria-hidden="true"
+              >
+                {FULL_WORD}
+              </span>
+
+              {/* Progressive typewriter character reveal with slim orange cursor */}
+              <span
+                className="absolute inset-y-0 left-0 flex items-center whitespace-nowrap font-editorial italic"
+                style={{ fontFamily: "var(--font-editorial, 'Instrument Serif', Georgia, serif)" }}
+              >
+                <span
+                  className="font-editorial italic"
+                  style={{ fontFamily: "var(--font-editorial, 'Instrument Serif', Georgia, serif)" }}
+                >
+                  {FULL_WORD.slice(0, typedCount)}
+                </span>
+                {showCursor && (
+                  <span
+                    className="inline-block w-[2px] h-[0.78em] sm:h-[0.82em] bg-[#FF5108] ml-1 sm:ml-1.5 align-middle select-none animate-hero-cursor"
+                    aria-hidden="true"
+                  />
+                )}
+              </span>
             </span>
           </div>
         </h1>
