@@ -4,6 +4,7 @@ import { getCaseStudyBySlug, getAllCaseStudySlugs } from "@/lib/wordpress/api";
 import ProjectHero from "@/components/case-study/ProjectHero";
 import BlockRenderer from "@/components/case-study/BlockRenderer";
 import NextProjectNav from "@/components/case-study/NextProjectNav";
+import LockedCaseStudy from "@/components/case-study/LockedCaseStudy";
 
 interface PageProps {
   params: Promise<{
@@ -59,6 +60,14 @@ export default async function CaseStudyPage({ params }: PageProps) {
 
   if (!project) {
     notFound();
+  }
+
+  // Intercept locked projects (Coming Soon or non-navigable Concept presentations)
+  if (
+    project.status === "COMING_SOON" ||
+    (project.status === "CONCEPT" && !project.hasPresentation)
+  ) {
+    return <LockedCaseStudy project={project} />;
   }
 
   return (

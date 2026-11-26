@@ -224,7 +224,8 @@ export async function getProjects(): Promise<Project[]> {
       projectUrl: "/work/elegant-ai",
       caseStudyUrl: "/work/elegant-ai",
       servicesUsed: ["Interface Design", "Product Strategy", "Design System"],
-      featuredProject: true
+      featuredProject: true,
+      status: "AVAILABLE",
     },
     {
       id: "vehicle-service-platform",
@@ -240,7 +241,8 @@ export async function getProjects(): Promise<Project[]> {
       projectUrl: "/work/vehicle-service-platform",
       caseStudyUrl: "/work/vehicle-service-platform",
       servicesUsed: ["Web Application", "Mobile Experience", "Service Design"],
-      featuredProject: true
+      featuredProject: true,
+      status: "AVAILABLE",
     },
     {
       id: "cr-cricket-bar",
@@ -256,7 +258,8 @@ export async function getProjects(): Promise<Project[]> {
       projectUrl: "/work/cr-cricket-bar",
       caseStudyUrl: "/work/cr-cricket-bar",
       servicesUsed: ["Visual Identity", "Environmental Design", "Print & Signage"],
-      featuredProject: false
+      featuredProject: false,
+      status: "AVAILABLE",
     },
     {
       id: "goodly",
@@ -272,7 +275,8 @@ export async function getProjects(): Promise<Project[]> {
       projectUrl: "/work/goodly",
       caseStudyUrl: "/work/goodly",
       servicesUsed: ["Brand Strategy", "Packaging System", "Visual Identity"],
-      featuredProject: false
+      featuredProject: false,
+      status: "AVAILABLE",
     },
     {
       id: "my-little-kevi",
@@ -285,10 +289,12 @@ export async function getProjects(): Promise<Project[]> {
       year: "2024",
       featuredImage: "/case-studies/elegant-ai-hero.svg",
       galleryImages: [],
-      projectUrl: "/work/elegant-ai",
-      caseStudyUrl: "/work/elegant-ai",
+      projectUrl: "/work/my-little-kevi",
+      caseStudyUrl: "/work/my-little-kevi",
       servicesUsed: ["Mobile UI/UX", "User Research", "Interaction Design"],
-      featuredProject: false
+      featuredProject: false,
+      status: "COMING_SOON",
+      statusNote: "Case study currently in development.",
     },
     {
       id: "baps",
@@ -301,10 +307,13 @@ export async function getProjects(): Promise<Project[]> {
       year: "2024",
       featuredImage: "/case-studies/goodly-hero.svg",
       galleryImages: [],
-      projectUrl: "/work/goodly",
-      caseStudyUrl: "/work/goodly",
+      projectUrl: "/work/baps",
+      caseStudyUrl: "/work/baps",
       servicesUsed: ["Brand Identity", "Web Experience", "Design Guidelines"],
-      featuredProject: false
+      featuredProject: false,
+      status: "CONCEPT",
+      statusNote: "Design presentation in preparation.",
+      hasPresentation: false,
     }
   ];
 }
@@ -494,10 +503,58 @@ export async function getCaseStudyBySlug(slug: string): Promise<CaseStudyProject
   }
 
   // Graceful local demonstration data adapter
-  return demoCaseStudies[slug] || null;
+  if (demoCaseStudies[slug]) {
+    return {
+      ...demoCaseStudies[slug],
+      status: demoCaseStudies[slug].status || "AVAILABLE",
+    };
+  }
+
+  // Check fallback project definitions for Coming Soon / Concept projects
+  const fallbackProjects = await getProjects();
+  const matchedProject = fallbackProjects.find((p) => p.slug === slug);
+  if (matchedProject) {
+    return {
+      id: matchedProject.id,
+      title: matchedProject.title,
+      slug: matchedProject.slug,
+      subtitle: matchedProject.shortDescription,
+      shortDescription: matchedProject.shortDescription,
+      fullDescription: matchedProject.fullDescription,
+      projectType: matchedProject.category[0] || "Digital Design",
+      industry: "Design & Technology",
+      client: matchedProject.clientName || "Studio Partner",
+      year: matchedProject.year || "2025",
+      duration: "In Progress",
+      projectStatus: matchedProject.status === "COMING_SOON" ? "In Development" : "Concept Exploration",
+      status: matchedProject.status || "COMING_SOON",
+      statusNote: matchedProject.statusNote || "Case study currently in development.",
+      hasPresentation: matchedProject.hasPresentation ?? false,
+      featured: matchedProject.featuredProject,
+      displayOrder: 1,
+      categories: matchedProject.category,
+      services: matchedProject.servicesUsed,
+      toolsAndTechnologies: ["Figma", "Design Systems"],
+      projectTeam: [{ role: "Lead Designer", name: "Color Vision Studio" }],
+      projectCredits: [],
+      thumbnailImage: null,
+      heroImage: null,
+      galleryImages: [],
+      seoTitle: `${matchedProject.title} — Case Study Coming Soon | Color Vision`,
+      seoDescription: `${matchedProject.shortDescription} Case study currently in development at Color Vision.`,
+      sections: [],
+    };
+  }
+
+  return null;
 }
 
 export async function getAllCaseStudySlugs(): Promise<string[]> {
-  return Object.keys(demoCaseStudies);
+  const fallback = await getProjects();
+  const allSlugs = new Set([
+    ...Object.keys(demoCaseStudies),
+    ...fallback.map((p) => p.slug),
+  ]);
+  return Array.from(allSlugs);
 }
 
