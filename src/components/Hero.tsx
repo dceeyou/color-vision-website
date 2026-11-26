@@ -545,13 +545,6 @@ export default function Hero({ hero }: HeroProps) {
           <div className="border-r border-white/[0.025] hidden sm:block h-full" />
         </div>
 
-        {/* Studio Technical Metadata in exact requested #777982 */}
-        <div className="absolute top-28 left-6 sm:left-10 text-[10px] tracking-[0.25em] font-[600] text-[#777982] uppercase">
-          COLOR VISION // CV-SYS.01
-        </div>
-        <div className="absolute top-28 right-6 sm:right-10 text-[10px] tracking-[0.25em] font-[600] text-[#777982] uppercase hidden sm:block">
-          07°00&apos;N · 80°00&apos;E
-        </div>
         <div className="absolute bottom-28 left-6 sm:left-10 text-[10px] tracking-[0.22em] font-[600] text-[#777982] uppercase hidden md:block">
           STUDIO // EXPERIENCES
         </div>
